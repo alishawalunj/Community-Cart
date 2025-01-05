@@ -2,14 +2,10 @@ package com.nzefler.user_management.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @ToString
 @Table(name = "users")
@@ -25,13 +21,6 @@ public class User {
     @Column(name="password", nullable=false)
     private String password;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
