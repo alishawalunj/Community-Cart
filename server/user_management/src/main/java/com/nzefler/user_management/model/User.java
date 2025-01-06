@@ -21,6 +21,10 @@ public class User {
     @Column(name="password", nullable=false)
     private String password;
 
+    public User() {
+
+    }
+
 
     public String getUserName() {
         return userName;

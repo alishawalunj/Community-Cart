@@ -3,10 +3,11 @@ package com.nzefler.user_management.service;
 import com.nzefler.user_management.model.User;
 import com.nzefler.user_management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
