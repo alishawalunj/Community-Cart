@@ -6,17 +6,18 @@ type User {
 }
 
 input UserInput {
-   userName: String!
+    userName: String!
     email: String!
     password: String!
 }
+
 type Query {
     getAllUsers: [User]
-    getUsersById(id: ID!): User
+    getUserById(id: ID!): User
 }
+
 type Mutation {
     createUser(userName: String!, email: String!, password: String!): User
     updateUser(userName: String!, email: String!, password: String!): User
     deleteUser(id: ID!): String
 }
-

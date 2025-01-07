@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 
-@Entity
+
 @AllArgsConstructor
 @ToString
-@Table(name = "users")
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

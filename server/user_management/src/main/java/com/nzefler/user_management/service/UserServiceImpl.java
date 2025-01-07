@@ -14,6 +14,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAllUsers() {
+        System.out.println("in service method for getting all user");
         return userRepository.findAll();
     }
 
@@ -24,9 +25,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User createUser(User user) {
-        if(userRepository.findUserByUserName(user.getUserName()) == null){
-            throw new RuntimeException("User already Exists");
+        User existingUser = userRepository.findUserByUserName(user.getUserName());
+        if (existingUser != null) {
+            throw new RuntimeException("User already exists with username: " + user.getUserName());
         }
+        System.out.println("In service method for creating user");
         return userRepository.save(user);
     }
 
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService{
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
         }
-        return existingUser;
+        return userRepository.save(existingUser);
     }
 
     @Override
