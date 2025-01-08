@@ -17,7 +17,7 @@ public class UserResolver {
 
     @QueryMapping
     public List<User> getAllUsers(){
-        System.out.println("in user query class for getting all user");
+        System.out.println("in user query method for getting all user");
         return userService.getAllUsers();
     }
     @QueryMapping
@@ -26,18 +26,24 @@ public class UserResolver {
     }
 
     @MutationMapping
-    public User createUser(@Argument String userName, @Argument String email, @Argument String password){
-        System.out.println("in user mutation class for create user");
+    public User createUser(@Argument String userName, @Argument String firstName, @Argument String lastName, @Argument String address, @Argument String email, @Argument String password){
+        System.out.println("in user mutation method for create user");
         User newUser = new User();
         newUser.setUserName(userName);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setAddress(address);
         newUser.setEmail(email);
         newUser.setPassword(password);
         return userService.createUser(newUser);
     }
     @MutationMapping
-    public User updateUser(@Argument String userName, @Argument String email, @Argument String password){
+    public User updateUser(@Argument String userName, @Argument String firstName, @Argument String lastName, @Argument String address, @Argument String email, @Argument String password){
         User existingUser = new User();
         existingUser.setUserName(userName);
+        existingUser.setFirstName(firstName);
+        existingUser.setLastName(lastName);
+        existingUser.setAddress(address);
         existingUser.setEmail(email);
         existingUser.setPassword(password);
         return userService.updateUser(existingUser);

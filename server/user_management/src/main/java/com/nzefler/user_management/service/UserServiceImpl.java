@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("User does not exist, please create an account first!!");
         }else{
             existingUser.setUserName(user.getUserName());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setAddress(user.getAddress());
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
         }
