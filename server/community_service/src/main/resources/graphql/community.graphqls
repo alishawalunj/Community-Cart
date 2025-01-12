@@ -1,0 +1,36 @@
+type Community {
+    communityId: ID!
+    name: String!
+    owner: String!
+    description: String!
+    createdOn: String!
+    membersList: [Member]
+}
+
+type Member{
+    id: ID!
+    userName: String!
+    firstName: String!
+    lastName: String!
+    address: String!
+    email: String!
+    password: String!
+}
+
+input CommunityInput{
+    name: String!
+    owner: String!
+    description: String!
+    createdOn: String!
+}
+
+type Query{
+    getAllCommunities: [Community]
+    getCommunityById(communityId: ID): Community
+}
+
+type Mutation{
+    createCommunity(name: String!, owner: String!, description: String!, createdOn: String!): Community
+    updateCommunity(name: String!, owner: String!, description: String!, createdOn: String!): Community
+    deleteCommunity(communityId: ID!) : Float
+}
