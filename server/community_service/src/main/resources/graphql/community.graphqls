@@ -4,10 +4,10 @@ type Community {
     owner: String!
     description: String!
     createdOn: String!
-    membersList: [Member]
+    membersList: [User]
 }
 
-type Member{
+type User{
     id: ID!
     userName: String!
     firstName: String!

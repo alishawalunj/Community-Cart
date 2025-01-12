@@ -7,7 +7,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-public class Member {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -25,7 +25,7 @@ public class Member {
     @Column(name="password", nullable=false)
     private String password;
 
-    public Member(){}
+    public User(){}
 
     public long getId() {
         return id;

@@ -17,7 +17,7 @@ public class Community {
     private String owner;
     private String description;
     private String createdOn;
-    private List<Member> membersList;
+    private List<User> membersList;
 
     public Community(){
 
@@ -63,11 +63,11 @@ public class Community {
         this.createdOn = createdOn;
     }
 
-    public List<Member> getMembersList() {
+    public List<User> getMembersList() {
         return membersList;
     }
 
-    public void setMembersList(List<Member> membersList) {
+    public void setMembersList(List<User> membersList) {
         this.membersList = membersList;
     }
 }
