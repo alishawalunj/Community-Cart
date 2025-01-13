@@ -1,6 +1,8 @@
 package com.nzefler.community_service.service;
 
+import com.nzefler.community_service.client.UserServiceClient;
 import com.nzefler.community_service.model.Community;
+import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.repository.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Autowired
     private CommunityRepository communityRepository;
+
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     @Override
     public List<Community> getAllCommunities() {
@@ -49,5 +54,10 @@ public class CommunityServiceImpl implements CommunityService{
     @Override
     public void deleteCommunity(Long communityId) {
         communityRepository.deleteById(communityId);
+    }
+
+    public List<User> fetchUsersList(Long communityId){
+        List<User> members = userServiceClient.getUserByCommunityId(communityId);
+        return members;
     }
 }
