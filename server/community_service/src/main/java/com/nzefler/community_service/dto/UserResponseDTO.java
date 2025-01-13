@@ -1,4 +1,4 @@
-package com.nzefler.community_service.model;
+package com.nzefler.community_service.dto;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,25 +7,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
+public class UserResponseDTO {
     private long id;
-    @Column(name="username", nullable=false)
     private String userName;
-    @Column(name="firstName", nullable=false)
     private String firstName;
-    @Column(name="lastName", nullable=false)
     private String lastName;
-    @Column(name="address", nullable=false)
     private String address;
-    @Column(name="email", nullable=false)
     private String email;
-    @Column(name="password", nullable=false)
     private String password;
 
-    public User(){}
+    public UserResponseDTO(){}
 
     public long getId() {
         return id;

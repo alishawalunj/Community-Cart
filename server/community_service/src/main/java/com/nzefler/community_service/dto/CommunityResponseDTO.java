@@ -1,26 +1,16 @@
-package com.nzefler.community_service.model;
-
-import com.nzefler.community_service.dto.UserResponseDTO;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+package com.nzefler.community_service.dto;
 
 import java.util.List;
-@AllArgsConstructor
-@ToString
-@Entity
-public class Community {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class CommunityResponseDTO {
     private Long communityId;
     private String name;
     private String owner;
     private String description;
     private String createdOn;
+    private List<UserResponseDTO> membersList;
 
-    public Community(){
-
+    public CommunityResponseDTO() {
     }
 
     public Long getCommunityId() {
@@ -63,4 +53,11 @@ public class Community {
         this.createdOn = createdOn;
     }
 
+    public List<UserResponseDTO> getMembersList() {
+        return membersList;
+    }
+
+    public void setMembersList(List<UserResponseDTO> membersList) {
+        this.membersList = membersList;
+    }
 }

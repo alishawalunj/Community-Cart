@@ -1,8 +1,10 @@
 package com.nzefler.community_service.service;
 
 import com.nzefler.community_service.client.UserServiceClient;
+import com.nzefler.community_service.dto.CommunityResponseDTO;
+import com.nzefler.community_service.mapper.CommunityMapper;
 import com.nzefler.community_service.model.Community;
-import com.nzefler.community_service.model.User;
+import com.nzefler.community_service.dto.UserResponseDTO;
 import com.nzefler.community_service.repository.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,20 @@ public class CommunityServiceImpl implements CommunityService{
     @Autowired
     private UserServiceClient userServiceClient;
 
+    @Autowired
+    private CommunityMapper mapper;
+
     @Override
     public List<Community> getAllCommunities() {
         return communityRepository.findAll();
     }
 
     @Override
-    public Optional<Community> getCommunityById(Long communityId) {
-        return communityRepository.findById(communityId);
+    public Optional<CommunityResponseDTO> getCommunityById(Long communityId) {
+       return communityRepository.findById(communityId).map(community -> {
+           List<UserResponseDTO> membersList = fetchUsersList(communityId);
+           return mapper.toDTO(community, membersList);
+       });
     }
 
     @Override
@@ -56,8 +64,7 @@ public class CommunityServiceImpl implements CommunityService{
         communityRepository.deleteById(communityId);
     }
 
-    public List<User> fetchUsersList(Long communityId){
-        List<User> members = userServiceClient.getUserByCommunityId(communityId);
-        return members;
+    public List<UserResponseDTO> fetchUsersList(Long communityId){
+        return userServiceClient.getUserByCommunityId(communityId);
     }
 }
