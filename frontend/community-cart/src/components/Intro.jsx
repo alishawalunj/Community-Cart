@@ -5,7 +5,7 @@ const Intro = () => {
   const navigate = useNavigate();
 
   const handleGetStatrted = () => {
-    navigate("/options");
+    navigate("/dashboard");
   }
 
   return (

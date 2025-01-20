@@ -1,15 +1,23 @@
 import './App.css'
-import Navbar from './components/Navbar/Navbar.jsx'
+import Navbar from './components/Navbar.jsx'
 import { Routes, Route } from 'react-router-dom'
-import Options from './pages/options.jsx'
-import Intro from './pages/Intro.jsx'
-import Login from './components/Login/Login.jsx'
+import HomePage from  './pages/HomePage.jsx'
+import DashBoard from './pages/DashBoard.jsx'
+import Marketplace from './components/Marketplace.jsx'
+import Intro from './components/Intro.jsx'
+import Login from './components/Login.jsx'
+import Options from './components/Options.jsx'
+import Community from './components/Community.jsx'
   const App = () => {
     return (
       <Routes>
-        <Route path="/" element={<Intro />} />
-        <Route path="/options" element={<Options />} />
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/intro" element={<Intro />} />
+        <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/login" element={<Login></Login>}/>
+        <Route path="/options" element={<Options/>}></Route>
+        <Route path="/community" element={<Community/>}></Route>
       </Routes>
     );
   };

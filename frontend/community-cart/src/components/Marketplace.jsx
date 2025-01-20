@@ -1,6 +1,6 @@
 import React from "react";
 
-const Options = () => {
+const Marketplace = () => {
     return (
         <div className="h-screen flex">
             <div className="w-1/2 bg-orange-400 hover:bg-orange-500 flex items-center justify-center">
@@ -13,4 +13,4 @@ const Options = () => {
     );
 };
 
-export default Options;
+export default Marketplace;
