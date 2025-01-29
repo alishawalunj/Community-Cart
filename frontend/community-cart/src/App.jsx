@@ -8,6 +8,8 @@ import Intro from './components/Intro.jsx'
 import Login from './components/Login.jsx'
 import Options from './components/Options.jsx'
 import Community from './components/Community.jsx'
+import CommunityRegistration from './pages/CommunityRegistration.jsx'
+
   const App = () => {
     return (
       <Routes>
@@ -18,6 +20,7 @@ import Community from './components/Community.jsx'
         <Route path="/login" element={<Login></Login>}/>
         <Route path="/options" element={<Options/>}></Route>
         <Route path="/community" element={<Community/>}></Route>
+        <Route path="/communityregistration" element={<CommunityRegistration/>}></Route>
       </Routes>
     );
   };
