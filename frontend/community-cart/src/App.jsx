@@ -9,6 +9,7 @@ import Login from './components/Login.jsx'
 import Options from './components/Options.jsx'
 import Community from './components/Community.jsx'
 import CommunityRegistration from './pages/CommunityRegistration.jsx'
+import SellProductForm from './pages/SellProductForm.jsx'
 
   const App = () => {
     return (
@@ -21,6 +22,7 @@ import CommunityRegistration from './pages/CommunityRegistration.jsx'
         <Route path="/options" element={<Options/>}></Route>
         <Route path="/community" element={<Community/>}></Route>
         <Route path="/communityregistration" element={<CommunityRegistration/>}></Route>
+        <Route path="/sell" element={<SellProductForm/>}></Route>
       </Routes>
     );
   };
