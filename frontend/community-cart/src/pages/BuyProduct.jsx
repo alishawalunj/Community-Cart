@@ -1,5 +1,5 @@
 import React from 'react'
-import Products from '../components/ProductsGrid'
+import ProductsGrid from '../components/ProductsGrid';
 export default function BuyProduct() {
 
     const products = [
@@ -46,7 +46,7 @@ export default function BuyProduct() {
   return (
     <div>
       <div className='min-h-screen bg-gray-100'>
-        <Products products={products} />
+        <ProductsGrid/>
       </div>
     </div>
   )

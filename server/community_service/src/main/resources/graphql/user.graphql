@@ -1,0 +1,33 @@
+type User {
+    userId: ID!
+    firstName: String!
+    lastName: String!
+    emailId: String!
+    password: String!
+}
+
+type UserInput {
+    firstName: String!
+    lastName: String!
+    emailId: String!
+    password: String!
+}
+
+type UserResponseDTO {
+    userId: ID!
+    firstName: String!
+    lastName: String!
+    emailId: String!
+    password: String!
+}
+type Query {
+    findAllUsers: [UserResponseDTO!]!
+    findUserById(userId: ID!): UserResponseDTO!
+    findUserByEmailId(emailId: String!): UserResponseDTO!
+}
+
+type Mutation {
+    saveUser(input: UserInput!): UserResponseDTO!
+    updateUser(input: UserInput!): UserResponseDTO!
+    deleteUser(userId: ID!): String!
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Button } from '@mui/material';
 import { CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-const  ProductCard = (product) => {
+const  ProductCard = ({ product, isBuyProductModel, isViewCartModel }) => {
   return (
     <div>
        <Card sx={{ maxWidth: 345 }}>

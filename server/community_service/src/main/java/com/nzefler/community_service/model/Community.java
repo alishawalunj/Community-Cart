@@ -1,11 +1,12 @@
 package com.nzefler.community_service.model;
 
-import com.nzefler.community_service.dto.UserResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
@@ -18,10 +19,8 @@ public class Community {
     private String owner;
     private String description;
     private String createdOn;
-
-    public Community(){
-
-    }
+    @OneToMany
+    private List<User> members;
 
     public Long getCommunityId() {
         return communityId;
@@ -63,4 +62,11 @@ public class Community {
         this.createdOn = createdOn;
     }
 
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
 }

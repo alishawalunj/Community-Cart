@@ -4,6 +4,7 @@ type Community {
     owner: String!
     description: String!
     createdOn: String!
+    members: [UserResponseDTO!]
 }
 
 type CommunityResponseDTO {
@@ -12,33 +13,24 @@ type CommunityResponseDTO {
     owner: String!
     description: String!
     createdOn: String!
-    membersList: [UserResponseDTO!]
+    members: [UserResponseDTO!]
 }
 
-type UserResponseDTO {
-    id: ID!
-    userName: String!
-    firstName: String!
-    lastName: String!
-    address: String!
-    email: String!
-    password: String!
-}
-
-input CommunityInput{
+input CommunityInput {
     name: String!
     owner: String!
     description: String!
     createdOn: String!
 }
 
-type Query{
-    getAllCommunities: [Community!]!
+type Query {
+    getAllCommunities: [CommunityResponseDTO!]!
     getCommunityById(communityId: ID!): CommunityResponseDTO!
+    getAllCommunitiesByName(name: String!): CommunityResponseDTO!
 }
 
-type Mutation{
-    createCommunity(input: CommunityInput!): Community!
-    updateCommunity(input: CommunityInput!): Community!
+type Mutation {
+    createCommunity(input: CommunityInput!): String!
+    updateCommunity(input: CommunityInput!): CommunityResponseDTO!
     deleteCommunity(communityId: ID!) : String!
 }

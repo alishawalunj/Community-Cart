@@ -8,16 +8,16 @@ import java.util.List;
 
 public class CommunityMapper {
 
-    public CommunityResponseDTO toDTO(Community community, List<UserResponseDTO> usersList){
+    public CommunityResponseDTO toDTO(Community community){
         CommunityResponseDTO response = new CommunityResponseDTO();
         response.setCommunityId(community.getCommunityId());
         response.setDescription(community.getDescription());
         response.setCreatedOn(community.getCreatedOn());
         response.setName(community.getName());
         response.setOwner(community.getOwner());
-        if(!usersList.isEmpty()){
-            response.setMembersList(usersList);
-        }
+//        if(!usersList.isEmpty()){
+//            response.setMembersList(usersList);
+//        }
         return response;
     }
 

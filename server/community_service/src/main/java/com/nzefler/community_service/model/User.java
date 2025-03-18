@@ -1,24 +1,25 @@
-package com.nzefler.community_service.dto;
+package com.nzefler.community_service.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.List;
-
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
-@NoArgsConstructor
-public class UserResponseDTO {
+public class User {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long userId;
     private String firstName;
     private String lastName;
     private String emailId;
     private String password;
-    private List<CommunityResponseDTO> communities;
-    private List<CommunityResponseDTO> communitiesOwned;
+
+    @ManyToOne
+    @JoinColumn(name = "community_id")
+    private Community community;
 
     public Long getUserId() {
         return userId;
@@ -60,19 +61,11 @@ public class UserResponseDTO {
         this.password = password;
     }
 
-    public List<CommunityResponseDTO> getCommunities() {
-        return communities;
+    public Community getCommunity() {
+        return community;
     }
 
-    public void setCommunities(List<CommunityResponseDTO> communities) {
-        this.communities = communities;
-    }
-
-    public List<CommunityResponseDTO> getCommunitiesOwned() {
-        return communitiesOwned;
-    }
-
-    public void setCommunitiesOwned(List<CommunityResponseDTO> communitiesOwned) {
-        this.communitiesOwned = communitiesOwned;
+    public void setCommunity(Community community) {
+        this.community = community;
     }
 }

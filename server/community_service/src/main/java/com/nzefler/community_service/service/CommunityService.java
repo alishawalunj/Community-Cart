@@ -8,9 +8,10 @@ import java.util.Optional;
 
 public interface CommunityService {
 
-    List<Community> getAllCommunities();
-    Optional<CommunityResponseDTO> getCommunityById(Long communityId);
-    Community createCommunity(Community community);
+    List<CommunityResponseDTO> findAllCommunities();
+    CommunityResponseDTO findCommunityById(Long communityId);
+    CommunityResponseDTO findCommunityByName(String name);
+    String saveCommunity(Community community);
     Community updateCommunity(Community community);
     void deleteCommunity(Long communityId);
 }
