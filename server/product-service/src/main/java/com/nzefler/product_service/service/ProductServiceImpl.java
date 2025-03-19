@@ -1,10 +1,13 @@
 package com.nzefler.product_service.service;
 
+import com.nzefler.product_service.dto.ProductResponseDTO;
+import com.nzefler.product_service.mapper.ProductMapper;
 import com.nzefler.product_service.model.Product;
 import com.nzefler.product_service.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -13,47 +16,97 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductRepository productRepository;
 
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+    @Autowired
+    private ProductMapper mapper;
 
     @Override
-    public Optional<Product> getProductById(Long productId) {
-        return productRepository.findById(productId);
-    }
-
-    @Override
-    public Product createProduct(Product product) {
-        if(product.getProductId() != null){
-            throw new RuntimeException("Product already exists!!");
+    public List<ProductResponseDTO> findAllProducts() {
+        try{
+            List<ProductResponseDTO> productList = new ArrayList<>();
+            List<Product> products = productRepository.findAll();
+            for(Product product: products){
+                productList.add(mapper.toDto(product));
+            }
+            return productList;
+        }catch(Exception e){
+            throw new RuntimeException("Error fetching products");
         }
-        return productRepository.save(product);
+    }
+
+    @Override
+    public ProductResponseDTO findProductById(Long productId) {
+        try{
+            return productRepository.findById(productId).map(mapper::toDto).orElseThrow(() -> new RuntimeException("No product present in database with id "+ productId));
+        }catch(Exception e){
+            throw new RuntimeException("Error fetching product");
+        }
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsByCommunityId(Long communityId) {
+        try{
+            List<ProductResponseDTO> productList = new ArrayList<>();
+            List<Product> products = productRepository.findAllByCommunityId(communityId);
+            for(Product product: products){
+                productList.add(mapper.toDto(product));
+            }
+            return productList;
+        }catch(Exception e){
+            throw new RuntimeException("Error fetching products");
+        }
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsByUserId(Long userId) {
+        try{
+            List<ProductResponseDTO> productList = new ArrayList<>();
+            List<Product> products = productRepository.findAllByUserId(userId);
+            for(Product product: products){
+                productList.add(mapper.toDto(product));
+            }
+            return productList;
+        }catch(Exception e){
+            throw new RuntimeException("Error fetching products");
+        }
+    }
+
+    @Override
+    public String saveProduct(Product product) {
+        try{
+            Optional<Product> existingProduct = productRepository.findById(product.getProductId());
+            if(existingProduct.isPresent()){
+                throw new RuntimeException("Product already exists");
+            }else{
+                productRepository.save(product);
+                return "Product created successsfully";
+            }
+        }catch(Exception e){
+            throw new RuntimeException("Error creating new product");
+        }
     }
 
     @Override
     public Product updateProduct(Product product) {
-        Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
-        if(optionalProduct.isEmpty()){
-            throw new RuntimeException("Product does not exist, please add the product first");
+        try{
+            Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
+            if (optionalProduct.isEmpty()) {
+                throw new RuntimeException("Product does not exist");
+            }
+            Product existingProduct = optionalProduct.get();
+            Product updatedProduct = mapper.updateExistingProduct(existingProduct,product);
+            return productRepository.save(updatedProduct);
+        }catch(Exception e){
+            throw new RuntimeException("Error creating new product");
         }
-        Product existingProduct = optionalProduct.get();
-        existingProduct.setCategory(product.getCategory());
-        existingProduct.setColor(product.getColor());
-        existingProduct.setName(product.getName());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setCommunityId(product.getCommunityId());
-        existingProduct.setSize(product.getSize());
-        existingProduct.setTag(product.getTag());
-        existingProduct.setType(product.getType());
-        existingProduct.setUserId(product.getUserId());
-        productRepository.save(existingProduct);
-        return existingProduct;
     }
 
     @Override
     public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+        try{
+            productRepository.deleteById(productId);
+        }catch (Exception e){
+            throw new RuntimeException("Error deleting product");
+        }
+
     }
 }

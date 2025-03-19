@@ -1,0 +1,54 @@
+package com.nzefler.product_service.controller;
+
+import com.nzefler.product_service.dto.ProductResponseDTO;
+import com.nzefler.product_service.model.Product;
+import com.nzefler.product_service.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
+
+import java.util.List;
+
+@Controller
+public class ProductController {
+
+    @Autowired
+    private ProductService productService;
+
+    @QueryMapping
+    public List<ProductResponseDTO> getAllProducts(){
+        return productService.findAllProducts();
+    }
+
+    @QueryMapping
+    public ProductResponseDTO getProductById(@Argument Long productId){
+        return productService.findProductById(productId);
+    }
+
+    @QueryMapping
+    public List<ProductResponseDTO> getProductsByCommunityId(@Argument Long communityId){
+        return productService.findProductsByCommunityId(communityId);
+    }
+
+    @QueryMapping
+    public List<ProductResponseDTO> getProductsByUserId(@Argument Long userId){
+        return productService.findProductsByUserId(userId);
+    }
+
+    @MutationMapping
+    public String createProduct(@Argument Product product){
+        return productService.saveProduct(product);
+    }
+
+    @MutationMapping
+    public Product updateProduct(@Argument Product product){
+        return productService.updateProduct(product);
+    }
+
+    @MutationMapping
+    public void deleteProduct(@Argument Long id){
+        productService.deleteProduct(id);
+    }
+}

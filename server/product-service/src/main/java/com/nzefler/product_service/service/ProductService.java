@@ -1,15 +1,17 @@
 package com.nzefler.product_service.service;
 
+import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
-    List<Product> getAllProducts();
-    Optional<Product> getProductById(Long productId);
-    Product createProduct(Product product);
+    List<ProductResponseDTO> findAllProducts();
+    ProductResponseDTO findProductById(Long productId);
+    List<ProductResponseDTO> findProductsByCommunityId(Long communityId);
+    List<ProductResponseDTO> findProductsByUserId(Long userId);
+    String saveProduct(Product product);
     Product updateProduct(Product product);
     void deleteProduct(Long productId);
 

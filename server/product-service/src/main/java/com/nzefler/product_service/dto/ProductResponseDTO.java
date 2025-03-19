@@ -1,38 +1,21 @@
-package com.nzefler.product_service.model;
+package com.nzefler.product_service.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="product_id")
+public class ProductResponseDTO {
     private Long productId;
-    @Column(name="community_id")
     private Long communityId;
-    @Column(name="user_id")
     private Long userId;
-    @Column(name="name")
     private String name;
-    @Column(name="description")
     private String description;
-    @Column(name="type")
     private String type;
-    @Column(name="tag")
     private String tag;
-    @Column(name="category")
     private String category;
-    @Column(name="color")
     private String color;
-    @Column(name="size")
     private String size;
-    @Column(name="price")
     private double price;
 
     public Long getProductId() {

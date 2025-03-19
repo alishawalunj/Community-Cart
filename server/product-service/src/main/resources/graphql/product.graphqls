@@ -13,6 +13,22 @@ type Product{
 }
 
 input ProductInput{
+    communityId: ID!
+    userId: ID!
+    name: String!
+    description: String!
+    type: String!
+    tag: String!
+    category: String!
+    color: String!
+    size: String!
+    price: Float!
+}
+
+type ProductResponseDTO {
+    productId: ID!
+    communityId: ID!
+    userId: ID!
     name: String!
     description: String!
     type: String!
@@ -24,12 +40,14 @@ input ProductInput{
 }
 
 type Query{
-    getAllProducts: [Product]
-    getProductById(productId: ID): Product
+    getAllProducts: [ProductResponseDTO!]!
+    getProductById(productId: ID!): ProductResponseDTO!
+    getProductsByCommunityId(communityId: ID!): [ProductResponseDTO!]!
+    getProductsByUserId(userId: ID!): [ProductResponseDTO!]!
 }
 
 type Mutation{
-    createProduct(name: String!, description: String!, type: String!,tag: String!,category: String!, color: String!,size: String!,price: Float!): Product
-    updateProduct(name: String!, description: String!, type: String!,tag: String!,category: String!, color: String!,size: String!,price: Float!): Product
-    deleteProduct(id: ID!): Product
+    createProduct(input: ProductInput): String!
+    updateProduct(input: ProductInput): ProductResponseDTO!
+    deleteProduct(productId: ID!): String!
 }
