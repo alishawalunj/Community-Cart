@@ -32,12 +32,12 @@ const SellProductForm = ({onProductUploadClick, communities}) => {
             <form onSubmit={handleSubmit}>
                 <div className='mb-5'>
                     <label htmlFor='communityName' className='block text-gray-700 font-bold mb-2'>Community Name</label>
-                    <select name='communityName' id='communityName' value={formData.communityName} onChange={handleChange} className='border rounded-lg px-4 py-2 w-full' required>
+                    {/* <select name='communityName' id='communityName' value={formData.communityName} onChange={handleChange} className='border rounded-lg px-4 py-2 w-full' required>
                         <option value={''}>Select a community</option>
                         {communities.map((community) => (
                             <option key={community.communityId} value={community.communityName}>{community.communityName}</option>
                         ))}
-                    </select>
+                    </select> */}
 
                     <label htmlFor="productName" className='block text-gray-700 font-bold mb-2'>Product Name</label>
                     <input type='text' name='productName' id='productName' value={formData.productName} onChange={handleChange} className='border rounded-lg px-4 py-2 w-full' required/>
@@ -55,6 +55,9 @@ const SellProductForm = ({onProductUploadClick, communities}) => {
 
                     <label htmlFor='quantity' className='block text-gray-700 font-bold mb-2'>Quantity</label>
                     <input type='number' name='quantity' id='quantity' value={formData.quantity} onChange={handleChange} className='border rounded-lg px-4 py-4 w-full' required/>
+
+                    <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Add Product</button>
+                    <button type='back' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full' onClick={() => window.history.back()}>Back</button>
                 </div>
             </form>
         </>
