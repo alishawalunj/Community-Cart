@@ -51,5 +51,4 @@ public class UserController {
     public void deleteUser(@Argument Long userId){
         userService.deleteUser(userId);
     }
-
 }
