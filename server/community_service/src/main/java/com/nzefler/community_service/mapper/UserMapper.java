@@ -21,7 +21,7 @@ public class UserMapper {
         toSaveUser.setFirstName(userDTO.getFirstName());
         toSaveUser.setLastName(userDTO.getLastName());
         toSaveUser.setPassword(userDTO.getPassword());
-        toSaveUser.set
+//        toSaveUser.setCommunity(userDTO.getCommunityId());
         return toSaveUser;
     }
 }
