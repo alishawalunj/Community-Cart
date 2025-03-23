@@ -3,7 +3,6 @@ package com.nzefler.community_service.controller;
 import com.nzefler.community_service.dto.UserDTO;
 import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -14,8 +13,11 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @QueryMapping
     public List<UserDTO> getAllUsers(){

@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDTO> findAllUsersByCommunityId(Long communityId) {
         try{
-            return userRepository.findByCommunity_CommunityId(communityId).stream().map(userMapper::toDTO).collect(Collectors.toList());
+            return userRepository.findByCommunities_CommunityId(communityId).stream().map(userMapper::toDTO).collect(Collectors.toList());
         }catch(Exception e){
             throw new RuntimeException("Error fetching users");
         }

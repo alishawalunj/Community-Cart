@@ -1,17 +1,11 @@
 package com.nzefler.community_service.dto;
 
-import com.nzefler.community_service.model.Community;
-import com.nzefler.community_service.model.User;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @ToString
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {

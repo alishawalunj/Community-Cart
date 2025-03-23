@@ -12,5 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u from User u WHERE LOWER(u.emailId) = LOWER(:emailId)")
     Optional<User> findByEmailId(@Param("emailId") String emailId);
-    List<User> findByCommunity_CommunityId(Long communityId);
+
+    List<User> findByCommunities_CommunityId(Long communityId);
 }

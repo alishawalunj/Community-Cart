@@ -3,7 +3,6 @@ package com.nzefler.community_service.controller;
 import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.service.CommunityServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -13,8 +12,11 @@ import java.util.List;
 @Controller
 public class CommunityController {
 
-    @Autowired
-    private CommunityServiceImpl communityService;
+    private final CommunityServiceImpl communityService;
+
+    public CommunityController(CommunityServiceImpl communityService) {
+        this.communityService = communityService;
+    }
 
     @QueryMapping
     public List<CommunityDTO> getAllCommunities(){

@@ -1,11 +1,8 @@
 package com.nzefler.community_service.dto;
 
-import com.nzefler.community_service.model.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommunityDTO {

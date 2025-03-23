@@ -1,0 +1,22 @@
+type User {
+    userId: ID!
+    firstName: String!
+    lastName: String!
+    emailId: String!
+    password: String!
+    communities:[Community]
+}
+
+extend type Query {
+    getAllUsers: [User]
+    getUserById(userId: ID!): User
+    getUserByEmailId(emailId: String!): User
+    getUsersByCommunityId(communityId: ID!): [User]
+}
+
+extend type Mutation {
+    createUser(firstName: String!, lastName: String!, emailId: String!, password: String!): String
+    updateUser(userId: ID!, firstName: String, lastName: String, emailId: String, password: String): User
+    deleteUser(userId: ID!): String
+    updateUserCommunities(userId: ID!, communityIds: [ID!]!): User
+}
