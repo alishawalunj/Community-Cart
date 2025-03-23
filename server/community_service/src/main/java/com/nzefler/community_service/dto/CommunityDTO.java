@@ -1,14 +1,19 @@
 package com.nzefler.community_service.dto;
 
+import com.nzefler.community_service.model.User;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommunityDTO {
     private Long communityId;
     private String name;
     private String owner;
     private String description;
     private String createdOn;
-
-    public CommunityDTO() {
-    }
 
     public Long getCommunityId() {
         return communityId;

@@ -13,4 +13,6 @@ public interface CommunityService {
     String saveCommunity(Community community);
     Community updateCommunity(Community community);
     void deleteCommunity(Long communityId);
+    CommunityDTO addUsersToCommunity(Long communityId, List<Long> userIds);
+    CommunityDTO removeUsersFromCommunity(Long communityId, List<Long> userIds);
 }

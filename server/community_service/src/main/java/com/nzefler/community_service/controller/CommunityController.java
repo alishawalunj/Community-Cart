@@ -45,5 +45,15 @@ public class CommunityController {
     public void deleteCommunity(@Argument Long communityId){
         communityService.deleteCommunity(communityId);
     }
+
+    @MutationMapping
+    public CommunityDTO addUsersToCommunity(@Argument Long communityId, @Argument List<Long> userIds){
+        return communityService.addUsersToCommunity(communityId,userIds);
+    }
+
+    @MutationMapping
+    public CommunityDTO removeUsersFromCommunity(@Argument Long communityId, @Argument List<Long> userIds){
+        return communityService.removeUsersFromCommunity(communityId,userIds);
+    }
 }
 

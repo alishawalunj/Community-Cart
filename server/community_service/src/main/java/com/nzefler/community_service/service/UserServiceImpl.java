@@ -1,13 +1,17 @@
 package com.nzefler.community_service.service;
 
+import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.dto.UserDTO;
 import com.nzefler.community_service.mapper.UserMapper;
+import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.model.User;
+import com.nzefler.community_service.repository.CommunityRepository;
 import com.nzefler.community_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -18,6 +22,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CommunityRepository communityRepository;
 
     @Override
     public List<UserDTO> findAllUsers() {
@@ -31,7 +38,6 @@ public class UserServiceImpl implements UserService{
         }catch (Exception e){
             throw new RuntimeException("Error fetching users details");
         }
-
     }
 
     @Override
@@ -102,5 +108,18 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete user");
         }
+    }
+
+    @Override
+    public UserDTO updateUserCommunities(Long userId, List<Long> communityIds) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("No user found with given id"));
+
+        List<Community> communities = communityRepository.findAllById(communityIds);
+        if (communities.size() != communityIds.size()) {
+            throw new RuntimeException("One or more communities not found");
+        }
+        user.setCommunities(new HashSet<>(communities));
+        userRepository.save(user);
+        return userMapper.toDTO(user);
     }
 }

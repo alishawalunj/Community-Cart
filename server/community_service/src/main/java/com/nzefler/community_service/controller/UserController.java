@@ -51,4 +51,9 @@ public class UserController {
     public void deleteUser(@Argument Long userId){
         userService.deleteUser(userId);
     }
+
+    @MutationMapping
+    public UserDTO updateUserCommunities(@Argument Long userId, @Argument List<Long> communityIds){
+        return userService.updateUserCommunities(userId, communityIds);
+    }
 }

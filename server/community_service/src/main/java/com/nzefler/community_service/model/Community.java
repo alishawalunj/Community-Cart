@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="community")
+@Table(name="communities")
 public class Community {
 
     @Id
@@ -22,8 +25,8 @@ public class Community {
     private String owner;
     private String description;
     private String createdOn;
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> members;
+    @ManyToMany(mappedBy = "communities")
+    private Set<User> users = new HashSet<>();
 
     public Long getCommunityId() {
         return communityId;
@@ -65,11 +68,11 @@ public class Community {
         this.createdOn = createdOn;
     }
 
-    public List<User> getMembers() {
-        return members;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

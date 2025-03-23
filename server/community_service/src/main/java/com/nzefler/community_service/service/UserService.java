@@ -1,5 +1,6 @@
 package com.nzefler.community_service.service;
 
+import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.dto.UserDTO;
 import com.nzefler.community_service.model.User;
 
@@ -13,4 +14,5 @@ public interface UserService {
     String saveUser(User user);
     User updateUser(User user);
     void deleteUser(Long userId);
+    UserDTO updateUserCommunities(Long userId, List<Long> communityIds);
 }

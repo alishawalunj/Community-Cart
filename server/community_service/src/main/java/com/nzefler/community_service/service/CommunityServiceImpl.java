@@ -3,7 +3,9 @@ package com.nzefler.community_service.service;
 import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.mapper.CommunityMapper;
 import com.nzefler.community_service.model.Community;
+import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.repository.CommunityRepository;
+import com.nzefler.community_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Autowired
     private CommunityMapper mapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<CommunityDTO> findAllCommunities() {
@@ -87,5 +92,27 @@ public class CommunityServiceImpl implements CommunityService{
             throw new RuntimeException("Failed to delete the community");
         }
 
+    }
+
+    @Override
+    public CommunityDTO addUsersToCommunity(Long communityId, List<Long> userIds) {
+        Community community = communityRepository.findById(communityId).orElseThrow(() -> new RuntimeException("Community not found"));
+
+        List<User> users = userRepository.findAllById(userIds);
+        if(users.size() != userIds.size()){
+            throw new RuntimeException("One or more users not found");
+        }
+        community.getUsers().addAll(users);
+        communityRepository.save(community);
+        return mapper.toDTO(community);
+    }
+
+    @Override
+    public CommunityDTO removeUsersFromCommunity(Long communityId, List<Long> userIds) {
+        Community community = communityRepository.findById(communityId).orElseThrow(() -> new RuntimeException("Community not found"));
+        List<User> users = userRepository.findAllById(userIds);
+        community.getUsers().removeAll(users);
+        communityRepository.save(community);
+        return mapper.toDTO(community);
     }
 }

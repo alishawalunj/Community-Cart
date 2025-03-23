@@ -1,21 +1,36 @@
 package com.nzefler.community_service.dto;
 
+import com.nzefler.community_service.model.Community;
+import com.nzefler.community_service.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@AllArgsConstructor
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @ToString
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
     private Long userId;
     private String firstName;
     private String lastName;
     private String emailId;
     private String password;
-    private Long communityId;
+//    private Set<Long> communityIds;
+
+
+//    public UserDTO(User user){
+//        this.userId = user.getUserId();
+//        this.firstName = user.getFirstName();
+//        this.lastName = user.getLastName();
+//        this.emailId = user.getEmailId();
+//        this.password = user.getPassword();
+//        this.communityIds = user.getCommunities().stream().map(Community::getCommunityId).collect(Collectors.toSet());
+//    }
 
     public Long getUserId() {
         return userId;
@@ -57,11 +72,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Long getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
-    }
+//    public Set<Long> getCommunityIds() {
+//        return communityIds;
+//    }
+//
+//    public void setCommunityIds(Set<Long> communityIds) {
+//        this.communityIds = communityIds;
+//    }
 }

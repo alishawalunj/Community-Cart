@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -18,10 +22,9 @@ public class User {
     private String lastName;
     private String emailId;
     private String password;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "community_id",nullable = false)
-    private Community community;
+    @ManyToMany
+    @JoinTable(name="user_community", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "community_id"))
+    private Set<Community> communities = new HashSet<>();
 
     public Long getUserId() {
         return userId;
@@ -63,11 +66,11 @@ public class User {
         this.password = password;
     }
 
-    public Community getCommunity() {
-        return community;
+    public Set<Community> getCommunities() {
+        return communities;
     }
 
-    public void setCommunity(Community community) {
-        this.community = community;
+    public void setCommunities(Set<Community> communities) {
+        this.communities = communities;
     }
 }
