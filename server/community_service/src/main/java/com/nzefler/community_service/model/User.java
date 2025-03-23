@@ -8,17 +8,19 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name="users")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1, initialValue = 101)
     private Long userId;
     private String firstName;
     private String lastName;
     private String emailId;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "community_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_id",nullable = false)
     private Community community;
 
     public Long getUserId() {

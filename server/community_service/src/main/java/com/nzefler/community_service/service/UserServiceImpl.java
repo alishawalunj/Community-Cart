@@ -1,12 +1,13 @@
 package com.nzefler.community_service.service;
 
-import com.nzefler.community_service.dto.UserResponseDTO;
+import com.nzefler.community_service.dto.UserDTO;
 import com.nzefler.community_service.mapper.UserMapper;
 import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -19,12 +20,22 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> findAllUsers() {
+        try{
+            List<UserDTO> userResponseList = new ArrayList<>();
+            List<User> users = userRepository.findAll();
+            for(User user : users){
+                userResponseList.add((userMapper.toDTO(user)));
+            }
+            return userResponseList;
+        }catch (Exception e){
+            throw new RuntimeException("Error fetching users details");
+        }
+
     }
 
     @Override
-    public UserResponseDTO findUserById(Long userId) {
+    public UserDTO findUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new RuntimeException("No user Found with given user id");
@@ -33,12 +44,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO findUserByEmailId(String emailId) {
+    public UserDTO findUserByEmailId(String emailId) {
         Optional<User> existingUser = userRepository.findByEmailId(emailId);
         if(existingUser.isEmpty()){
             throw new RuntimeException("User is not the existing one");
         }
         return existingUser.map(userMapper::toDTO).orElseThrow(() -> new RuntimeException("Error fetching user"));
+    }
+
+    @Override
+    public List<UserDTO> findAllUsersByCommunityId(Long communityId) {
+        try{
+            List<UserDTO> usersList = new ArrayList<>();
+            List<User> users = userRepository.findByCommunity_CommunityId(communityId);
+            for(User user : users){
+                usersList.add(userMapper.toDTO(user));
+            }
+            return usersList;
+        }catch(Exception e){
+            throw new RuntimeException("Error fetching users");
+        }
     }
 
     @Override

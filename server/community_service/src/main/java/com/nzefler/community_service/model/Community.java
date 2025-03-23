@@ -10,16 +10,19 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name="community")
 public class Community {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "community_seq")
+    @SequenceGenerator(name = "community_seq", sequenceName = "community_sequence", allocationSize = 1, initialValue = 1001)
     private Long communityId;
+    @Column(unique = true, nullable = false)
     private String name;
     private String owner;
     private String description;
     private String createdOn;
-    @OneToMany
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> members;
 
     public Long getCommunityId() {

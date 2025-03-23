@@ -1,6 +1,6 @@
 package com.nzefler.community_service.service;
 
-import com.nzefler.community_service.dto.CommunityResponseDTO;
+import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.mapper.CommunityMapper;
 import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.repository.CommunityRepository;
@@ -20,9 +20,9 @@ public class CommunityServiceImpl implements CommunityService{
     private CommunityMapper mapper;
 
     @Override
-    public List<CommunityResponseDTO> findAllCommunities() {
+    public List<CommunityDTO> findAllCommunities() {
         try{
-            List<CommunityResponseDTO> communitiesList = new ArrayList<>();
+            List<CommunityDTO> communitiesList = new ArrayList<>();
             List<Community> communities = communityRepository.findAll();
             for(Community community : communities){
                 communitiesList.add(mapper.toDTO(community));
@@ -34,7 +34,7 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     @Override
-    public CommunityResponseDTO findCommunityById(Long communityId) {
+    public CommunityDTO findCommunityById(Long communityId) {
         try{
             return communityRepository.findById(communityId).map(mapper::toDTO).orElseThrow(() -> new RuntimeException("Community not found in database"));
         }catch(Exception e){
@@ -43,7 +43,7 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     @Override
-    public CommunityResponseDTO findCommunityByName(String name) {
+    public CommunityDTO findCommunityByName(String name) {
         Optional<Community> existingCommunity = communityRepository.findByName(name);
         if(existingCommunity.isEmpty()){
             throw new RuntimeException("Community not found");
@@ -67,16 +67,14 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     public Community updateCommunity(Community community) {
-         Optional<Community> optionalCommunity = communityRepository.findByName(community.getName());
-         if(optionalCommunity.isEmpty()){
-             throw new RuntimeException("Community doesnt exist, create it first ");
-         }
-         Community existingCommunity = optionalCommunity.get();
-         existingCommunity.setDescription(community.getDescription());
-         existingCommunity.setName(community.getName());
-         existingCommunity.setOwner(community.getOwner());
-//         TODO: use of updating members List
-//        existingCommunity.setMembersList(community.getMembersList());
+        Optional<Community> optionalCommunity = communityRepository.findByName(community.getName());
+        if(optionalCommunity.isEmpty()){
+            throw new RuntimeException("Community doesnt exist, create it first ");
+        }
+        Community existingCommunity = optionalCommunity.get();
+        existingCommunity.setDescription(community.getDescription());
+        existingCommunity.setName(community.getName());
+        existingCommunity.setOwner(community.getOwner());
         communityRepository.save(existingCommunity);
         return existingCommunity;
     }

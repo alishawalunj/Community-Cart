@@ -5,20 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
 @AllArgsConstructor
 @ToString
 @Entity
 @NoArgsConstructor
-public class UserResponseDTO {
+public class UserDTO {
     private Long userId;
     private String firstName;
     private String lastName;
     private String emailId;
     private String password;
-    private List<CommunityResponseDTO> communities;
-    private List<CommunityResponseDTO> communitiesOwned;
+    private Long communityId;
 
     public Long getUserId() {
         return userId;
@@ -60,19 +57,11 @@ public class UserResponseDTO {
         this.password = password;
     }
 
-    public List<CommunityResponseDTO> getCommunities() {
-        return communities;
+    public Long getCommunityId() {
+        return communityId;
     }
 
-    public void setCommunities(List<CommunityResponseDTO> communities) {
-        this.communities = communities;
-    }
-
-    public List<CommunityResponseDTO> getCommunitiesOwned() {
-        return communitiesOwned;
-    }
-
-    public void setCommunitiesOwned(List<CommunityResponseDTO> communitiesOwned) {
-        this.communitiesOwned = communitiesOwned;
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
     }
 }

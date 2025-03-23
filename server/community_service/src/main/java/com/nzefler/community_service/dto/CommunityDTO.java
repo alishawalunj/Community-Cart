@@ -1,16 +1,13 @@
 package com.nzefler.community_service.dto;
 
-import java.util.List;
-
-public class CommunityResponseDTO {
+public class CommunityDTO {
     private Long communityId;
     private String name;
     private String owner;
     private String description;
     private String createdOn;
-    private List<UserResponseDTO> membersList;
 
-    public CommunityResponseDTO() {
+    public CommunityDTO() {
     }
 
     public Long getCommunityId() {
@@ -51,13 +48,5 @@ public class CommunityResponseDTO {
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public List<UserResponseDTO> getMembersList() {
-        return membersList;
-    }
-
-    public void setMembersList(List<UserResponseDTO> membersList) {
-        this.membersList = membersList;
     }
 }

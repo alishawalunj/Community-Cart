@@ -1,6 +1,6 @@
 package com.nzefler.community_service.controller;
 
-import com.nzefler.community_service.dto.UserResponseDTO;
+import com.nzefler.community_service.dto.UserDTO;
 import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +18,23 @@ public class UserController {
     private UserServiceImpl userService;
 
     @QueryMapping
-    public List<User> getAllUsers(){
+    public List<UserDTO> getAllUsers(){
         return userService.findAllUsers();
     }
 
     @QueryMapping
-    public UserResponseDTO getUserById(@Argument Long userId){
+    public UserDTO getUserById(@Argument Long userId){
         return userService.findUserById(userId);
     }
 
     @QueryMapping
-    public UserResponseDTO getUserByEmailId(@Argument String emailId){
+    public UserDTO getUserByEmailId(@Argument String emailId){
         return userService.findUserByEmailId(emailId);
+    }
+
+    @QueryMapping
+    public List<UserDTO> getUsersByCommunityId(@Argument Long communityId){
+        return userService.findAllUsersByCommunityId(communityId);
     }
 
     @MutationMapping

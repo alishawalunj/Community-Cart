@@ -1,6 +1,6 @@
 package com.nzefler.community_service.controller;
 
-import com.nzefler.community_service.dto.CommunityResponseDTO;
+import com.nzefler.community_service.dto.CommunityDTO;
 import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.service.CommunityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,17 @@ public class CommunityController {
     private CommunityServiceImpl communityService;
 
     @QueryMapping
-    public List<CommunityResponseDTO> getAllCommunities(){
+    public List<CommunityDTO> getAllCommunities(){
         return communityService.findAllCommunities();
     }
 
     @QueryMapping
-    public CommunityResponseDTO getCommunityById(@Argument Long communityId){
+    public CommunityDTO getCommunityById(@Argument Long communityId){
         return communityService.findCommunityById(communityId);
     }
 
     @QueryMapping
-    public CommunityResponseDTO getCommunityByName(@Argument String name){
+    public CommunityDTO getCommunityByName(@Argument String name){
         return communityService.findCommunityByName(name);
     }
 

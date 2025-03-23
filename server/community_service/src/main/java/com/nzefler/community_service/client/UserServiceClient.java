@@ -1,6 +1,6 @@
 package com.nzefler.community_service.client;
 
-import com.nzefler.community_service.dto.UserResponseDTO;
+import com.nzefler.community_service.dto.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,5 +11,5 @@ import java.util.List;
 public interface UserServiceClient {
 
     @GetMapping("/api/users")
-    List<UserResponseDTO> getUserByCommunityId(@RequestParam("communityId") Long communityId);
+    List<UserDTO> getUserByCommunityId(@RequestParam("communityId") Long communityId);
 }
