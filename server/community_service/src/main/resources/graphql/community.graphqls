@@ -7,16 +7,24 @@ type Community {
     users: [User]
 }
 
+
+input CommunityInput {
+    name: String!
+    owner: String!
+    description: String!
+    createdOn: String!
+}
+
 type Query {
     getAllCommunities: [Community]
     getCommunityById(communityId: ID!): Community
-    getAllCommunitiesByName(name: String!): Community
+    getCommunityByName(name: String!): Community
 }
 
 type Mutation {
-    createCommunity(name: String!, owner: String, description: String, createdOn: String): String
-    updateCommunity(communityId: ID!, name: String, owner: String, description: String): Community
+    createCommunity(community: CommunityInput!): String
+    updateCommunity(community: CommunityInput!): Community
     deleteCommunity(communityId: ID!): String
-    addUsersToCommunity(communityId: ID!, userIds: [ID!]!): Community
-    removeUsersFromCommunity(communityId: ID!, userIds: [ID!]!): Community
+    addUsersToCommunity(communityId: ID!, userId: ID!): Community
+    removeUsersFromCommunity(communityId: ID!, userId: ID!): Community
 }

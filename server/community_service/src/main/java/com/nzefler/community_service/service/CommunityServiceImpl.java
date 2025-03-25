@@ -1,6 +1,7 @@
 package com.nzefler.community_service.service;
 
 import com.nzefler.community_service.dto.CommunityDTO;
+import com.nzefler.community_service.dto.CommunityDetailDTO;
 import com.nzefler.community_service.exception.EntityAlreadyExistsException;
 import com.nzefler.community_service.exception.EntityNotFoundException;
 import com.nzefler.community_service.mapper.CommunityMapper;
@@ -36,11 +37,11 @@ public class CommunityServiceImpl implements CommunityService{
             throw new RuntimeException("Error fetching communities");
         }
     }
-
+    @Transactional
     @Override
-    public CommunityDTO findCommunityById(Long communityId) {
+    public CommunityDetailDTO findCommunityById(Long communityId) {
         try{
-            return communityRepository.findById(communityId).map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException("Community doesnt exists"));
+            return communityRepository.findByIdWithUsers(communityId).map(mapper::toCommunityDetailDTO).orElseThrow(() -> new EntityNotFoundException("Community doesnt exists"));
         }catch(Exception e){
             throw new RuntimeException("Error in fetching Community details");
         }
@@ -100,24 +101,27 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     @Transactional
-    public CommunityDTO addUsersToCommunity(Long communityId, List<Long> userIds) {
-        Community community = communityRepository.findById(communityId).orElseThrow(() -> new EntityNotFoundException("Community doesn't exists"));
-        List<User> users = userRepository.findAllById(userIds);
-        if(users.size() != userIds.size()){
-            throw new EntityNotFoundException("One or more user doesnt exists");
+    public CommunityDetailDTO addUsersToCommunity(Long communityId, Long userId) {
+        try{
+            Community community = communityRepository.findById(communityId).orElseThrow(() -> new EntityNotFoundException("Community doesn't exists"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+            community.getUsers().add(user);
+            user.getCommunities().add(community);
+            userRepository.save(user);
+            return mapper.toCommunityDetailDTO(community);
+        }catch(Exception e){
+            throw new RuntimeException("Error in updating Community");
         }
-        community.getUsers().addAll(users);
-        communityRepository.save(community);
-        return mapper.toDTO(community);
     }
 
     @Override
     @Transactional
-    public CommunityDTO removeUsersFromCommunity(Long communityId, List<Long> userIds) {
+    public CommunityDetailDTO removeUsersFromCommunity(Long communityId, Long userId) {
         Community community = communityRepository.findById(communityId).orElseThrow(() -> new EntityNotFoundException("Community doesn't exists"));
-        List<User> users = userRepository.findAllById(userIds);
-        users.forEach(community.getUsers()::remove);
-        communityRepository.save(community);
-        return mapper.toDTO(community);
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        community.getUsers().remove(user);
+        user.getCommunities().remove(community);
+        userRepository.save(user);
+        return mapper.toCommunityDetailDTO(community);
     }
 }

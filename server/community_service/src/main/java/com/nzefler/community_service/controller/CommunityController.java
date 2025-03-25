@@ -1,6 +1,7 @@
 package com.nzefler.community_service.controller;
 
 import com.nzefler.community_service.dto.CommunityDTO;
+import com.nzefler.community_service.dto.CommunityDetailDTO;
 import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.service.CommunityServiceImpl;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,7 +25,7 @@ public class CommunityController {
     }
 
     @QueryMapping
-    public CommunityDTO getCommunityById(@Argument Long communityId){
+    public CommunityDetailDTO getCommunityById(@Argument Long communityId){
         return communityService.findCommunityById(communityId);
     }
 
@@ -49,13 +50,13 @@ public class CommunityController {
     }
 
     @MutationMapping
-    public CommunityDTO addUsersToCommunity(@Argument Long communityId, @Argument List<Long> userIds){
-        return communityService.addUsersToCommunity(communityId,userIds);
+    public CommunityDetailDTO addUsersToCommunity(@Argument Long communityId, @Argument Long userId){
+        return communityService.addUsersToCommunity(communityId,userId);
     }
 
     @MutationMapping
-    public CommunityDTO removeUsersFromCommunity(@Argument Long communityId, @Argument List<Long> userIds){
-        return communityService.removeUsersFromCommunity(communityId,userIds);
+    public CommunityDetailDTO removeUsersFromCommunity(@Argument Long communityId, @Argument Long userId){
+        return communityService.removeUsersFromCommunity(communityId,userId);
     }
 }
 

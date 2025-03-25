@@ -7,6 +7,13 @@ type User {
     communities:[Community]
 }
 
+input UserInput {
+    firstName: String!
+    lastName: String!
+    emailId: String!
+    password: String!
+}
+
 extend type Query {
     getAllUsers: [User]
     getUserById(userId: ID!): User
@@ -15,8 +22,8 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(firstName: String!, lastName: String!, emailId: String!, password: String!): String
-    updateUser(userId: ID!, firstName: String, lastName: String, emailId: String, password: String): User
+    createUser(user: UserInput!): String
+    updateUser(user: UserInput!): User
     deleteUser(userId: ID!): String
     updateUserCommunities(userId: ID!, communityIds: [ID!]!): User
 }
