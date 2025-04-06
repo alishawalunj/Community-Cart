@@ -5,25 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "product_seq")
+    @SequenceGenerator(name = "product_seq", sequenceName = "product_sequence", allocationSize = 1, initialValue = 1301)
     @Column(name="product_id")
     private Long productId;
-    @Column(name="community_id")
-    private Long communityId;
     @Column(name="user_id")
     private Long userId;
+    @Column(name = "community_id")
+    private Long communityId;
     @Column(name="name")
     private String name;
     @Column(name="description")
     private String description;
-    @Column(name="type")
-    private String type;
+    @Column(name="productType")
+    private String productType;
     @Column(name="tag")
     private String tag;
     @Column(name="category")
@@ -34,6 +37,8 @@ public class Product {
     private String size;
     @Column(name="price")
     private double price;
+    @Column(name="count")
+    private double count;
 
     public Long getProductId() {
         return productId;
@@ -43,20 +48,20 @@ public class Product {
         this.productId = productId;
     }
 
-    public Long getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
-    }
-
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
     }
 
     public String getName() {
@@ -75,12 +80,12 @@ public class Product {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getProductType() {
+        return productType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public String getTag() {
@@ -121,5 +126,13 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getCount() {
+        return count;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
     }
 }

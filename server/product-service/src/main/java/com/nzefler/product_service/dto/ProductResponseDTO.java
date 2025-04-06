@@ -1,22 +1,23 @@
 package com.nzefler.product_service.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductResponseDTO {
     private Long productId;
     private Long communityId;
     private Long userId;
     private String name;
     private String description;
-    private String type;
+    private String productType;
     private String tag;
     private String category;
     private String color;
     private String size;
     private double price;
+    private double count;
 
     public Long getProductId() {
         return productId;
@@ -58,12 +59,12 @@ public class ProductResponseDTO {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getProductType() {
+        return productType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public String getTag() {
@@ -104,5 +105,13 @@ public class ProductResponseDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getCount() {
+        return count;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
     }
 }

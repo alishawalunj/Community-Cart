@@ -2,8 +2,7 @@ package com.nzefler.product_service.controller;
 
 import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
-import com.nzefler.product_service.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nzefler.product_service.service.ProductServiceImpl;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -14,8 +13,11 @@ import java.util.List;
 @Controller
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductServiceImpl productService;
+
+    public ProductController(ProductServiceImpl productService) {
+        this.productService = productService;
+    }
 
     @QueryMapping
     public List<ProductResponseDTO> getAllProducts(){
@@ -43,12 +45,12 @@ public class ProductController {
     }
 
     @MutationMapping
-    public Product updateProduct(@Argument Product product){
+    public ProductResponseDTO updateProduct(@Argument Product product){
         return productService.updateProduct(product);
     }
 
     @MutationMapping
-    public void deleteProduct(@Argument Long id){
-        productService.deleteProduct(id);
+    public String deleteProduct(@Argument Long productId){
+        return productService.deleteProduct(productId);
     }
 }

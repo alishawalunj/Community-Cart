@@ -2,7 +2,9 @@ package com.nzefler.product_service.mapper;
 
 import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductMapper {
 
     public ProductResponseDTO toDto(Product product){
@@ -12,12 +14,13 @@ public class ProductMapper {
         response.setUserId(product.getUserId());
         response.setName(product.getName());
         response.setDescription(product.getDescription());
-        response.setType(product.getType());
+        response.setProductType(product.getProductType());
         response.setTag(product.getTag());
         response.setCategory(product.getCategory());
         response.setColor(product.getColor());
         response.setSize(product.getSize());
         response.setPrice(product.getPrice());
+        response.setCount(product.getCount());
         return response;
     }
 
@@ -27,12 +30,13 @@ public class ProductMapper {
         existingProduct.setUserId(productDto.getUserId());
         existingProduct.setName(productDto.getName());
         existingProduct.setDescription(productDto.getDescription());
-        existingProduct.setType(productDto.getType());
+        existingProduct.setProductType(productDto.getProductType());
         existingProduct.setTag(productDto.getTag());
         existingProduct.setCategory(productDto.getCategory());
         existingProduct.setColor(productDto.getColor());
         existingProduct.setSize(productDto.getSize());
         existingProduct.setPrice(productDto.getPrice());
+        existingProduct.setCount(productDto.getCount());
         return existingProduct;
     }
 
@@ -42,12 +46,13 @@ public class ProductMapper {
         existingProduct.setUserId(newProduct.getUserId());
         existingProduct.setName(newProduct.getName());
         existingProduct.setDescription(newProduct.getDescription());
-        existingProduct.setType(newProduct.getType());
+        existingProduct.setProductType(newProduct.getProductType());
         existingProduct.setTag(newProduct.getTag());
         existingProduct.setCategory(newProduct.getCategory());
         existingProduct.setColor(newProduct.getColor());
         existingProduct.setSize(newProduct.getSize());
         existingProduct.setPrice(newProduct.getPrice());
+        existingProduct.setCount(newProduct.getCount());
         return existingProduct;
     }
 }

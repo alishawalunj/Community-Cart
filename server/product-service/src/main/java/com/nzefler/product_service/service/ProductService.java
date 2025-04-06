@@ -6,13 +6,11 @@ import com.nzefler.product_service.model.Product;
 import java.util.List;
 
 public interface ProductService {
-
     List<ProductResponseDTO> findAllProducts();
     ProductResponseDTO findProductById(Long productId);
     List<ProductResponseDTO> findProductsByCommunityId(Long communityId);
     List<ProductResponseDTO> findProductsByUserId(Long userId);
     String saveProduct(Product product);
-    Product updateProduct(Product product);
-    void deleteProduct(Long productId);
-
+    ProductResponseDTO updateProduct(Product product);
+    String deleteProduct(Long productId);
 }

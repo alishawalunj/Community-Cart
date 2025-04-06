@@ -1,112 +1,113 @@
 package com.nzefler.product_service.service;
 
 import com.nzefler.product_service.dto.ProductResponseDTO;
+import com.nzefler.product_service.exception.EntityAlreadyExistsException;
+import com.nzefler.product_service.exception.EntityNotFoundException;
 import com.nzefler.product_service.mapper.ProductMapper;
 import com.nzefler.product_service.model.Product;
 import com.nzefler.product_service.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 public class ProductServiceImpl implements ProductService{
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper mapper;
 
-    @Autowired
-    private ProductMapper mapper;
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper mapper) {
+        this.productRepository = productRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<ProductResponseDTO> findAllProducts() {
         try{
-            List<ProductResponseDTO> productList = new ArrayList<>();
-            List<Product> products = productRepository.findAll();
-            for(Product product: products){
-                productList.add(mapper.toDto(product));
-            }
-            return productList;
+            return productRepository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
         }catch(Exception e){
-            throw new RuntimeException("Error fetching products");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public ProductResponseDTO findProductById(Long productId) {
         try{
-            return productRepository.findById(productId).map(mapper::toDto).orElseThrow(() -> new RuntimeException("No product present in database with id "+ productId));
+            return productRepository.findById(productId).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException("Product does not exist"));
         }catch(Exception e){
-            throw new RuntimeException("Error fetching product");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public List<ProductResponseDTO> findProductsByCommunityId(Long communityId) {
         try{
-            List<ProductResponseDTO> productList = new ArrayList<>();
-            List<Product> products = productRepository.findAllByCommunityId(communityId);
-            for(Product product: products){
-                productList.add(mapper.toDto(product));
-            }
-            return productList;
+            return productRepository.findByCommunityId(communityId).stream().map(mapper::toDto).collect(Collectors.toList());
         }catch(Exception e){
-            throw new RuntimeException("Error fetching products");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public List<ProductResponseDTO> findProductsByUserId(Long userId) {
         try{
-            List<ProductResponseDTO> productList = new ArrayList<>();
-            List<Product> products = productRepository.findAllByUserId(userId);
-            for(Product product: products){
-                productList.add(mapper.toDto(product));
-            }
-            return productList;
+            return productRepository.findByUserId(userId).stream().map(mapper::toDto).collect(Collectors.toList());
         }catch(Exception e){
-            throw new RuntimeException("Error fetching products");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
+    @Transactional
     public String saveProduct(Product product) {
         try{
-            Optional<Product> existingProduct = productRepository.findById(product.getProductId());
-            if(existingProduct.isPresent()){
-                throw new RuntimeException("Product already exists");
-            }else{
-                productRepository.save(product);
-                return "Product created successsfully";
-            }
+            productRepository.save(product);
+            return "Product created successfully";
         }catch(Exception e){
-            throw new RuntimeException("Error creating new product");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public Product updateProduct(Product product) {
+    @Transactional
+    public ProductResponseDTO updateProduct(Product product) {
+        Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
         try{
-            Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
             if (optionalProduct.isEmpty()) {
-                throw new RuntimeException("Product does not exist");
+                throw new EntityNotFoundException("Product does not exist");
             }
             Product existingProduct = optionalProduct.get();
-            Product updatedProduct = mapper.updateExistingProduct(existingProduct,product);
-            return productRepository.save(updatedProduct);
+            existingProduct.setTag(product.getTag());
+            existingProduct.setProductType(product.getProductType());
+            existingProduct.setSize(product.getSize());
+            existingProduct.setCount(product.getCount());
+            existingProduct.setName(product.getName());
+            existingProduct.setDescription(product.getDescription());
+            existingProduct.setCategory(product.getCategory());
+            existingProduct.setColor(product.getColor());
+            productRepository.save(existingProduct);
+            return mapper.toDto(existingProduct);
         }catch(Exception e){
-            throw new RuntimeException("Error creating new product");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public void deleteProduct(Long productId) {
+    @Transactional
+    public String deleteProduct(Long productId) {
         try{
             productRepository.deleteById(productId);
+            return "Product deleted successfully";
         }catch (Exception e){
-            throw new RuntimeException("Error deleting product");
+            throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private void validateUserCommunities(Long userId, Set<Long> communityIds){
 
     }
 }

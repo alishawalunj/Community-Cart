@@ -1,53 +1,56 @@
 type Product{
     productId: ID!
-    communityId: ID!
     userId: ID!
+    communityId: ID!
     name: String!
     description: String!
-    type: String!
+    productType: String!
     tag: String!
     category: String!
     color: String!
     size: String!
     price: Float!
+    count: Float!
 }
 
 input ProductInput{
-    communityId: ID!
     userId: ID!
+    communityId: ID!
     name: String!
     description: String!
-    type: String!
+    productType: String!
     tag: String!
     category: String!
     color: String!
     size: String!
     price: Float!
+    count: Float!
 }
 
-type ProductResponseDTO {
+input UpdateProductInput{
     productId: ID!
-    communityId: ID!
     userId: ID!
+    communityId: ID!
     name: String!
     description: String!
-    type: String!
+    productType: String!
     tag: String!
     category: String!
     color: String!
     size: String!
     price: Float!
+    count: Float!
 }
 
-type Query{
-    getAllProducts: [ProductResponseDTO!]!
-    getProductById(productId: ID!): ProductResponseDTO!
-    getProductsByCommunityId(communityId: ID!): [ProductResponseDTO!]!
-    getProductsByUserId(userId: ID!): [ProductResponseDTO!]!
+type Query {
+    getAllProducts: [Product]
+    getProductById(productId: ID!): Product
+    getProductsByCommunityId(communityId: ID!): [Product]
+    getProductsByUserId(userId: ID!): [Product]
 }
 
 type Mutation{
-    createProduct(input: ProductInput): String!
-    updateProduct(input: ProductInput): ProductResponseDTO!
+    createProduct(product: ProductInput!): String
+    updateProduct(product: UpdateProductInput!): Product
     deleteProduct(productId: ID!): String!
 }
