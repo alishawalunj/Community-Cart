@@ -1,14 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
+import "../styles/CardComponent.css";
+import { styled } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function CommunityCard() {
+const CommunityCard = () => {
+
+  const membersList =[
+    {
+      role:"Admin",
+      name:"Rachel Green"
+    },
+    {
+      role:"Member",
+      name:"Monica Geller"
+    },
+    {
+      role:"Member",
+      name:"Phoebe Buffay Miller"
+    }
+  ] 
+  // Table Styling
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+  const leaveCommunity = () =>{
+    alert("You have left the community");
+  }
+
   return (
-    <div className="flex justify-center items-center py-6">
-      <div className="max-w-2xl w-2/3 flex border rounded-lg shadow-lg bg-white overflow-hidden transition-all duration-500 group">
-        {/* Front face */}
-        <div className="relative w-full backface-hidden">
-          <div className="w-full min-h-[200px] bg-cover bg-center" style={{ backgroundImage: "url('/src/assets/community1.jpg')" }}/>
-          <div className="p-6 flex flex-col justify-between">
-            <div className="mb-4">
+    <div className="flex items-center justify-center">
+      <div className="container ">
+        <div className="card">
+          <div className="front">
+          <div className="front-image h-1/2 w-full">
+
+          </div>
+          <div className="mb-4 flex flex-col items-center justify-center">
               <h2 className="text-gray-900 font-bold text-xl mb-2">Purdue Community</h2>
               <p className="text-gray-700 text-base">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -16,17 +67,37 @@ export default function CommunityCard() {
                 exercitationem praesentium nihil.
               </p>
             </div>
-            <div className="flex items-center mt-4">
-              <span className="px-5">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">View</button>
-              </span>
-              <span className="px-5">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Leave</button>
-              </span>
+            </div>
+          <div className="back">
+            <h2>Members</h2>
+            <div className='flex flex-col items-center justify-center w-full'>
+              <TableContainer component={Paper} sx={{boxShadow: 'none' , width: '90%'}}>
+                <Table aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Role</StyledTableCell>
+                      <StyledTableCell align="center">Name</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {membersList.map((member) => (
+                      <StyledTableRow key={member.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <StyledTableCell align="center" component="th" scope="row">{member.role}</StyledTableCell>
+                        <StyledTableCell align="center">{member.name}</StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <div className='flex flex-row items-center justify-center w-full mt-4'>
+                <Button variant="outlined" startIcon={<DeleteIcon/>} onClick={leaveCommunity}>Leave Community</Button>
             </div>
           </div>
-        </div>
-      </div>
+          </div>
+        </div>   
     </div>
   );
 }
+
+export default CommunityCard;
