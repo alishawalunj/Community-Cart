@@ -11,22 +11,22 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const CommunityCard = () => {
+const CommunityCard = ({ community }) => {
 
-  const membersList =[
-    {
-      role:"Admin",
-      name:"Rachel Green"
-    },
-    {
-      role:"Member",
-      name:"Monica Geller"
-    },
-    {
-      role:"Member",
-      name:"Phoebe Buffay Miller"
-    }
-  ] 
+  // const membersList =[
+  //   {
+  //     role:"Admin",
+  //     name:"Rachel Green"
+  //   },
+  //   {
+  //     role:"Member",
+  //     name:"Monica Geller"
+  //   },
+  //   {
+  //     role:"Member",
+  //     name:"Phoebe Buffay Miller"
+  //   }
+  // ] 
   // Table Styling
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -48,7 +48,7 @@ const CommunityCard = () => {
   }));
 
   const leaveCommunity = () =>{
-    alert("You have left the community");
+    alert("Are you sure you wan to leave the community?");
   }
 
   return (
@@ -56,19 +56,18 @@ const CommunityCard = () => {
       <div className="container ">
         <div className="card">
           <div className="front">
-          <div className="front-image h-1/2 w-full">
-
-          </div>
-          <div className="mb-4 flex flex-col items-center justify-center">
-              <h2 className="text-gray-900 font-bold text-xl mb-2">Purdue Community</h2>
+            <div className="front-image h-1/2 w-full">
+            </div>
+            <div className="mb-4 flex flex-col items-center justify-center bg-white p-4">
+              <h2 className="text-gray-900 font-bold text-xl mb-2">{community.title}</h2>
               <p className="text-gray-700 text-base">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Voluptatibus quia, nulla! Maiores et perferendis eaque,
                 exercitationem praesentium nihil.
               </p>
             </div>
-            </div>
-          <div className="back">
+          </div>
+          <div className="back h-full">
             <h2>Members</h2>
             <div className='flex flex-col items-center justify-center w-full'>
               <TableContainer component={Paper} sx={{boxShadow: 'none' , width: '90%'}}>
@@ -80,8 +79,8 @@ const CommunityCard = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {membersList.map((member) => (
-                      <StyledTableRow key={member.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    {community.members.map((member,index) => (
+                      <StyledTableRow key={index} sx={{'&:last-child td, &:last-child th': { border: 0 } }}>
                         <StyledTableCell align="center" component="th" scope="row">{member.role}</StyledTableCell>
                         <StyledTableCell align="center">{member.name}</StyledTableCell>
                       </StyledTableRow>
