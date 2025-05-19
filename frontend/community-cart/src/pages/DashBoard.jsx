@@ -8,31 +8,35 @@ const DashBoard = () => {
 
     const marketplaceRef = useRef(null);
     const communityRef = useRef(null);
-
+    const optionsRef = useRef(null);
 
     const handleScrollOptionsToMarketplace = () =>{
-        marketplaceRef.current.scrollIntoView({ behavior: 'smooth' });
+        marketplaceRef.current.scrollIntoView({behavior: 'smooth'});
 
     };
 
     const handleScrollOptionsToCommunity = () => {
-        communityRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+        communityRef.current.scrollIntoView({behavior: 'smooth'});
+    };
+
+    const handleScrollToTop = () => {
+        optionsRef.current.scrollIntoView({behavior: 'smooth'});
+    };
 
 
   return (
     <div>
-      <div>
+      <div ref={optionsRef}>
         <Options onMarketplaceClick ={handleScrollOptionsToMarketplace} onCommunityClick={handleScrollOptionsToCommunity}/>
       </div>
       <div>
         <div ref={communityRef}>
-            <Community/>
+            <Community onBackClick={handleScrollToTop}/>
         </div>
       </div>
       <div>
         <div ref={marketplaceRef}>
-            <Marketplace/>
+            <Marketplace onBackClick={handleScrollToTop}/>
         </div>
       </div>
       

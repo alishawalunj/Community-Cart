@@ -30,26 +30,6 @@ const SellProductForm = ({ onProductUploadClick, communities }) => {
             <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-10 rounded-xl shadow-xl">
                 <h2 className="text-2xl font-bold mb-6 text-center">Add a Product</h2>
 
-                {/* Example if you want to include the community dropdown */}
-                {/* <div className="mb-4">
-                    <label htmlFor="communityName" className="block text-gray-700 font-semibold mb-1">Community Name</label>
-                    <select
-                        name="communityName"
-                        id="communityName"
-                        value={formData.communityName}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                        required
-                    >
-                        <option value="">Select a community</option>
-                        {communities.map((community) => (
-                            <option key={community.communityId} value={community.communityName}>
-                                {community.communityName}
-                            </option>
-                        ))}
-                    </select>
-                </div> */}
-
                 {[
                     { inputFor : 'Product Name', name: 'productName', placeholder: 'Product Name' },
                     { inputFor : 'Product Type', name: 'productType', placeholder: 'Product Type' },

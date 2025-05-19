@@ -1,0 +1,166 @@
+{
+    "communities": [
+      {
+        "communityId": 1001,
+        "name": "Nature Explorers",
+        "owner": "Alice Johnson",
+        "description": "A community for people who love nature trails and hikes.",
+        "createdOn": "2024-03-15",
+        "users": [
+          {
+            "userId": 101,
+            "firstName": "John",
+            "lastName": "Doe",
+            "emailId": "john.doe@example.com"
+          },
+          {
+            "userId": 102,
+            "firstName": "Emily",
+            "lastName": "Smith",
+            "emailId": "emily.smith@example.com"
+          }
+        ]
+      },
+      {
+        "communityId": 1002,
+        "name": "Tech Talks",
+        "owner": "Bob Martin",
+        "description": "Discuss the latest in technology and software engineering.",
+        "createdOn": "2024-01-10",
+        "users": [
+          {
+            "userId": 101,
+            "firstName": "John",
+            "lastName": "Doe",
+            "emailId": "john.doe@example.com"
+          },
+          {
+            "userId": 103,
+            "firstName": "Sarah",
+            "lastName": "Connor",
+            "emailId": "sarah.connor@example.com"
+          }
+        ]
+      }
+    ],
+    "users": [
+      {
+        "userId": 101,
+        "firstName": "John",
+        "lastName": "Doe",
+        "emailId": "john.doe@example.com",
+        "password": "hashed_password_1",
+        "communities": [1001, 1002]
+      },
+      {
+        "userId": 102,
+        "firstName": "Emily",
+        "lastName": "Smith",
+        "emailId": "emily.smith@example.com",
+        "password": "hashed_password_2",
+        "communities": [1001]
+      },
+      {
+        "userId": 103,
+        "firstName": "Sarah",
+        "lastName": "Connor",
+        "emailId": "sarah.connor@example.com",
+        "password": "hashed_password_3",
+        "communities": [1002]
+      }
+    ],
+    "products":[
+      {
+        "productId": 1001,
+        "name": "T-Shirt",
+        "description": "A comfortable and stylish t-shirt.",
+        "price": 19.99,
+        "quantity": 10,
+        "category": "Clothing",
+        "imageUrl": "https://example.com/t-shirt.jpg"
+      },
+      {
+        "productId": 1002,
+        "name": "Sneakers",
+        "description": "Stylish and durable sneakers.",
+        "price": 79.99,
+        "quantity": 5,
+        "category": "Shoes",
+        "imageUrl": "https://example.com/sneakers.jpg"
+      },
+      {
+        "productId": 1003,
+        "name": "Backpack",
+        "description": "A spacious and durable backpack.",
+        "price": 49.99,
+        "quantity": 8,
+        "category": "Accessories",
+        "imageUrl": "https://example.com/backpack.jpg"
+      },
+      {
+        "productId": 1004,
+        "name": "Headphones",
+        "description": "High-quality headphones for music enthusiasts.",
+        "price": 89.99,
+        "quantity": 12,
+        "category": "Electronics",
+        "imageUrl": "https://example.com/headphones.jpg"
+      },
+      {
+        "productId": 1005,
+        "name": "Running Shoes",
+        "description": "Lightweight and durable running shoes.",
+        "price": 79.99,
+        "quantity": 6,
+        "category": "Shoes",
+        "imageUrl": "https://example.com/running-shoes.jpg"
+      },
+      {
+        "productId": 1006,
+        "name": "Trousers",
+        "description": "Stylish and comfortable trousers.",
+        "price": 39.99,
+        "quantity": 15,
+        "category": "Clothing",
+        "imageUrl": "https://example.com/trousers.jpg"
+      },
+      {
+        "productId": 1007,
+        "name": "Sunglasses",
+        "description": "Stylish and durable sunglasses.",
+        "price": 29.99,
+        "quantity": 10,
+        "category": "Accessories",
+        "imageUrl": "https://example.com/sunglasses.jpg"
+      },
+      {
+        "productId": 1008,
+        "name": "Water Bottle",
+        "description": "Compact and durable water bottle.",
+        "price": 9.99,
+        "quantity": 20, 
+        "category": "Accessories",
+        "imageUrl": "https://example.com/water-bottle.jpg"
+      },
+      {
+        "productId": 1009,
+        "name": "Watch",
+        "description": "Stylish and durable watch.",
+        "price": 99.99,
+        "quantity": 5,
+        "category": "Accessories",
+        "imageUrl": "https://example.com/watch.jpg"
+      },
+      {
+        "productId": 1010,
+        "name": "Laptop",
+        "description": "Powerful and portable laptop.",
+        "price": 999.99,
+        "quantity": 3,
+        "category": "Electronics",
+        "imageUrl": "https://example.com/laptop.jpg"
+      }
+
+    ]
+  }
+  

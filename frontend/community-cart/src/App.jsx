@@ -12,6 +12,7 @@ import SellProductForm from './pages/SellProductForm.jsx'
 import LoginSignup from './pages/LoginSignup.jsx'
 import Login from './components/Login.jsx'
 import Signup from './components/Signup.jsx'
+import BuyProduct from './pages/BuyProduct.jsx'
 
   const App = () => {
     return (
@@ -28,6 +29,7 @@ import Signup from './components/Signup.jsx'
         <Route path="/loginsignup" element={<LoginSignup/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup/>}></Route>
+        <Route path="/buy" element={<BuyProduct/>}></Route>
       </Routes>
     );
   };
