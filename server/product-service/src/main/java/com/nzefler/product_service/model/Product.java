@@ -25,12 +25,8 @@ public class Product {
     private String name;
     @Column(name="description")
     private String description;
-    @Column(name="productType")
-    private String productType;
     @Column(name="tag")
     private String tag;
-    @Column(name="category")
-    private String category;
     @Column(name="color")
     private String color;
     @Column(name="size")
@@ -80,28 +76,12 @@ public class Product {
         this.description = description;
     }
 
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
     public String getTag() {
         return tag;
     }
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getColor() {

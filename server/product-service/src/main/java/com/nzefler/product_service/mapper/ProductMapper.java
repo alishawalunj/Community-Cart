@@ -14,9 +14,7 @@ public class ProductMapper {
         response.setUserId(product.getUserId());
         response.setName(product.getName());
         response.setDescription(product.getDescription());
-        response.setProductType(product.getProductType());
         response.setTag(product.getTag());
-        response.setCategory(product.getCategory());
         response.setColor(product.getColor());
         response.setSize(product.getSize());
         response.setPrice(product.getPrice());
@@ -30,9 +28,7 @@ public class ProductMapper {
         existingProduct.setUserId(productDto.getUserId());
         existingProduct.setName(productDto.getName());
         existingProduct.setDescription(productDto.getDescription());
-        existingProduct.setProductType(productDto.getProductType());
         existingProduct.setTag(productDto.getTag());
-        existingProduct.setCategory(productDto.getCategory());
         existingProduct.setColor(productDto.getColor());
         existingProduct.setSize(productDto.getSize());
         existingProduct.setPrice(productDto.getPrice());
@@ -46,9 +42,7 @@ public class ProductMapper {
         existingProduct.setUserId(newProduct.getUserId());
         existingProduct.setName(newProduct.getName());
         existingProduct.setDescription(newProduct.getDescription());
-        existingProduct.setProductType(newProduct.getProductType());
         existingProduct.setTag(newProduct.getTag());
-        existingProduct.setCategory(newProduct.getCategory());
         existingProduct.setColor(newProduct.getColor());
         existingProduct.setSize(newProduct.getSize());
         existingProduct.setPrice(newProduct.getPrice());

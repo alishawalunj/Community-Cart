@@ -4,9 +4,7 @@ type Product{
     communityId: ID!
     name: String!
     description: String!
-    productType: String!
     tag: String!
-    category: String!
     color: String!
     size: String!
     price: Float!
@@ -18,9 +16,7 @@ input ProductInput{
     communityId: ID!
     name: String!
     description: String!
-    productType: String!
     tag: String!
-    category: String!
     color: String!
     size: String!
     price: Float!
@@ -33,9 +29,7 @@ input UpdateProductInput{
     communityId: ID!
     name: String!
     description: String!
-    productType: String!
     tag: String!
-    category: String!
     color: String!
     size: String!
     price: Float!

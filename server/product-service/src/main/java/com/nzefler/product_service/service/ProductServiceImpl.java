@@ -1,7 +1,6 @@
 package com.nzefler.product_service.service;
 
 import com.nzefler.product_service.dto.ProductResponseDTO;
-import com.nzefler.product_service.exception.EntityAlreadyExistsException;
 import com.nzefler.product_service.exception.EntityNotFoundException;
 import com.nzefler.product_service.mapper.ProductMapper;
 import com.nzefler.product_service.model.Product;
@@ -82,12 +81,10 @@ public class ProductServiceImpl implements ProductService{
             }
             Product existingProduct = optionalProduct.get();
             existingProduct.setTag(product.getTag());
-            existingProduct.setProductType(product.getProductType());
             existingProduct.setSize(product.getSize());
             existingProduct.setCount(product.getCount());
             existingProduct.setName(product.getName());
             existingProduct.setDescription(product.getDescription());
-            existingProduct.setCategory(product.getCategory());
             existingProduct.setColor(product.getColor());
             productRepository.save(existingProduct);
             return mapper.toDto(existingProduct);

@@ -11,9 +11,7 @@ public class ProductResponseDTO {
     private Long userId;
     private String name;
     private String description;
-    private String productType;
     private String tag;
-    private String category;
     private String color;
     private String size;
     private double price;
@@ -59,28 +57,12 @@ public class ProductResponseDTO {
         this.description = description;
     }
 
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
     public String getTag() {
         return tag;
     }
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getColor() {
