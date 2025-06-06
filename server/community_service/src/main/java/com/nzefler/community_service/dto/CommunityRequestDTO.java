@@ -3,22 +3,15 @@ package com.nzefler.community_service.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+import java.util.HashSet;
+import java.util.Set;
 @AllArgsConstructor
-public class CommunityDTO {
-    private Long communityId;
+@NoArgsConstructor
+public class CommunityRequestDTO {
     private String name;
     private String owner;
     private String description;
     private String createdOn;
-
-    public Long getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
-    }
 
     public String getName() {
         return name;

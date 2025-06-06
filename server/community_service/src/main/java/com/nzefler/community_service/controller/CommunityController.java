@@ -1,7 +1,8 @@
 package com.nzefler.community_service.controller;
 
-import com.nzefler.community_service.dto.CommunityDTO;
-import com.nzefler.community_service.dto.CommunityDetailDTO;
+import com.nzefler.community_service.dto.CommunityRequestDTO;
+import com.nzefler.community_service.dto.CommunityResponseDTO;
+import com.nzefler.community_service.dto.UserResponseDTO;
 import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.service.CommunityServiceImpl;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -20,28 +21,28 @@ public class CommunityController {
     }
 
     @QueryMapping
-    public List<CommunityDTO> getAllCommunities(){
+    public List<CommunityResponseDTO> getAllCommunities(){
         return communityService.findAllCommunities();
     }
 
     @QueryMapping
-    public CommunityDetailDTO getCommunityById(@Argument Long communityId){
+    public CommunityResponseDTO getCommunityById(@Argument Long communityId){
         return communityService.findCommunityById(communityId);
     }
 
     @QueryMapping
-    public CommunityDTO getCommunityByName(@Argument String name){
+    public CommunityResponseDTO getCommunityByName(@Argument String name){
         return communityService.findCommunityByName(name);
     }
 
     @MutationMapping
-    public String createCommunity(@Argument Community community){
-        return communityService.saveCommunity(community);
+    public CommunityResponseDTO createCommunity(@Argument("community") CommunityRequestDTO dto){
+        return communityService.saveCommunity(dto);
     }
 
     @MutationMapping
-    public Community updateCommunity(@Argument Community community){
-        return communityService.updateCommunity(community);
+    public CommunityResponseDTO updateCommunity(@Argument("community") CommunityRequestDTO dto){
+        return communityService.updateCommunity(dto);
     }
 
     @MutationMapping
@@ -50,13 +51,18 @@ public class CommunityController {
     }
 
     @MutationMapping
-    public CommunityDetailDTO addUsersToCommunity(@Argument Long communityId, @Argument Long userId){
-        return communityService.addUsersToCommunity(communityId,userId);
+    public Boolean addUsersToCommunity(@Argument Long communityId, @Argument Long userId){
+         return communityService.addUsersToCommunity(communityId,userId);
     }
 
     @MutationMapping
-    public CommunityDetailDTO removeUsersFromCommunity(@Argument Long communityId, @Argument Long userId){
-        return communityService.removeUsersFromCommunity(communityId,userId);
+    public Boolean removeUsersFromCommunity(@Argument Long communityId, @Argument Long userId){
+         return communityService.removeUsersFromCommunity(communityId,userId);
+    }
+
+    @QueryMapping
+    public List<UserResponseDTO> getAllCommunityUsers(@Argument Long communityId){
+        return communityService.findAllCommunityUsers(communityId);
     }
 }
 

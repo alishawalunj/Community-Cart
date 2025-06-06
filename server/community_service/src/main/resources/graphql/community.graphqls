@@ -19,12 +19,13 @@ type Query {
     getAllCommunities: [Community]
     getCommunityById(communityId: ID!): Community
     getCommunityByName(name: String!): Community
+    getAllCommunityUsers(communityId: ID!): [User]
 }
 
 type Mutation {
-    createCommunity(community: CommunityInput!): String
+    createCommunity(community: CommunityInput!): Community
     updateCommunity(community: CommunityInput!): Community
     deleteCommunity(communityId: ID!): String
-    addUsersToCommunity(communityId: ID!, userId: ID!): Community
-    removeUsersFromCommunity(communityId: ID!, userId: ID!): Community
+    addUsersToCommunity(communityId: ID!, userId: ID!): Boolean
+    removeUsersFromCommunity(communityId: ID!, userId: ID!): Boolean
 }

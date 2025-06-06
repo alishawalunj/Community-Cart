@@ -1,6 +1,9 @@
 package com.nzefler.community_service.controller;
 
-import com.nzefler.community_service.dto.UserDTO;
+import com.nzefler.community_service.dto.CommunityResponseDTO;
+import com.nzefler.community_service.dto.UserRequestDTO;
+import com.nzefler.community_service.dto.UserResponseDTO;
+import com.nzefler.community_service.model.Community;
 import com.nzefler.community_service.model.User;
 import com.nzefler.community_service.service.UserServiceImpl;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -20,42 +23,47 @@ public class UserController {
     }
 
     @QueryMapping
-    public List<UserDTO> getAllUsers(){
+    public List<UserResponseDTO> getAllUsers(){
         return userService.findAllUsers();
     }
 
     @QueryMapping
-    public UserDTO getUserById(@Argument Long userId){
+    public UserResponseDTO getUserById(@Argument Long userId){
         return userService.findUserById(userId);
     }
 
     @QueryMapping
-    public UserDTO getUserByEmailId(@Argument String emailId){
+    public UserResponseDTO getUserByEmailId(@Argument String emailId){
         return userService.findUserByEmailId(emailId);
     }
 
+    @MutationMapping
+    public UserResponseDTO createUser(@Argument UserRequestDTO userRequestDTO){
+        return userService.saveUser(userRequestDTO);
+    }
+
+    @MutationMapping
+    public UserResponseDTO updateUser(@Argument UserRequestDTO userRequestDTO){
+        return userService.updateUser(userRequestDTO);
+    }
+
+    @MutationMapping
+    public String deleteUser(@Argument Long userId){
+        return userService.deleteUser(userId);
+    }
+
+    @MutationMapping
+    public Boolean joinCommunity(@Argument Long userId, @Argument Long communityId){
+        return userService.joinCommunity(userId,communityId);
+    }
+
+    @MutationMapping
+    public Boolean leaveCommunity(@Argument Long userId, @Argument Long communityId){
+        return userService.leaveCommunity(userId, communityId);
+    }
+
     @QueryMapping
-    public List<UserDTO> getUsersByCommunityId(@Argument Long communityId){
-        return userService.findAllUsersByCommunityId(communityId);
-    }
-
-    @MutationMapping
-    public String createUser(@Argument User user){
-        return userService.saveUser(user);
-    }
-
-    @MutationMapping
-    public User updateUser(@Argument User user){
-        return userService.updateUser(user);
-    }
-
-    @MutationMapping
-    public void deleteUser(@Argument Long userId){
-        userService.deleteUser(userId);
-    }
-
-    @MutationMapping
-    public UserDTO updateUserCommunities(@Argument Long userId, @Argument List<Long> communityIds){
-        return userService.updateUserCommunities(userId, communityIds);
+    public List<CommunityResponseDTO> getUserCommunities(@Argument Long userId){
+        return userService.findAllUserCommunities(userId);
     }
 }

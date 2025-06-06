@@ -1,30 +1,22 @@
-package com.nzefler.community_service.model;
+package com.nzefler.community_service.dto;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Entity
-@Table(name="users")
-public class User {
-    @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1, initialValue = 101)
+public class UserResponseDTO {
     private Long userId;
     private String firstName;
     private String lastName;
     private String emailId;
     private String password;
-    @ManyToMany
-    @JoinTable(name="user_community", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "community_id"))
-    private Set<Community> communities = new HashSet<>();
+
 
     public Long getUserId() {
         return userId;
@@ -66,25 +58,16 @@ public class User {
         this.password = password;
     }
 
-    public Set<Community> getCommunities() {
-        return communities;
-    }
-
-    public void setCommunities(Set<Community> communities) {
-        this.communities = communities;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserResponseDTO that = (UserResponseDTO) o;
+        return Objects.equals(userId, that.userId) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(emailId, that.emailId) && Objects.equals(password, that.password);
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o)  return true;
-        if(!(o instanceof User)) return false;
-        User user = (User) o;
-        return userId != null && userId.equals(user.userId);
+    public int hashCode() {
+        return Objects.hash(userId, firstName, lastName, emailId, password);
     }
-
-    @Override
-    public int hashCode(){
-        return getClass().hashCode();
-    }
-
 }

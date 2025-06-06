@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -74,5 +73,18 @@ public class Community {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof Community)) return false;
+        Community community = (Community) o;
+        return communityId != null && communityId.equals(community.communityId);
+    }
+
+    @Override
+    public int hashCode(){
+        return getClass().hashCode();
     }
 }

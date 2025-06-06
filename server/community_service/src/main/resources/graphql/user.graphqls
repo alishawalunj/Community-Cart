@@ -18,12 +18,13 @@ extend type Query {
     getAllUsers: [User]
     getUserById(userId: ID!): User
     getUserByEmailId(emailId: String!): User
-    getUsersByCommunityId(communityId: ID!): [User]
+    getUserCommunities(userId: ID!): [Community]
 }
 
 extend type Mutation {
-    createUser(user: UserInput!): String
+    createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
     deleteUser(userId: ID!): String
-    updateUserCommunities(userId: ID!, communityIds: [ID!]!): User
+    joinCommunity(userId: ID!, communityId: ID!): Boolean
+    leaveCommunity(userId: ID!, communityId: ID!): Boolean
 }
