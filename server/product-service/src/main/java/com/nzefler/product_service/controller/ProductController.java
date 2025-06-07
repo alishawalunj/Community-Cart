@@ -1,5 +1,6 @@
 package com.nzefler.product_service.controller;
 
+import com.nzefler.product_service.dto.ProductRequestDTO;
 import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
 import com.nzefler.product_service.service.ProductServiceImpl;
@@ -39,8 +40,12 @@ public class ProductController {
         return productService.findProductsByUserId(userId);
     }
 
+    @QueryMapping List<ProductResponseDTO> getProductsByUserCommunities(@Argument Long userId){
+        return productService.findProductsByUserCommunities(userId);
+    }
+
     @MutationMapping
-    public String createProduct(@Argument Product product){
+    public ProductResponseDTO createProduct(@Argument ProductRequestDTO product){
         return productService.saveProduct(product);
     }
 
@@ -50,7 +55,7 @@ public class ProductController {
     }
 
     @MutationMapping
-    public String deleteProduct(@Argument Long productId){
+    public Boolean deleteProduct(@Argument Long productId){
         return productService.deleteProduct(productId);
     }
 }

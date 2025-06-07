@@ -1,5 +1,6 @@
 package com.nzefler.product_service.mapper;
 
+import com.nzefler.product_service.dto.ProductRequestDTO;
 import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
 import org.springframework.stereotype.Component;
@@ -22,18 +23,19 @@ public class ProductMapper {
         return response;
     }
 
-    public Product toEntity(Product existingProduct, ProductResponseDTO productDto){
-        existingProduct.setProductId(productDto.getProductId());
-        existingProduct.setCommunityId(productDto.getCommunityId());
-        existingProduct.setUserId(productDto.getUserId());
-        existingProduct.setName(productDto.getName());
-        existingProduct.setDescription(productDto.getDescription());
-        existingProduct.setTag(productDto.getTag());
-        existingProduct.setColor(productDto.getColor());
-        existingProduct.setSize(productDto.getSize());
-        existingProduct.setPrice(productDto.getPrice());
-        existingProduct.setCount(productDto.getCount());
-        return existingProduct;
+    public Product toEntity(ProductRequestDTO requestDTO){
+        Product newProduct = new Product();
+        newProduct.setImage(requestDTO.getImage());
+        newProduct.setCommunityId(requestDTO.getCommunityId());
+        newProduct.setUserId(requestDTO.getUserId());
+        newProduct.setName(requestDTO.getName());
+        newProduct.setDescription(requestDTO.getDescription());
+        newProduct.setTag(requestDTO.getTag());
+        newProduct.setColor(requestDTO.getColor());
+        newProduct.setSize(requestDTO.getSize());
+        newProduct.setPrice(requestDTO.getPrice());
+        newProduct.setCount(requestDTO.getCount());
+        return newProduct;
     }
 
     public Product updateExistingProduct(Product existingProduct, Product newProduct){

@@ -1,5 +1,6 @@
 package com.nzefler.product_service.service;
 
+import com.nzefler.product_service.dto.ProductRequestDTO;
 import com.nzefler.product_service.dto.ProductResponseDTO;
 import com.nzefler.product_service.model.Product;
 
@@ -10,7 +11,8 @@ public interface ProductService {
     ProductResponseDTO findProductById(Long productId);
     List<ProductResponseDTO> findProductsByCommunityId(Long communityId);
     List<ProductResponseDTO> findProductsByUserId(Long userId);
-    String saveProduct(Product product);
+    List<ProductResponseDTO> findProductsByUserCommunities(Long userId);
+    ProductResponseDTO saveProduct(ProductRequestDTO product);
     ProductResponseDTO updateProduct(Product product);
-    String deleteProduct(Long productId);
+    Boolean deleteProduct(Long productId);
 }

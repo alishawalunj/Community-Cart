@@ -1,16 +1,13 @@
 package com.nzefler.product_service.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class ProductResponseDTO {
-
-    private Long productId;
+public class ProductRequestDTO {
     private Long userId;
     private Long communityId;
     private String image;
@@ -21,14 +18,6 @@ public class ProductResponseDTO {
     private String size;
     private double price;
     private double count;
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     public Long getUserId() {
         return userId;

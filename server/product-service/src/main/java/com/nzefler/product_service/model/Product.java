@@ -21,6 +21,8 @@ public class Product {
     private Long userId;
     @Column(name = "community_id")
     private Long communityId;
+    @Column(name="image")
+    private String image;
     @Column(name="name")
     private String name;
     @Column(name="description")
@@ -58,6 +60,14 @@ public class Product {
 
     public void setCommunityId(Long communityId) {
         this.communityId = communityId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {
