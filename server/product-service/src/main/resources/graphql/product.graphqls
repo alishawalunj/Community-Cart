@@ -3,6 +3,7 @@ type Product{
     userId: ID!
     communityId: ID!
     name: String!
+    image: String!
     description: String!
     tag: String!
     color: String!
@@ -15,6 +16,7 @@ input ProductInput{
     userId: ID!
     communityId: ID!
     name: String!
+    image: String!
     description: String!
     tag: String!
     color: String!
@@ -28,6 +30,7 @@ input UpdateProductInput{
     userId: ID!
     communityId: ID!
     name: String!
+    image: String!
     description: String!
     tag: String!
     color: String!
@@ -41,10 +44,11 @@ type Query {
     getProductById(productId: ID!): Product
     getProductsByCommunityId(communityId: ID!): [Product]
     getProductsByUserId(userId: ID!): [Product]
+    getProductsByUserCommunities(userId: ID!): [Product]
 }
 
 type Mutation{
-    createProduct(product: ProductInput!): String
+    createProduct(product: ProductInput!): Product
     updateProduct(product: UpdateProductInput!): Product
-    deleteProduct(productId: ID!): String!
+    deleteProduct(productId: ID!): Boolean!
 }
