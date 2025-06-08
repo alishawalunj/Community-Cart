@@ -1,15 +1,13 @@
 package com.nzefler.cart_service.mapper;
 
-import com.nzefler.cart_service.dto.CartItemRequestDTO;
-import com.nzefler.cart_service.dto.CartItemResponseDTO;
 import com.nzefler.cart_service.dto.CartRequestDTO;
 import com.nzefler.cart_service.dto.CartResponseDTO;
 import com.nzefler.cart_service.model.Cart;
-import com.nzefler.cart_service.model.CartItem;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class CartMapper {
 
 

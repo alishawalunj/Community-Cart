@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString
 public class CartRequestDTO {
     private Long userId;
-    private List<CartItemRequestDTO> items;
+    private List<Integer> productIds;
 
     public Long getUserId() {
         return userId;
@@ -21,23 +21,11 @@ public class CartRequestDTO {
         this.userId = userId;
     }
 
-    public List<CartItemRequestDTO> getItems() {
-        return items;
+    public List<Integer> getProductIds() {
+        return productIds;
     }
 
-    public void setItems(List<CartItemRequestDTO> items) {
-        this.items = items;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CartRequestDTO that)) return false;
-        return Objects.equals(userId, that.userId) && Objects.equals(items, that.items);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, items);
+    public void setProductIds(List<Integer> productIds) {
+        this.productIds = productIds;
     }
 }

@@ -1,0 +1,22 @@
+type CartResponseDTO {
+    cartId: ID!
+    userId: ID!
+    productIds: [Int!]!
+}
+
+input CartRequestDTO {
+    userId: ID!
+    productIds: [Int!]!
+}
+
+type Query {
+    getAllCarts: [CartResponseDTO]
+    getCartById(cartId: ID!): CartResponseDTO
+    getAllCartByUserId(userId: ID!): [CartResponseDTO]
+}
+
+type Mutation {
+    createCart(input: CartRequestDTO): CartResponseDTO
+    updateCart(input: CartRequestDTO): CartResponseDTO
+    deleteCart(cartId: ID!): Boolean
+}
