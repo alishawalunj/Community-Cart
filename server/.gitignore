@@ -1,0 +1,14 @@
+# Maven target folders for all microservices
+**/target/
+
+# IntelliJ files (if any) in backend
+*.iml
+.idea/
+out/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

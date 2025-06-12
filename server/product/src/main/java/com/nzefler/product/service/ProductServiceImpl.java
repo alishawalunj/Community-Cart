@@ -59,24 +59,24 @@ public class ProductServiceImpl implements ProductService{
         }
     }
 
-    @Override
-    public List<ProductResponseDTO> findProductsByUserCommunities(Long userId) {
-        try{
-            //fetch user's communities
-            List<Long> communities = client.getUserCommunityIds(userId);
-            List<ProductResponseDTO> productsList = new ArrayList<>();
-            List<ProductResponseDTO> communityProductsList = new ArrayList<>();
-            for(Long community: communities){
-                communityProductsList = findProductsByCommunityId(community);
-                for(ProductResponseDTO product : communityProductsList){
-                    productsList.add(product);
-                }
-            }
-            return productsList;
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching products list for user");
-        }
-    }
+//    @Override
+//    public List<ProductResponseDTO> findProductsByUserCommunities(Long userId) {
+//        try{
+//            //fetch user's communities
+//            List<Long> communities = client.getUserCommunityIds(userId);
+//            List<ProductResponseDTO> productsList = new ArrayList<>();
+//            List<ProductResponseDTO> communityProductsList = new ArrayList<>();
+//            for(Long community: communities){
+//                communityProductsList = findProductsByCommunityId(community);
+//                for(ProductResponseDTO product : communityProductsList){
+//                    productsList.add(product);
+//                }
+//            }
+//            return productsList;
+//        } catch (Exception e) {
+//            throw new RuntimeException("Error fetching products list for user");
+//        }
+//    }
 
     @Override
     @Transactional

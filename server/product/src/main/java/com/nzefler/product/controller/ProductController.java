@@ -41,10 +41,10 @@ public class ProductController {
         return productService.findProductsByUserId(userId);
     }
 
-    @GetMapping("/getProductsByUserCommunities/{userId}")
-    public List<ProductResponseDTO> getProductsByUserCommunities(@PathVariable Long userId){
-        return productService.findProductsByUserCommunities(userId);
-    }
+//    @GetMapping("/getProductsByUserCommunities/{userId}")
+//    public List<ProductResponseDTO> getProductsByUserCommunities(@PathVariable Long userId){
+//        return productService.findProductsByUserCommunities(userId);
+//    }
 
    @PostMapping("/createProduct")
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO product){
