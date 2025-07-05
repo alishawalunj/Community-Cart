@@ -2,8 +2,9 @@ package com.nzefler.community.service;
 
 import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
+import com.nzefler.community.dto.CommunityUserResponseDTO;
 import com.nzefler.community.dto.UserResponseDTO;
-import com.nzefler.community.model.Community;
+
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface CommunityService {
 
 //    Basic CRUD
     List<CommunityResponseDTO> findAllCommunities();
-    CommunityResponseDTO findCommunityById(Long communityId);
+    CommunityUserResponseDTO findCommunityById(Long communityId);
     CommunityResponseDTO saveCommunity(CommunityRequestDTO community);
     CommunityResponseDTO updateCommunity(CommunityRequestDTO community);
     void deleteCommunity(Long communityId);

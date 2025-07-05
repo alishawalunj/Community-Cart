@@ -1,32 +1,20 @@
-package com.nzefler.community.model;
+package com.nzefler.community.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
-
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Entity
-@Table(name="communities")
-public class Community {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "community_seq")
-    @SequenceGenerator(name = "community_seq", sequenceName = "community_sequence", allocationSize = 1, initialValue = 1201)
+public class CommunityUserResponseDTO {
     private Long communityId;
-    @Column(unique = true, nullable = false)
     private String name;
     private String owner;
     private String description;
     private String createdOn;
-    @ManyToMany(mappedBy = "communities")
-    private Set<User> users = new HashSet<>();
+    private Set<UserResponseDTO> users = new HashSet<>();
 
     public Long getCommunityId() {
         return communityId;
@@ -68,24 +56,11 @@ public class Community {
         this.createdOn = createdOn;
     }
 
-    public Set<User> getUsers() {
+    public Set<UserResponseDTO> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(Set<UserResponseDTO> users) {
         this.users = users;
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(!(o instanceof Community)) return false;
-        Community community = (Community) o;
-        return communityId != null && communityId.equals(community.communityId);
-    }
-
-    @Override
-    public int hashCode(){
-        return getClass().hashCode();
     }
 }

@@ -1,8 +1,6 @@
 package com.nzefler.community.service;
 
-import com.nzefler.community.dto.CommunityResponseDTO;
-import com.nzefler.community.dto.UserRequestDTO;
-import com.nzefler.community.dto.UserResponseDTO;
+import com.nzefler.community.dto.*;
 import com.nzefler.community.exception.EntityAlreadyExistsException;
 import com.nzefler.community.exception.EntityNotFoundException;
 import com.nzefler.community.exception.ErrorMessages;
@@ -43,8 +41,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO findUserById(Long userId) {
-        return userRepository.findById(userId).map(userMapper::toDTO).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
+    public UserCommunityResponseDTO findUserById(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()){
+            throw new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND);
+        }
+        User user = optionalUser.get();
+        return userMapper.toEntity(user);
     }
 
     @Override
@@ -138,5 +141,14 @@ public class UserServiceImpl implements UserService{
         }catch(Exception e){
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
         }
+    }
+
+    @Override
+    public UserResponseDTO login(AuthRequestDTO requestDTO) {
+        UserResponseDTO user = findUserByEmailId(requestDTO.getEmailId());
+        if(!user.getPassword().equals(requestDTO.getPassword())){
+            throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
+        }
+        return user;
     }
 }

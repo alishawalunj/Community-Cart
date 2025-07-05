@@ -2,6 +2,7 @@ package com.nzefler.community.controller;
 
 import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
+import com.nzefler.community.dto.CommunityUserResponseDTO;
 import com.nzefler.community.dto.UserResponseDTO;
 import com.nzefler.community.service.CommunityServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class CommunityController {
     }
 
     @GetMapping("/getCommunityById/{communityId}")
-    public ResponseEntity<CommunityResponseDTO> getCommunityById(@PathVariable Long communityId){
-        CommunityResponseDTO response = communityService.findCommunityById(communityId);
+    public ResponseEntity<CommunityUserResponseDTO> getCommunityById(@PathVariable Long communityId){
+        CommunityUserResponseDTO response = communityService.findCommunityById(communityId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

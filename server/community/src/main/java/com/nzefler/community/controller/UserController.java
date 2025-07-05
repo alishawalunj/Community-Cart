@@ -1,8 +1,6 @@
 package com.nzefler.community.controller;
 
-import com.nzefler.community.dto.CommunityResponseDTO;
-import com.nzefler.community.dto.UserRequestDTO;
-import com.nzefler.community.dto.UserResponseDTO;
+import com.nzefler.community.dto.*;
 import com.nzefler.community.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +24,20 @@ public class UserController {
     }
 
     @GetMapping("/getUserById/{userId}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable  Long userId){
-        UserResponseDTO response = userService.findUserById(userId);
+    public ResponseEntity<UserCommunityResponseDTO> getUserById(@PathVariable  Long userId){
+        UserCommunityResponseDTO response = userService.findUserById(userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/getUserByEmailId/{emailId}")
     public ResponseEntity<UserResponseDTO> getUserByEmailId(@PathVariable  String emailId){
         UserResponseDTO response = userService.findUserByEmailId(emailId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDTO> login(@RequestBody AuthRequestDTO requestDTO){
+        UserResponseDTO response = userService.login(requestDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -49,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/deleteUser/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();

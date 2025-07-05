@@ -12,21 +12,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const CommunityCard = ({ community }) => {
-
-  // const membersList =[
-  //   {
-  //     role:"Admin",
-  //     name:"Rachel Green"
-  //   },
-  //   {
-  //     role:"Member",
-  //     name:"Monica Geller"
-  //   },
-  //   {
-  //     role:"Member",
-  //     name:"Phoebe Buffay Miller"
-  //   }
-  // ] 
+ 
   // Table Styling
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {

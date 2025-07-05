@@ -3,7 +3,6 @@ import ProductsGrid from '../components/ProductsGrid';
 // import mockData from '../mockData';
 import useProducts  from '../hooks/useProducts';
 import BackButton from '../components/BackButton';
-import withApolloClient from '../wrappers/ApolloClientWrapper';
 const BuyProduct = () => {
 
   const { allProducts, allProductsLoading, allProductsError } = useProducts();
@@ -29,4 +28,4 @@ const BuyProduct = () => {
 }
 
 // export default BuyProduct;
-export default withApolloClient(BuyProduct, 'products');
+export default BuyProduct;

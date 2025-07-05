@@ -2,6 +2,7 @@ package com.nzefler.community.service;
 
 import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
+import com.nzefler.community.dto.CommunityUserResponseDTO;
 import com.nzefler.community.dto.UserResponseDTO;
 import com.nzefler.community.exception.EntityAlreadyExistsException;
 import com.nzefler.community.exception.EntityNotFoundException;
@@ -46,12 +47,13 @@ public class CommunityServiceImpl implements CommunityService{
     }
     @Transactional
     @Override
-    public CommunityResponseDTO findCommunityById(Long communityId) {
-//        try{
-            return communityRepository.findByIdWithUsers(communityId).map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
-//        }catch(Exception e){
-//            throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
-//        }
+    public CommunityUserResponseDTO findCommunityById(Long communityId) {
+        Optional<Community> optionalCommunity = communityRepository.findById(communityId);
+        if(optionalCommunity.isEmpty()){
+            throw new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND);
+        }
+        Community response = optionalCommunity.get();
+        return mapper.toEntity(response);
     }
 
     @Override

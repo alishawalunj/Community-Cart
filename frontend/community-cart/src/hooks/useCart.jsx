@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function useProducts() {
+export default function useCart() {
   return (
     <div>
       

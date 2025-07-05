@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ItemCard() {
+const ItemCard =() => {
   return (
     <div>
       <div className="max-w-sm rounded overflow-hidden shadow-lg">
@@ -21,3 +21,4 @@ export default function ItemCard() {
     </div>
   )
 }
+export default ItemCard;

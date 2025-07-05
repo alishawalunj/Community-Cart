@@ -7,6 +7,8 @@ import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import CommunityCard from './CommunityCard';
 import communityList from './communityList';
+// import { getAllUsers } from '../hooks/useUser';
+// import { getAllCommunities } from '../hooks/useCommunity';
 
 const CommunityCarousal = () => {
   return (

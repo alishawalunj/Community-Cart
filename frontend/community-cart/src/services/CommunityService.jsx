@@ -1,49 +1,77 @@
-import axiosInstance from "../config/axiosInstance";
+import axios from "axios";
+import serviceConfig from "./Config";
 
 console.log("Community service called");
 
-const COMMUNITY_BASE_URL ="http://localhost:8081/communities";
+/**
+ * 
+ * @returns Coomunity Data
+ */
 
-export const getAllCommunities = async() =>{
-    return await axiosInstance({
+export const getAllCommunitiesService = async() =>{
+    return await axios({
         method: 'get',
-        url: `${COMMUNITY_BASE_URL}/community-service/community/all`
+        url: `${serviceConfig.communityHost}/community/all`
     })
 }
 
-export const getCommunityById = async(communityId) => {
-    return await axiosInstance({
+export const getCommunityByIdService = async(communityId) => {
+    return await axios({
         method: 'get',
-        url: `${COMMUNITY_BASE_URL}/community-service/community/${communityId}`
+        url: `${serviceConfig.communityHost}/getCommunityById/${communityId}`
     })
 }
 
-export const getCommunityByName = async(communityName) => {
-    return await axiosInstance({
+export const getCommunityByNameService = async(communityName) => {
+    return await axios({
         method: 'get',
-        url: `${COMMUNITY_BASE_URL}/community-service/community/${communityName}`
+        url: `${serviceConfig.communityHost}/getCommunityByName/${communityName}`
     })
 }
 
-export const createCommunity = async(community) => {
-    return await axiosInstance({
+export const createCommunityService = async(community) => {
+    return await axios({
         method: 'post',
-        url: `${COMMUNITY_BASE_URL}/community-service/community`,
+        url: `${serviceConfig.communityHost}/createCommunity`,
         data: community
     })
 }
 
-export const updateCommunity = async(community) => {
-    return await axiosInstance({
+export const updateCommunityService = async(community) => {
+    return await axios({
         method: 'put',
-        url: `${COMMUNITY_BASE_URL}/community-service/community`,
+        url: `${serviceConfig.communityHost}/updateCommunity`,
         data: community
     })
 }
 
-export const deleteCommunity = async(communityId) => {
-    return await axiosInstance({
+export const deleteCommunityService = async(communityId) => {
+    return await axios({
         method: 'delete',
-        url: `${COMMUNITY_BASE_URL}/community-service/community/${communityId}`
+        url: `${serviceConfig.communityHost}/deleteCommunity/${communityId}`
+    })
+}
+
+export const addUsersToCommunityService = async(communityId, userId) => {
+    return await axios({
+        method:'put',
+        url:`${serviceConfig.communityHost}/addUsersToCommunitye/communityId/${communityId}/userId/${userId}`,
+        data: userId 
+    })
+}
+
+export const removeUsersFromCommunityService = async(communityId, userId) => {
+    return await axios({
+        method:'put',
+        url:`${serviceConfig.communityHost}/removeUsersFromCommunity/communityId/${communityId}/userId/${userId}`,
+        data: userId 
+    })
+}
+
+export const getAllCommunityUsersService = async(communityId) => {
+    return await axios({
+        method: 'get',
+        url: `${serviceConfig.communityHost}/getAllCommunityUsers/${communityId}`,
+        data: communityId
     })
 }
