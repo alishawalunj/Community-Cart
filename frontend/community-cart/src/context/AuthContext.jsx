@@ -6,12 +6,21 @@ export function useAuth(){
 }
 
 export function AuthProvider(props){
-    const [ auth, setAuth ] = useState(null);
-    const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [ auth, setAuth ] = useState(() =>{
+        const stored = localStorage.getItem("auth");
+        return stored ? JSON.parse(stored) : {};
+    });
+    
+    const [ isLoggedIn, setIsLoggedIn ] = useState(() => !!localStorage.getItem("auth"));
 
-    const value = { auth , setAuth, isLoggedIn, setIsLoggedIn};
+    const logout = () => {
+        localStorage.removeItem("auth");
+        setAuth({});
+        setIsLoggedIn(false);
+    }
+
+    const value = { auth , setAuth, isLoggedIn, setIsLoggedIn, logout};
     return (
-        // eslint-disable-next-line react/prop-types
         <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
     )
 }

@@ -16,6 +16,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+
         const authRequest = {
             emailId: email,
             password: password
@@ -26,13 +27,12 @@ const Login = () => {
                 setError("User not found");
                 return;
             }
-            // if(user.password != password){
-            //     setError("Incorrect password");
-            //     return;
-            // }
-            setAuth(user);
-            localStorage.setItem("user", JSON.stringify(user));
-            localStorage.setItem("token", user.token);
+            const userData = {
+                userId : user.userId,
+                token: user.token
+            }
+            setAuth(userData);
+            localStorage.setItem("auth", JSON.stringify(userData));
             setIsLoggedIn(true);
             navigate("/dashboard");
         }catch(error){

@@ -23,9 +23,13 @@ public class UserController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request){
-        User user = userService.authenticate(request.getEmailId(), request.getPassword());
+        String email = request.getEmailId();
+        String password = request.getPassword();
+        User user = userService.authenticate(email, password);
+        Long userId = user.getUserId();
         String token = jwtService.generateToken(user.getEmailId());
-        return new AuthResponse(token);
+        System.out.println(userId);
+        return new AuthResponse(userId, token);
     }
 
     @GetMapping("/users/all")

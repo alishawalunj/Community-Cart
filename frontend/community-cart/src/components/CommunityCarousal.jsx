@@ -7,30 +7,32 @@ import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import CommunityCard from './CommunityCard';
 import { useUser } from '../hooks/useUser';
+import { useAuth } from '../context/AuthContext';
 
 const CommunityCarousal = () => {
+    const { auth } = useAuth();
+    const userId = auth?.userId;
+
     const { getUserCommunities } = useUser();
     const [communities, setCommunities] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshFlag, setRefreshFlag] = useState(false);
-    // const refresh = () => {
-    //     setRefreshFlag(!refreshFlag);
-    // }
+    const [fetched, setFetched ] = useState(false);
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const userId = storedUser?.id; 
-
-    console.log("Aditya UserId is:", userId);
+    const refresh = () => {
+        setRefreshFlag(!refreshFlag);
+    }
 
     useEffect(()=> {
+        if (!userId || fetched) return;
         const fetchCommunities = async() => {
             const communityList = await getUserCommunities(userId);
-            console.log(communityList);
             setCommunities(communityList);
             setLoading(false);
+            setFetched(true);
         }
         fetchCommunities();
-    },[getUserCommunities]);
+    },[userId]);
 
   return (
       <div className="w-full h-full flex flex-col items-center justify-center">
