@@ -1,6 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
+/* eslint-disable react/prop-types */
 const Options = ({onMarketplaceClick, onCommunityClick}) => {
 
     return(

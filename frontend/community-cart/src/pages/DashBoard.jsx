@@ -1,4 +1,4 @@
-import React , {useRef} from 'react'
+import {useRef} from 'react'
 import Options from '../components/Options'
 import Marketplace from '../components/Marketplace'
 import Community from '../components/Community'

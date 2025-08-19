@@ -23,5 +23,5 @@ public interface UserService {
 
 //    Utility methods
     UserResponseDTO findUserByEmailId(String emailId);
-    UserResponseDTO login (AuthRequestDTO requestDTO);
+    User authenticate(String emailId, String password);
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -6,11 +6,32 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import CommunityCard from './CommunityCard';
-import communityList from './communityList';
-// import { getAllUsers } from '../hooks/useUser';
-// import { getAllCommunities } from '../hooks/useCommunity';
+import { useUser } from '../hooks/useUser';
 
 const CommunityCarousal = () => {
+    const { getUserCommunities } = useUser();
+    const [communities, setCommunities] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [refreshFlag, setRefreshFlag] = useState(false);
+    // const refresh = () => {
+    //     setRefreshFlag(!refreshFlag);
+    // }
+
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const userId = storedUser?.id; 
+
+    console.log("Aditya UserId is:", userId);
+
+    useEffect(()=> {
+        const fetchCommunities = async() => {
+            const communityList = await getUserCommunities(userId);
+            console.log(communityList);
+            setCommunities(communityList);
+            setLoading(false);
+        }
+        fetchCommunities();
+    },[getUserCommunities]);
+
   return (
       <div className="w-full h-full flex flex-col items-center justify-center">
         <h1 className="heading">Your Alisha Communties</h1>
@@ -19,7 +40,7 @@ const CommunityCarousal = () => {
         pagination ={{ el: '.swiper-pagination',clickable: true}}
         navigation ={{ prevEl: '.swiper-button-prev',nextEl: '.swiper-button-next',clickable:true}}
         className="swiper_container w-full h-full" >
-            {communityList.map((community) => (
+            {communities.map((community) => (
                 <SwiperSlide key={community.id} className="flex justify-center items-center w-auto h-auto" style={{width: '300px'}}>
                     <CommunityCard community={community} />
                 </SwiperSlide>

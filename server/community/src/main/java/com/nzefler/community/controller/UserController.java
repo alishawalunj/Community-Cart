@@ -1,21 +1,31 @@
 package com.nzefler.community.controller;
 
 import com.nzefler.community.dto.*;
+import com.nzefler.community.model.User;
+import com.nzefler.community.service.JwtService;
 import com.nzefler.community.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/community-service")
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final JwtService jwtService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody LoginRequest request){
+        User user = userService.authenticate(request.getEmailId(), request.getPassword());
+        String token = jwtService.generateToken(user.getEmailId());
+        return new AuthResponse(token);
     }
 
     @GetMapping("/users/all")
@@ -32,12 +42,6 @@ public class UserController {
     @GetMapping("/getUserByEmailId/{emailId}")
     public ResponseEntity<UserResponseDTO> getUserByEmailId(@PathVariable  String emailId){
         UserResponseDTO response = userService.findUserByEmailId(emailId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody AuthRequestDTO requestDTO){
-        UserResponseDTO response = userService.login(requestDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

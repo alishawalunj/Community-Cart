@@ -144,11 +144,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO login(AuthRequestDTO requestDTO) {
-        UserResponseDTO user = findUserByEmailId(requestDTO.getEmailId());
-        if(!user.getPassword().equals(requestDTO.getPassword())){
+    public User authenticate(String emailId, String password) {
+        try{
+            User user = userRepository.findByEmailId(emailId).orElseThrow(() -> new RuntimeException("User not found"));
+            if(!user.getPassword().equals(password)){
+                throw new RuntimeException("Invalid password");
+            }
+            return user;
+        }catch(Exception e){
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
         }
-        return user;
     }
+
+
 }

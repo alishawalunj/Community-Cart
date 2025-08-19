@@ -5,7 +5,6 @@ import { useUser } from "../hooks/useUser";
 
 
 const Login = () => {
-
     const navigate = useNavigate();
     const { setAuth, setIsLoggedIn } = useAuth();
     const { login  } = useUser();

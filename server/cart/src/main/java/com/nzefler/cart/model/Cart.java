@@ -1,17 +1,22 @@
 package com.nzefler.cart.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "cart")
 public class Cart {
-
     @Id
     private Long cartId;
     private Long userId;
-    private List<Integer> productIds;
+    private Date createdAt;
+    private Date updatedAt;
+    private List<CartItem> cartItems;
 
     public Long getCartId() {
         return cartId;
@@ -29,11 +34,38 @@ public class Cart {
         this.userId = userId;
     }
 
-    public List<Integer> getProductIds() {
-        return productIds;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setProductIds(List<Integer> productIds) {
-        this.productIds = productIds;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "cartId=" + cartId +
+                ", userId=" + userId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", cartItems=" + cartItems +
+                '}';
     }
 }

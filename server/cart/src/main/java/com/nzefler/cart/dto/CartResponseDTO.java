@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,7 +12,9 @@ import java.util.List;
 public class CartResponseDTO {
     private Long cartId;
     private Long userId;
-    private List<Integer> productIds;
+    private Date createdAt;
+    private Date updatedAt;
+    private List<CartItemResponseDTO> cartItems;
 
     public Long getCartId() {
         return cartId;
@@ -29,11 +32,27 @@ public class CartResponseDTO {
         this.userId = userId;
     }
 
-    public List<Integer> getProductIds() {
-        return productIds;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setProductIds(List<Integer> productIds) {
-        this.productIds = productIds;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<CartItemResponseDTO> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItemResponseDTO> cartItems) {
+        this.cartItems = cartItems;
     }
 }

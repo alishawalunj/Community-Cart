@@ -1,11 +1,6 @@
 package com.nzefler.community.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@AllArgsConstructor
-public class AuthRequestDTO {
+public class LoginRequest {
     private String emailId;
     private String password;
 

@@ -11,6 +11,7 @@ export function AuthProvider(props){
 
     const value = { auth , setAuth, isLoggedIn, setIsLoggedIn};
     return (
+        // eslint-disable-next-line react/prop-types
         <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
     )
 }
