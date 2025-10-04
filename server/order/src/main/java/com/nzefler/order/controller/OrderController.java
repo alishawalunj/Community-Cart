@@ -19,29 +19,29 @@ public class OrderController {
     }
 
     @GetMapping("/getAllOrders")
-    public List<OrderResponseDTO> getAllOrders(){
-        return orderService.getAllOrders();
+    public List<OrderResponseDTO> getAllOrders(@RequestHeader("Authorization") String token){
+        return orderService.getAllOrders(token);
     }
 
     @GetMapping("/getOrderById/{cartId}")
-    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
-        OrderResponseDTO response = orderService.getOrderById(orderId);
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId, @RequestHeader("Authorization") String token) {
+        OrderResponseDTO response = orderService.getOrderById(orderId, token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/getAllOrdersByUserId/{userId}")
-    public List<OrderResponseDTO> getAllOrdersByUserId(@PathVariable Long userId){
-        return orderService.getOrdersByUserId(userId);
+    public List<OrderResponseDTO> getAllOrdersByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String token){
+        return orderService.getOrdersByUserId(userId, token);
     }
 
     @PostMapping("/createOrder")
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody Order order){
-        OrderResponseDTO response = orderService.saveOrder(order);
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody Order order, @RequestHeader("Authorization") String token){
+        OrderResponseDTO response = orderService.saveOrder(order, token);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/deleteOrder/{orderId}")
-    public ResponseEntity<Boolean> deleteOrder(@PathVariable Long orderId){
-        orderService.deleteOrder(orderId);
+    public ResponseEntity<Boolean> deleteOrder(@PathVariable Long orderId, @RequestHeader("Authorization") String token){
+        orderService.deleteOrder(orderId, token);
         return ResponseEntity.noContent().build();
     }
 }

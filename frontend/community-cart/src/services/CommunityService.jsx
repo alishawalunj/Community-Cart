@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance";
-import serviceConfig from "./Config";
+import axios from "axios";
+import serviceConfig from "../config/Config";
 
 console.log("Community service called");
 

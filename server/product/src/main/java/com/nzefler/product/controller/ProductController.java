@@ -21,46 +21,47 @@ public class ProductController {
     }
 
     @GetMapping("/getAllProducts")
-    public List<ProductResponseDTO> getAllProducts(){
-        return productService.findAllProducts();
+    public List<ProductResponseDTO> getAllProducts(@RequestHeader("Authorization") String token){
+        System.out.println(token);
+        return productService.findAllProducts(token);
     }
 
     @GetMapping("/getProductById/{productId}")
-    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long productId){
-        ProductResponseDTO response = productService.findProductById(productId);
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long productId, @RequestHeader("Authorization") String token){
+        ProductResponseDTO response = productService.findProductById(productId, token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/getProductsByCommunityId/{communityId}")
-    public List<ProductResponseDTO> getProductsByCommunityId(@PathVariable Long communityId){
-        return productService.findProductsByCommunityId(communityId);
+    public List<ProductResponseDTO> getProductsByCommunityId(@PathVariable Long communityId, @RequestHeader("Authorization") String token){
+        return productService.findProductsByCommunityId(communityId, token);
     }
 
     @GetMapping("/getProductsByUserId/{userId}")
-    public List<ProductResponseDTO> getProductsByUserId(@PathVariable Long userId){
-        return productService.findProductsByUserId(userId);
+    public List<ProductResponseDTO> getProductsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String token){
+        return productService.findProductsByUserId(userId, token);
     }
 
-//    @GetMapping("/getProductsByUserCommunities/{userId}")
-//    public List<ProductResponseDTO> getProductsByUserCommunities(@PathVariable Long userId){
-//        return productService.findProductsByUserCommunities(userId);
-//    }
+    @GetMapping("/getProductsByUserCommunities/{userId}")
+    public List<ProductResponseDTO> getProductsByUserCommunities(@PathVariable Long userId, @RequestHeader("Authorization") String token){
+        return productService.findProductsByUserCommunities(userId, token);
+    }
 
    @PostMapping("/createProduct")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO product){
-       ProductResponseDTO response = productService.saveProduct(product);
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO product, @RequestHeader("Authorization") String token){
+       ProductResponseDTO response = productService.saveProduct(product, token);
        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/updateProduct")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@RequestBody Product product){
-        ProductResponseDTO response =  productService.updateProduct(product);
+    public ResponseEntity<ProductResponseDTO> updateProduct(@RequestBody Product product, @RequestHeader("Authorization") String token){
+        ProductResponseDTO response =  productService.updateProduct(product, token);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId){
-        productService.deleteProduct(productId);
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId, @RequestHeader("Authorization") String token){
+        productService.deleteProduct(productId, token);
         return ResponseEntity.noContent().build();
     }
 }

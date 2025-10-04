@@ -7,11 +7,9 @@ import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import CommunityCard from './CommunityCard';
 import { useUser } from '../hooks/useUser';
-import { useAuth } from '../context/AuthContext';
 
 const CommunityCarousal = () => {
-    const { auth } = useAuth();
-    const userId = auth?.userId;
+    const userId = localStorage.getItem("userId");  
 
     const { getUserCommunities } = useUser();
     const [communities, setCommunities] = useState([]);
@@ -27,6 +25,7 @@ const CommunityCarousal = () => {
         if (!userId || fetched) return;
         const fetchCommunities = async() => {
             const communityList = await getUserCommunities(userId);
+            console.log("Community List",communityList);
             setCommunities(communityList);
             setLoading(false);
             setFetched(true);
@@ -36,14 +35,13 @@ const CommunityCarousal = () => {
 
   return (
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <h1 className="heading">Your Alisha Communties</h1>
         <Swiper effect={'coverflow'} grabCursor= {true} centeredSlides={true} loop={true} slidesPerView={'auto'} spaceBetween={50} coverflowEffect={{ rotate:0,stretch:0,depth:150,slideShadows:true,modifier:2.5}}  
         modules={[EffectCoverflow, Pagination, Navigation]}
         pagination ={{ el: '.swiper-pagination',clickable: true}}
         navigation ={{ prevEl: '.swiper-button-prev',nextEl: '.swiper-button-next',clickable:true}}
         className="swiper_container w-full h-full" >
             {communities.map((community) => (
-                <SwiperSlide key={community.id} className="flex justify-center items-center w-auto h-auto" style={{width: '300px'}}>
+                <SwiperSlide key={community.communityId} className="flex justify-center items-center w-auto h-auto" style={{width: '300px'}}>
                     <CommunityCard community={community} />
                 </SwiperSlide>
             ))}

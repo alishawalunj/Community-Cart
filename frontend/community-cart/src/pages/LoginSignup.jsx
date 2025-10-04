@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
-import { useSearchParams } from "react-router-dom";
 
 const LoginSignup = () => {
-    const [ searchParams] = useSearchParams();
-    const mode = searchParams.get("mode");
-    const [isLogin, setIsLogin] = React.useState(mode === "login");
+    const [isLogin, setIsLogin] = useState(true);
     return(
         <>
             <div className="flex justify-center items-center h-screen bg-gradient-to-b from-blue-400 via-red-500 to-pink-500">

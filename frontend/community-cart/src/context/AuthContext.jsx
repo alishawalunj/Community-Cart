@@ -7,14 +7,16 @@ export function useAuth(){
 
 export function AuthProvider(props){
     const [ auth, setAuth ] = useState(() =>{
-        const stored = localStorage.getItem("auth");
-        return stored ? JSON.parse(stored) : {};
+        const token = localStorage.getItem("auth");
+        const userId = localStorage.getItem("userId");
+        return token && userId ? { token, userId } : {};
     });
     
     const [ isLoggedIn, setIsLoggedIn ] = useState(() => !!localStorage.getItem("auth"));
 
     const logout = () => {
         localStorage.removeItem("auth");
+        localStorage.removeItem("userId");
         setAuth({});
         setIsLoggedIn(false);
     }

@@ -16,7 +16,14 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
-
+        if(email === ''){
+            alert("Please enter email");
+            return;
+        }
+        if(password === ''){
+            alert("Please enter password");
+            return;
+        }
         const authRequest = {
             emailId: email,
             password: password
@@ -32,7 +39,9 @@ const Login = () => {
                 token: user.token
             }
             setAuth(userData);
-            localStorage.setItem("auth", JSON.stringify(userData));
+            // const response = JSON.stringify(userData);
+            localStorage.setItem("auth", user.token);
+            localStorage.setItem("userId", user.userId);
             setIsLoggedIn(true);
             navigate("/dashboard");
         }catch(error){
@@ -43,16 +52,15 @@ const Login = () => {
 
     return (
         <>
-        <div className="flex justify-center items-center bg-transparent">
+            <div className="flex justify-center items-center bg-transparent">
                 <div className="w-96 bg-transparent p-6 rounded-lg shadow-lg">
-                    
                     <div className="mb-4">
                         <label className="block mb-1 font-medium">Email</label>
                         <input 
                         type="email" 
                         onChange={(e)=>setEmail(e.target.value)}
                         value={email}
-                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"/>
+                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2" required/>
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1 font-medium">Password</label>
@@ -60,7 +68,7 @@ const Login = () => {
                         type="password" 
                         onChange={(e)=>setPassword(e.target.value)}
                         value={password}
-                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"/>
+                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2" required/>
                     </div>
                     <div className="text-center">
                         <button type ="submit" className="w-1/4 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition" onClick={handleSubmit}>Login</button>

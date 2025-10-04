@@ -7,12 +7,14 @@ import com.nzefler.product.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    List<ProductResponseDTO> findAllProducts();
-    ProductResponseDTO findProductById(Long productId);
-    List<ProductResponseDTO> findProductsByCommunityId(Long communityId);
-    List<ProductResponseDTO> findProductsByUserId(Long userId);
-//    List<ProductResponseDTO> findProductsByUserCommunities(Long userId);
-    ProductResponseDTO saveProduct(ProductRequestDTO product);
-    ProductResponseDTO updateProduct(Product product);
-    Boolean deleteProduct(Long productId);
+    List<ProductResponseDTO> findAllProducts(String token);
+    ProductResponseDTO findProductById(Long productId, String token);
+
+    ProductResponseDTO saveProduct(ProductRequestDTO product, String token);
+    ProductResponseDTO updateProduct(Product product, String token);
+    Boolean deleteProduct(Long productId, String token);
+
+    List<ProductResponseDTO> findProductsByCommunityId(Long communityId, String token);
+    List<ProductResponseDTO> findProductsByUserId(Long userId, String token);
+
 }

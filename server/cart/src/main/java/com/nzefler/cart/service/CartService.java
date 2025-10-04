@@ -7,14 +7,14 @@ import com.nzefler.cart.model.CartItem;
 import java.util.List;
 
 public interface CartService {
-    List<CartResponseDTO> findAllCarts();
-    CartResponseDTO findCartById(Long cartId);
-    List<CartResponseDTO> findAllCartByUserId(Long userId);
-    CartResponseDTO saveCart(Cart cart);
-    CartResponseDTO updateCart(Cart cart);
-    void deleteCart(Long cartId);
-    CartResponseDTO addItemToCart(Long cartId, CartItem cartItem);
-    CartResponseDTO removeItemFromCart(Long cartId, Long cartItemId);
-    CartResponseDTO clearCart(Long cartId);
+    List<CartResponseDTO> findAllCarts(String token);
+    CartResponseDTO findCartById(Long cartId, String token);
+    List<CartResponseDTO> findAllCartByUserId(Long userId, String token);
+    CartResponseDTO saveCart(Cart cart, String token);
+    CartResponseDTO updateCart(Cart cart, String token);
+    void deleteCart(Long cartId, String token);
+    CartResponseDTO addItemToCart(Long cartId, CartItem cartItem, String token);
+    CartResponseDTO removeItemFromCart(Long cartId, Long cartItemId, String token);
+    CartResponseDTO clearCart(Long cartId, String token);
 }
 

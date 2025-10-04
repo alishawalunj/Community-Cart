@@ -102,6 +102,7 @@ export const useCommunity = () => {
     const getCommunityUsers = async(communityId) => {
         try{
             const response = await getAllCommunityUsersService(communityId);
+            console.log("Alsihaw",response.data);
             return response.data;
         }catch(error){
             console.error("Error from backend", error);

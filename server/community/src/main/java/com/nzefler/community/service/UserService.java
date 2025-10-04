@@ -24,4 +24,5 @@ public interface UserService {
 //    Utility methods
     UserResponseDTO findUserByEmailId(String emailId);
     User authenticate(String emailId, String password);
+    List<Long> findUsersCommunitiesList(Long userId);
 }

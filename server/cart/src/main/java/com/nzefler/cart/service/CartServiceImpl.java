@@ -1,5 +1,6 @@
 package com.nzefler.cart.service;
 
+import com.nzefler.cart.client.AuthServiceClient;
 import com.nzefler.cart.dto.CartResponseDTO;
 import com.nzefler.cart.exception.EntityNotFoundException;
 import com.nzefler.cart.exception.ErrorMessages;
@@ -17,14 +18,22 @@ public class CartServiceImpl implements CartService{
 
     private final CartRepository cartRepository;
     private final CartMapper mapper;
+    private final AuthServiceClient client;
 
-    public CartServiceImpl(CartRepository cartRepository, CartMapper mapper) {
+    public CartServiceImpl(CartRepository cartRepository, CartMapper mapper, AuthServiceClient client) {
         this.cartRepository = cartRepository;
         this.mapper = mapper;
+        this.client = client;
+    }
+
+    private void validatetoken(String token){
+        if(!client.isTokenValid(token)){
+            throw new RuntimeException("Unauthorized : invalid token");
+        }
     }
 
     @Override
-    public List<CartResponseDTO> findAllCarts() {
+    public List<CartResponseDTO> findAllCarts(String token) {
         try{
             return cartRepository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
         }catch (Exception e){
@@ -33,12 +42,12 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public CartResponseDTO findCartById(Long cartId) {
+    public CartResponseDTO findCartById(Long cartId, String token) {
        return cartRepository.findById(cartId).map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
     }
 
     @Override
-    public List<CartResponseDTO> findAllCartByUserId(Long userId) {
+    public List<CartResponseDTO> findAllCartByUserId(Long userId, String token) {
         try{
             return cartRepository.findByUserId(userId).stream().map(mapper::toDTO).collect(Collectors.toList());
         }catch (Exception e) {
@@ -47,7 +56,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public CartResponseDTO saveCart(Cart cart) {
+    public CartResponseDTO saveCart(Cart cart, String token) {
         try{
             Cart saved = cartRepository.save(cart);
             return mapper.toDTO(saved);
@@ -56,7 +65,7 @@ public class CartServiceImpl implements CartService{
         }
     }
     @Override
-    public CartResponseDTO updateCart(Cart cart) {
+    public CartResponseDTO updateCart(Cart cart, String token) {
         try {
             Cart existing = cartRepository.findById(cart.getCartId()).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
             existing.setUserId(cart.getUserId());
@@ -71,7 +80,7 @@ public class CartServiceImpl implements CartService{
 
 
     @Override
-    public void deleteCart(Long cartId) {
+    public void deleteCart(Long cartId, String token) {
         if (!cartRepository.existsById(cartId)) {
             throw new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST);
         }
@@ -79,7 +88,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public CartResponseDTO addItemToCart(Long cartId, CartItem cartItem) {
+    public CartResponseDTO addItemToCart(Long cartId, CartItem cartItem, String token) {
         try{
             Cart existing = cartRepository.findById(cartItem.getCartItemId()).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
             if (existing.getCartItems() == null) {
@@ -94,7 +103,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public CartResponseDTO removeItemFromCart(Long cartId, Long cartItemId) {
+    public CartResponseDTO removeItemFromCart(Long cartId, Long cartItemId, String token) {
         try{
             if (cartId == null || cartItemId == null) {
                 throw new IllegalArgumentException("Cart ID and Cart Item ID must not be null");
@@ -115,7 +124,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public CartResponseDTO clearCart(Long cartId) {
+    public CartResponseDTO clearCart(Long cartId, String token) {
         if (cartId == null) {
             throw new IllegalArgumentException("Cart ID must not be null");
         }

@@ -21,6 +21,20 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader){
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            return ResponseEntity.status(401).body("Missing or Invalid Header");
+        }
+        String token = authHeader.substring(7);
+        if(jwtService.isTokenValid(token)){
+            String username = jwtService.extractUserName(token);
+            return ResponseEntity.ok(username);
+        }else{
+            return ResponseEntity.status(401).body("Invalid token");
+        }
+    }
+
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request){
         String email = request.getEmailId();
@@ -81,5 +95,11 @@ public class UserController {
     public ResponseEntity<List<CommunityResponseDTO>> getUserCommunities(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.findAllUserCommunities(userId));
     }
+
+    @GetMapping("/users/{userId}/communityList")
+    public ResponseEntity<List<Long>> getUserCommunityList(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.findUsersCommunitiesList(userId));
+    }
+
 
 }

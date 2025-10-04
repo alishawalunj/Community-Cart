@@ -1,25 +1,25 @@
-import axiosInstance from "../config/axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 
 console.log("Product Services called");
 
-const PRODUCT_BASE_URL = "http://localhost:8082/products";
+const PRODUCT_BASE_URL = "http://localhost:8082/product-service";
 
-export const getAllProducts = async(inputs) => {
+export const getAllProductsService = async(inputs) => {
     return await axiosInstance({
         method: 'get',
         url: `${PRODUCT_BASE_URL}/getAllProducts`
     })
 }
 
-export const getProductById = async(productId) => {
+export const getProductByIdService = async(productId) => {
     return await axiosInstance({
         method: 'get',
         url: `${PRODUCT_BASE_URL}/getProductById/${productId}`
     })
 }
 
-export const getProductsByCommunityId = (communityId) => {
+export const getProductsByCommunityIdService = (communityId) => {
     return axiosInstance({
         method: 'get',
         url: `${PRODUCT_BASE_URL}/getProductsByCommunityId/${communityId}`
@@ -32,54 +32,83 @@ export const getProductsByCommunityId = (communityId) => {
         console.error("Error from backend", error);
     })
 }
-
-export const getProductsByUserId = async(userId) => {
+/**
+ * 
+ * @param {*} userId 
+ * @returns list of products user will be selling
+ */
+export const getProductsByUserIdService = async(userId) => {
     return await axiosInstance({
         method: 'get',
-        url:`${PRODUCT_BASE_URL}/getProductsByUserId/{userId}`
+        url:`${PRODUCT_BASE_URL}/getProductsByUserId/${userId}`
     })
 }
+/**
+ * 
+ * @param {*} userId 
+ * @returns 
+ */
+export const getProductsByUserCommunitiesService = async (userId) => {
+    try {
+        const response = await axiosInstance({
+            method: 'get',
+            url: `${PRODUCT_BASE_URL}/getProductsByUserCommunities/${userId}`
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error from backend", error);
+        return [];
+    }
+}
+/**
+ * 
+ * @param {*} userId 
+ * @returns list of products user will be buying from the communities they are enrolled into
+ */
+// export const getAllUsersProductsService = async(userId) => {
+//     return await axiosInstance({
+//         method: 'get',
+//         url: `${PRODUCT_BASE_URL}/getAllUsersProducts/${userId}`
+//     })
+// }
 
-export const createProduct = (product) => {
-    return axiosInstance({
-        method:'post',
-        url:`${PRODUCT_BASE_URL}/createProduct`,
-        data: product
-    })
-    .then(response => {
+export const createProductService = async (product) => {
+    try {
+        const response = await axiosInstance({
+            method: 'post',
+            url: `${PRODUCT_BASE_URL}/createProduct`,
+            data: product
+        });
         console.log("Response from backend", response);
         return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
         console.error("Error from backend", error);
-    })
+    }
 }
 
-export const updateProduct = (product) =>{
-    return axiosInstance({
-        method: 'put',
-        url: `${PRODUCT_BASE_URL}/updateProduct`,
-        data: product
-    })
-    .then(response => {
-        console.log("Response from backend", response)
+export const updateProductService = async (product) =>{
+    try {
+        const response = await axiosInstance({
+            method: 'put',
+            url: `${PRODUCT_BASE_URL}/updateProduct`,
+            data: product
+        });
+        console.log("Response from backend", response);
         return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
         console.error("Error from backend", error);
-    })
+    }
 }
 
-export const deleteProduct = (productId) => {
-    return axiosInstance({
-        method: 'delete',
-        url: `${PRODUCT_BASE_URL}/deleteProduct/${productId}`
-    })
-    .then(response => {
+export const deleteProductService = async (productId) => {
+    try {
+        const response = await axiosInstance({
+            method: 'delete',
+            url: `${PRODUCT_BASE_URL}/deleteProduct/${productId}`
+        });
         console.log("Response from Backend", response);
         return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
         console.error("Error from backend", error);
-    })
+    }
 }

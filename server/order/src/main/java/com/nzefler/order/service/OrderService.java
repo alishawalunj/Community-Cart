@@ -6,9 +6,9 @@ import com.nzefler.order.model.Order;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderResponseDTO> getAllOrders();
-    OrderResponseDTO getOrderById(Long orderId);
-    List<OrderResponseDTO> getOrdersByUserId(Long userId);
-    OrderResponseDTO saveOrder(Order order);
-    void deleteOrder(Long orderId);
+    List<OrderResponseDTO> getAllOrders(String token);
+    OrderResponseDTO getOrderById(Long orderId, String token);
+    List<OrderResponseDTO> getOrdersByUserId(Long userId, String token);
+    OrderResponseDTO saveOrder(Order order, String token);
+    void deleteOrder(Long orderId, String token);
 }

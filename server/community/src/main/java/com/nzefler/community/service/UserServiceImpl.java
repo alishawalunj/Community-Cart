@@ -156,5 +156,19 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public List<Long> findUsersCommunitiesList(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()){
+            throw new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND);
+        }
+        User user = optionalUser.get();
+        List<Long> communities = new ArrayList<>();
+        for(Community community: user.getCommunities()){
+            communities.add(community.getCommunityId());
+        }
+        return communities;
+    }
+
 
 }

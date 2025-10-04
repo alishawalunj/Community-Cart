@@ -10,8 +10,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getAllCommunityUsersService, removeUsersFromCommunityService } from '../services/CommunityService';
 
 const CommunityCard = ({ community }) => {
+
+  const [ members, setMembers ] = useState([]);
+  const [ loading , setLoading ] = useState(false);
  
   // Table Styling
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,23 +37,47 @@ const CommunityCard = ({ community }) => {
     },
   }));
 
+  const fetchMembers = async () => {
+    try{
+        setLoading(true);
+        const response = await getAllCommunityUsersService(community.communityId);
+        setMembers(response.data);
+        setLoading(false);
+    }catch(error){
+      console.error("Error fetching members :", error);
+    }
+  }
+
   const leaveCommunity = () =>{
-    alert("Are you sure you wan to leave the community?");
+    const confirmed = window.confirm("Are you sure you want to leave the community?");
+    if (!confirmed) return;
+
+    const communityId = community.communityId;
+    const userId = localStorage.getItem("userId");
+    try{
+        const response = removeUsersFromCommunityService(communityId, userId);
+        if(response.status === 200){
+            alert("You have left the community");
+        }
+        window.location.reload();
+    }catch(error){
+      console.error("Error leaving community", error);
+    }
   }
 
   return (
     <div className="flex items-center justify-center">
-      <div className="container ">
+      <div className="container" onMouseEnter={() => {
+    if (members.length === 0) fetchMembers(); 
+  }}>
         <div className="card">
           <div className="front">
             <div className="front-image h-1/2 w-full">
             </div>
             <div className="mb-4 flex flex-col items-center justify-center bg-white p-4">
-              <h2 className="text-gray-900 font-bold text-xl mb-2">{community.title}</h2>
+              <h2 className="text-gray-900 font-bold text-xl mb-2">{community.name}</h2>
               <p className="text-gray-700 text-base">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                exercitationem praesentium nihil.
+                {community.description}
               </p>
             </div>
           </div>
@@ -65,10 +93,10 @@ const CommunityCard = ({ community }) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {community.members.map((member,index) => (
+                    {members.map((member,index) => (
                       <StyledTableRow key={index} sx={{'&:last-child td, &:last-child th': { border: 0 } }}>
-                        <StyledTableCell align="center" component="th" scope="row">{member.role}</StyledTableCell>
-                        <StyledTableCell align="center">{member.name}</StyledTableCell>
+                        <StyledTableCell align="center" component="th" scope="row">{member.firstName}</StyledTableCell>
+                        <StyledTableCell align="center">{member.firstName}</StyledTableCell>
                       </StyledTableRow>
                     ))}
                   </TableBody>

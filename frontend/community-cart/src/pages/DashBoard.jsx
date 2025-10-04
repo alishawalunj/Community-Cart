@@ -1,7 +1,8 @@
-import {useRef} from 'react'
+import { useState, useRef} from 'react'
 import Options from '../components/Options'
 import Marketplace from '../components/Marketplace'
 import Community from '../components/Community'
+
 
 
 const DashBoard = () => {
@@ -9,6 +10,7 @@ const DashBoard = () => {
     const marketplaceRef = useRef(null);
     const communityRef = useRef(null);
     const optionsRef = useRef(null);
+
 
     const handleScrollOptionsToMarketplace = () =>{
         marketplaceRef.current.scrollIntoView({behavior: 'smooth'});
@@ -22,6 +24,8 @@ const DashBoard = () => {
     const handleScrollToTop = () => {
         optionsRef.current.scrollIntoView({behavior: 'smooth'});
     };
+
+    
 
 
   return (
