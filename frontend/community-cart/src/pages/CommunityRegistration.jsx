@@ -32,7 +32,7 @@ const CommunityRegistration = (onCommunityRegistrationclick) =>{
     return(
             <div className='min-h-screen flex items-center justify-center'>
                 <div className="w-1/2 flex flex-col">
-                    <h1 className= "text-4xl bold flex justify-center items-center">Community Details</h1>
+                    <h1 className= "text-4xl bold flex justify-center items-center mb-6">New Community Details</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="communityName" className="block text-gray-700 font-bold mb-2">Community Name</label>

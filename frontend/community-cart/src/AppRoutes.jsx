@@ -13,6 +13,8 @@ import Signup from './components/Signup.jsx';
 import Layout from './pages/Layout.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import Buy from './pages/BuyProduct.jsx';
+import CommunityLists from './pages/CommunityLists.jsx';
+import UserOwnedCommunities from './pages/UserOwnedCommunities.jsx';
 
 const AppRoutes = () => {
   return (
@@ -34,6 +36,8 @@ const AppRoutes = () => {
         <Route path="/sell" element={<SellProductForm />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/buy" element={<Buy />} />
+        <Route path="/communitylists" element={<CommunityLists />} />
+        <Route path="/userownedcommunities" element={<UserOwnedCommunities />} />
       </Route>
     </Routes>
   );
