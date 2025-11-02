@@ -4,14 +4,17 @@ const CommunityRegistration = (onCommunityRegistrationclick) =>{
 
     const currentTime = new Date();
     const formattedTime = currentTime.toLocaleString();
-
+    const userId = localStorage.getItem('userId');
+    const [ previewImage, setPreviewImage ] = useState(null);
 
     const [formData, setFormData] = useState({
         communityName:'',
         communityDescription:'',
-        owner:'',
-        createdOn:''
+        owner: userId ||'',
+        createdOn: currentTime ||'',
+        photo: null,
     });
+
     const handleChange = (e) =>{
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -19,13 +22,28 @@ const CommunityRegistration = (onCommunityRegistrationclick) =>{
         }));
     };
 
+    const handlePhotoChange = (e) =>{
+        const file = e.target.files[0];
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: file
+        }));
+        const reader = new FileReader();
+        reader.onloadend = () =>{
+            setPreviewImage(reader.result);
+        };
+        if(file){
+            reader.readAsDataURL(file);
+        }
+    }
+
     const handleSubmit = (e) =>{
         e.preventDefault();
         alert(`
         Below Community created successfully!
         Community Name: ${formData.communityName}
         Community Description: ${formData.communityDescription}
-        Owner: ${formData.owner}
+        Owner: ${userId}
         Created On: ${ formattedTime}`);
     }
 
@@ -41,9 +59,6 @@ const CommunityRegistration = (onCommunityRegistrationclick) =>{
                             <label htmlFor="communityDescription" className="block text-gray-700 font-bold mb-2">Community Description</label>
                             <textarea id="communityDescription" name="communityDescription" value={formData.communityDescription} onChange={handleChange} className="border rounded-lg px-4 py-2 w-full"  rows="3"required />
 
-                            <label htmlFor="owner" className="block text-gray-700 font-bold mb-2">Owner</label>
-                            <input type="text" id="owner" name="owner" value={formData.owner} onChange={handleChange} className="border rounded-lg px-4 py-2 w-full" required />    
-                    
                             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded-full items-center justify-center">Submit</button> 
                         </div>
                     </form>

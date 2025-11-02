@@ -5,10 +5,13 @@ import com.nzefler.community.dto.CommunityResponseDTO;
 import com.nzefler.community.dto.CommunityUserResponseDTO;
 import com.nzefler.community.dto.UserResponseDTO;
 import com.nzefler.community.service.CommunityServiceImpl;
+import com.nzefler.community.service.S3Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -16,9 +19,11 @@ import java.util.List;
 public class CommunityController {
 
     private final CommunityServiceImpl communityService;
+    private final S3Service s3Service;
 
-    public CommunityController(CommunityServiceImpl communityService) {
+    public CommunityController(CommunityServiceImpl communityService, S3Service s3Service) {
         this.communityService = communityService;
+        this.s3Service = s3Service;
     }
 
     @GetMapping("/community/all")
@@ -71,6 +76,19 @@ public class CommunityController {
     @GetMapping("/getAllCommunityUsers/{communityId}")
     public List<UserResponseDTO> getAllCommunityUsers(@PathVariable Long communityId){
         return communityService.findAllCommunityUsers(communityId);
+    }
+
+    @GetMapping("/communities/{userId}/owned")
+    public List<CommunityResponseDTO> getUserOwnedCommunities(@PathVariable Long userId) {
+        return communityService.findAllUserOwnedCommunities(userId);
+    }
+
+    //image upload
+    @PostMapping("/{communityId}/upload-image")
+    public ResponseEntity<String> uploadCommunityImage(@PathVariable Long communityId, @RequestParam("file") MultipartFile file) throws IOException {
+        String fileUrl = s3Service.uploadFile("community", communityId + "-" + file.getOriginalFilename(), file.getBytes());
+        communityService.updateImageUrl(communityId, fileUrl);
+        return ResponseEntity.ok(fileUrl);
     }
 }
 

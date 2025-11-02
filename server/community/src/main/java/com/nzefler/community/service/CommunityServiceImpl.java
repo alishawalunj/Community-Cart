@@ -16,11 +16,8 @@ import com.nzefler.community.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-
 
 @Service
 public class CommunityServiceImpl implements CommunityService{
@@ -37,51 +34,50 @@ public class CommunityServiceImpl implements CommunityService{
         this.userMapper = userMapper;
     }
 
+    private User getOwner(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
+    }
+
     @Override
     public List<CommunityResponseDTO> findAllCommunities() {
-        try{
-            return communityRepository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
-        }catch(Exception e){
-            throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
-        }
+        List<Community> communities = communityRepository.findAll();
+        return communities.stream()
+                .map(mapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public CommunityUserResponseDTO findCommunityById(Long communityId) {
-        Optional<Community> optionalCommunity = communityRepository.findById(communityId);
-        if(optionalCommunity.isEmpty()){
-            throw new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND);
-        }
-        Community response = optionalCommunity.get();
-        return mapper.toEntity(response);
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
+        return mapper.toUserResponseDTO(community);
     }
 
     @Override
     @Transactional
     public CommunityResponseDTO saveCommunity(CommunityRequestDTO community) {
-        if(communityRepository.findByName(community.getName()).isPresent()){
+        if (communityRepository.findByName(community.getName()).isPresent()) {
             throw new EntityAlreadyExistsException(ErrorMessages.COMMUNITY_ALREADY_EXITS);
         }
-        Community newCommunity = mapper.toEntity(community);
+        User owner = getOwner(community.getOwner());
+        Community newCommunity = mapper.toEntity(community, owner);
         communityRepository.save(newCommunity);
-//            return communityRepository.findByName(community.getName());
-        return mapper.toDTO(newCommunity);
-
+        return mapper.toResponseDTO(newCommunity);
     }
 
     @Override
     @Transactional
     public CommunityResponseDTO updateCommunity(CommunityRequestDTO community) {
-        Optional<Community> optionalCommunity = communityRepository.findByName(community.getName());
-        if(optionalCommunity.isEmpty()){
-            throw new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND);
-        }
-        Community existingCommunity = optionalCommunity.get();
+        Community existingCommunity = communityRepository.findByName(community.getName())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
         existingCommunity.setDescription(community.getDescription());
         existingCommunity.setName(community.getName());
-        existingCommunity.setOwner(community.getOwner());
+        existingCommunity.setOwner(getOwner(community.getOwner()));
+        existingCommunity.setImage(community.getImage());
         communityRepository.save(existingCommunity);
-        return mapper.toDTO(existingCommunity);
+        return mapper.toResponseDTO(existingCommunity);
     }
 
     @Override
@@ -96,8 +92,10 @@ public class CommunityServiceImpl implements CommunityService{
     @Override
     @Transactional
     public Boolean addUsersToCommunity(Long communityId, Long userId) {
-        Community community = communityRepository.findById(communityId).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
         community.getUsers().add(user);
         user.getCommunities().add(community);
         userRepository.save(user);
@@ -123,7 +121,26 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     @Override
+    public List<CommunityResponseDTO> findAllUserOwnedCommunities(Long userId) {
+        User user = getOwner(userId);
+        List<Community> communities = communityRepository.findByOwner(user);
+
+        return communities.stream()
+                .map(mapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CommunityResponseDTO findCommunityByName(String name) {
-        return communityRepository.findByName(name).map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
+        Community community = communityRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.COMMUNITY_NOT_FOUND));
+        return mapper.toResponseDTO(community);
+    }
+
+    public void updateImageUrl(Long communityId, String imageUrl) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found with id: " + communityId));
+        community.setImage(imageUrl);
+        communityRepository.save(community);
     }
 }

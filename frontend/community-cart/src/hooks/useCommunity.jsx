@@ -8,6 +8,7 @@ import {
     deleteCommunityService,
     addUsersToCommunityService,
     removeUsersFromCommunityService,
+    getUserOwnedCommunitiesService
   } from '../services/CommunityService';
 import { useState } from 'react';
 
@@ -110,6 +111,16 @@ export const useCommunity = () => {
         }
     }
 
+    const getUserOwnedCommunities = async(userId) => {
+        try{
+            const response = await getUserOwnedCommunitiesService(userId);
+            return response.data;
+        }catch(error){
+            console.error("Error from backend", error);
+            return [];
+        }
+    }
+
     return {
         refresh,
         getAllCommunities,
@@ -120,6 +131,7 @@ export const useCommunity = () => {
         updateCommunity,
         deleteCommunity,
         addUsersToCommunity,
-        removeUsersFromCommunity
+        removeUsersFromCommunity,
+        getUserOwnedCommunities
     }
 }

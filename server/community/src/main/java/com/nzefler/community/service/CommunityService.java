@@ -21,6 +21,7 @@ public interface CommunityService {
     Boolean addUsersToCommunity(Long communityId, Long userId);
     Boolean removeUsersFromCommunity(Long communityId, Long userId);
     List<UserResponseDTO> findAllCommunityUsers(Long communityId);
+    List<CommunityResponseDTO> findAllUserOwnedCommunities(Long userId);
 
 //    Utility methods
     CommunityResponseDTO findCommunityByName(String name);

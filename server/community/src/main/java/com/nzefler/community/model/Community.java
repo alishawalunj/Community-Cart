@@ -22,9 +22,13 @@ public class Community {
     private Long communityId;
     @Column(unique = true, nullable = false)
     private String name;
-    private String owner;
+//    private String owner;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
     private String description;
     private String createdOn;
+    private String image;
     @ManyToMany(mappedBy = "communities")
     private Set<User> users = new HashSet<>();
 
@@ -44,11 +48,11 @@ public class Community {
         this.name = name;
     }
 
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
@@ -66,6 +70,14 @@ public class Community {
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Set<User> getUsers() {

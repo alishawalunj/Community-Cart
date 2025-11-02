@@ -76,3 +76,11 @@ export const getAllCommunityUsersService = async(communityId) => {
         data: communityId
     })
 }
+
+export const getUserOwnedCommunitiesService = async(userId) => {
+    return await axiosInstance({
+        method: 'get',
+        url: `${serviceConfig.communityHost}/communities/${userId}/owned`,
+        data: userId
+    })
+}

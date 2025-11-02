@@ -11,9 +11,10 @@ import java.util.Set;
 public class CommunityUserResponseDTO {
     private Long communityId;
     private String name;
-    private String owner;
+    private UserResponseDTO owner;
     private String description;
     private String createdOn;
+    private String image;
     private Set<UserResponseDTO> users = new HashSet<>();
 
     public Long getCommunityId() {
@@ -32,11 +33,11 @@ public class CommunityUserResponseDTO {
         this.name = name;
     }
 
-    public String getOwner() {
+    public UserResponseDTO getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(UserResponseDTO owner) {
         this.owner = owner;
     }
 
@@ -54,6 +55,14 @@ public class CommunityUserResponseDTO {
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Set<UserResponseDTO> getUsers() {

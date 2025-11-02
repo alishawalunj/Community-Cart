@@ -143,4 +143,11 @@ public class ProductServiceImpl implements ProductService{
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public void updateImageUrl(Long productId, String imageUrl) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        product.setImage(imageUrl);
+        productRepository.save(product);
+    }
 }

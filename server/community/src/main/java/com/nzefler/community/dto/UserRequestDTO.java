@@ -14,6 +14,7 @@ public class UserRequestDTO {
     private String lastName;
     private String emailId;
     private String password;
+    private String image;
 
     public String getFirstName() {
         return firstName;
@@ -45,6 +46,14 @@ public class UserRequestDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

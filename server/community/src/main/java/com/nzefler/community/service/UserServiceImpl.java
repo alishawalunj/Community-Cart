@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService{
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmailId(user.getEmailId());
                 existingUser.setPassword(user.getPassword());
+                existingUser.setImage(user.getImage());
                 userRepository.save(existingUser);
                 return userMapper.toDTO(existingUser);
             }
@@ -125,14 +126,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<CommunityResponseDTO> findAllUserCommunities(Long userId) {
-        try{
-            User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User doesnt exist") );
-            Set<Community> communities= user.getCommunities();
-            return communities.stream().map(communityMapper::toDTO).collect(Collectors.toList());
-        }catch(Exception e){
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User doesn't exist"));
+            Set<Community> communities = user.getCommunities();
+            return communities.stream()
+                    .map(communityMapper::toResponseDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
         }
     }
+
 
     @Override
     public UserResponseDTO findUserByEmailId(String emailId) {
@@ -170,5 +175,11 @@ public class UserServiceImpl implements UserService{
         return communities;
     }
 
+    public void updateImageUrl(Long userId, String imageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        user.setImage(imageUrl);
+        userRepository.save(user);
+    }
 
 }

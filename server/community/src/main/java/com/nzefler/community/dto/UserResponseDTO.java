@@ -16,6 +16,7 @@ public class UserResponseDTO {
     private String lastName;
     private String emailId;
     private String password;
+    private String image;
 
 
     public Long getUserId() {
@@ -56,6 +57,14 @@ public class UserResponseDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

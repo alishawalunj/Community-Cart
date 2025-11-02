@@ -14,6 +14,7 @@ public class UserCommunityResponseDTO {
     private String lastName;
     private String emailId;
     private String password;
+    private String image;
     private Set<CommunityResponseDTO> communities = new HashSet<>();
 
     public Long getUserId() {
@@ -54,6 +55,14 @@ public class UserCommunityResponseDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Set<CommunityResponseDTO> getCommunities() {

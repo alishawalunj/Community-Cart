@@ -23,6 +23,7 @@ public class User {
     private String lastName;
     private String emailId;
     private String password;
+    private String image;
     @ManyToMany
     @JoinTable(name="user_community", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "community_id"))
     private Set<Community> communities = new HashSet<>();
@@ -65,6 +66,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Set<Community> getCommunities() {

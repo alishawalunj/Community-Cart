@@ -3,11 +3,14 @@ package com.nzefler.community.controller;
 import com.nzefler.community.dto.*;
 import com.nzefler.community.model.User;
 import com.nzefler.community.service.JwtService;
+import com.nzefler.community.service.S3Service;
 import com.nzefler.community.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping("/community-service")
@@ -15,10 +18,12 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final JwtService jwtService;
+    private final S3Service s3Service;
 
-    public UserController(UserServiceImpl userService, JwtService jwtService) {
+    public UserController(UserServiceImpl userService, JwtService jwtService, S3Service s3Service) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.s3Service = s3Service;
     }
 
     @GetMapping("/validate")
@@ -99,6 +104,14 @@ public class UserController {
     @GetMapping("/users/{userId}/communityList")
     public ResponseEntity<List<Long>> getUserCommunityList(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.findUsersCommunitiesList(userId));
+    }
+
+    //image upload
+    @PostMapping("/{userId}/upload-image")
+    public ResponseEntity<String> uploadUserImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) throws IOException {
+        String fileUrl = s3Service.uploadFile("users", userId + "-" + file.getOriginalFilename(), file.getBytes());
+        userService.updateImageUrl(userId, fileUrl);
+        return ResponseEntity.ok(fileUrl);
     }
 
 

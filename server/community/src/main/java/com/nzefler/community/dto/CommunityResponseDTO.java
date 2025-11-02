@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 public class CommunityResponseDTO {
     private Long communityId;
     private String name;
-    private String owner;
+    private UserResponseDTO owner;
     private String description;
     private String createdOn;
+    private String image;
 
     public Long getCommunityId() {
         return communityId;
@@ -28,11 +29,11 @@ public class CommunityResponseDTO {
         this.name = name;
     }
 
-    public String getOwner() {
+    public UserResponseDTO getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(UserResponseDTO owner) {
         this.owner = owner;
     }
 
@@ -50,5 +51,13 @@ public class CommunityResponseDTO {
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
