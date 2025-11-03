@@ -1,21 +1,28 @@
 package com.nzefler.cart.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+
+@Entity
+@Table(name = "cart")
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "cart")
 public class Cart {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
     private Long userId;
+    private String status;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 
     public Long getCartId() {
@@ -32,6 +39,14 @@ public class Cart {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {

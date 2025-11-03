@@ -1,19 +1,28 @@
 package com.nzefler.cart.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+
+@Entity
+@Table(name = "cart_item")
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "cartItem")
 public class CartItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartItemId;
-    private Long cartId;
     private Long productId;
     private int quantity;
+    private double price;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date addedAt;
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
     public Long getCartItemId() {
         return cartItemId;
@@ -21,14 +30,6 @@ public class CartItem {
 
     public void setCartItemId(Long cartItemId) {
         this.cartItemId = cartItemId;
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
     }
 
     public Long getProductId() {
@@ -47,6 +48,14 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public Date getAddedAt() {
         return addedAt;
     }
@@ -55,4 +64,11 @@ public class CartItem {
         this.addedAt = addedAt;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

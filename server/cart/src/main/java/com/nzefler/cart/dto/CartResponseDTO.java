@@ -12,6 +12,7 @@ import java.util.List;
 public class CartResponseDTO {
     private Long cartId;
     private Long userId;
+    private String status;
     private Date createdAt;
     private Date updatedAt;
     private List<CartItemResponseDTO> cartItems;
@@ -30,6 +31,14 @@ public class CartResponseDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {

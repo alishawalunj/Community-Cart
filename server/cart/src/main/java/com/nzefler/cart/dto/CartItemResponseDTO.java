@@ -13,6 +13,7 @@ public class CartItemResponseDTO {
     private Long cartId;
     private Long productId;
     private int quantity;
+    private double price;
     private Date addedAt;
 
     public Long getCartItemId() {
@@ -45,6 +46,14 @@ public class CartItemResponseDTO {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Date getAddedAt() {

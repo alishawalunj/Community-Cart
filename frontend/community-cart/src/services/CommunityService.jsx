@@ -56,7 +56,7 @@ export const deleteCommunityService = async(communityId) => {
 export const addUsersToCommunityService = async(communityId, userId) => {
     return await axiosInstance({
         method:'put',
-        url:`${serviceConfig.communityHost}/addUsersToCommunitye/communityId/${communityId}/userId/${userId}`,
+        url:`${serviceConfig.communityHost}/addUsersToCommunity/communityId/${communityId}/userId/${userId}`,
         data: userId 
     })
 }

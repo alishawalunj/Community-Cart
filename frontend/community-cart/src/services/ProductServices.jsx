@@ -19,14 +19,14 @@ export const getProductByIdService = async(productId) => {
     })
 }
 
-export const getProductsByCommunityIdService = (communityId) => {
+export const getProductsByCommunityIdService = async(communityId) => {
     return axiosInstance({
         method: 'get',
         url: `${PRODUCT_BASE_URL}/getProductsByCommunityId/${communityId}`
     })
     .then(response => {
         console.log("Response from backend", response);
-        return response.data;
+        return response;
     })
     .catch(error => {
         console.error("Error from backend", error);
@@ -73,6 +73,7 @@ export const getProductsByUserCommunitiesService = async (userId) => {
 // }
 
 export const createProductService = async (product) => {
+    console.log("product request sent",product);
     try {
         const response = await axiosInstance({
             method: 'post',

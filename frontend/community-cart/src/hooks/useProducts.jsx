@@ -51,6 +51,7 @@ export const useProducts = () => {
   const getProductsByUserId = async(userId) => {
     try{
         const response = await getProductsByUserIdService(userId);
+        console.log("Response from backend for products owned by user", response);
         return response.data;
     }catch(error){
         console.error("Error from backend", error);
@@ -71,7 +72,8 @@ export const useProducts = () => {
   const createProduct = async(product) => {
     try{
         const response = await createProductService(product);
-        return response.data;
+        console.log("Resp from backend",response)
+        return response;
     }catch(error){
         console.error("Error from backend", error);
         return [];
@@ -101,6 +103,7 @@ export const useProducts = () => {
   const uploadProductImage = async(productId, formData) => {
     try{
       const response = await uploadProductImageService(productId, formData);
+      console.log("Image product response", response);
       return response.data;
     }catch(error){
       console.error("Error from backend", error);

@@ -1,10 +1,12 @@
 package com.nzefler.cart.repository;
 
 import com.nzefler.cart.model.Cart;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface CartRepository extends MongoRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<Cart, Long> {
     List<Cart> findByUserId(Long userId);
+    Optional<Cart> findByUserIdAndStatus(Long userId, String status);
 }
