@@ -6,51 +6,45 @@ import BackButton from './BackButton';
 const Community = ({ onBackClick }) => {
   const navigate = useNavigate();
 
-  const onCommunityRegistrationclick = () => navigate('/communityregistration');
+  const onCommunityRegistrationClick = () => navigate('/communityregistration');
   const onExploreCommunitiesClick = () => navigate('/communitylists');
   const onUserOwnedCommunitiesClick = () => navigate('/userownedcommunities');
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-200">
-      {/* Header Section */}
-      <div className="relative flex flex-col justify-center px-8 py-6">
-        <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-6">
-          <button
-            onClick={onExploreCommunitiesClick}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-transform transform hover:scale-105"
-          >
-            Explore All Communities
-          </button>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-500
+    hover:from-blue-500 hover:via-cyan-500 hover:to-teal-400 p-6 md:p-12">
+      <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-100 flex items-center gap-3">
+          Your Communities
+        </h1>
 
-          <button
-            onClick={onCommunityRegistrationclick}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-transform transform hover:scale-105"
-          >
-            Add Community
-          </button>
-
-          <button
-            onClick={onUserOwnedCommunitiesClick}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-transform transform hover:scale-105"
-          >
-            Communities You Created
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Your Communities
-          </h1>
-
-          <div className="text-2xl md:text-3xl">
-            <BackButton onClick={onBackClick} />
-          </div>
+        <div className="flex flex-wrap gap-3 justify-end">
+          {[{
+            label: "Explore All",
+            onClick: onExploreCommunitiesClick
+          }, {
+            label: "Add Community",
+            onClick: onCommunityRegistrationClick
+          }, {
+            label: "My Communities",
+            onClick: onUserOwnedCommunitiesClick
+          }].map(({ label, onClick }) => (
+            <button
+              key={label}
+              onClick={onClick}
+              className="bg-white/20 backdrop-blur-md border border-white/30 text-white/90 
+                         font-medium py-2 px-4 rounded-lg shadow-md hover:shadow-lg
+                         transition-all duration-300 hover:scale-105"
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Carousel Section */}
-      <div className="flex justify-center items-center flex-grow px-4 py-6">
-        <div className="w-full md:w-3/4 lg:w-2/3">
+      <div className="flex-grow flex justify-center items-start">
+        <div className="w-full md:w-4/5 lg:w-3/5">
           <CommunityCarousal />
         </div>
       </div>

@@ -3,11 +3,11 @@ import { FiEdit } from "react-icons/fi";
 import { useUser } from "../hooks/useUser";
 
 const UserProfileTab = () => {
-  const [user, setUser] = useState(null);
-  const { getUserById, updateUser } = useUser();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const [ user, setUser ] = useState(null);
+  const { getUserById, updateUser, uploadUserImage } = useUser();
+  const [ isEditing, setIsEditing ] = useState(false);
+  const [ formData, setFormData ] = useState({});
+  const [ profileImage, setProfileImage ] = useState("https://via.placeholder.com/150");
 
   const handleEdit = () => {
     setFormData(user);
@@ -32,16 +32,41 @@ const UserProfileTab = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) setProfileImage(URL.createObjectURL(file));
+    if (!file) return;
+
+    const userId = localStorage.getItem("userId");
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const imageUrl = await uploadUserImage(userId, formData);
+      console.log(imageUrl)
+      setProfileImage(imageUrl);
+      setUser({ ...user, imageUrl });
+      alert("Profile image uploaded successfully!");
+    } catch (error) {
+      console.log("Error uploading image", error);
+      alert("Failed to upload image");
+    }
   };
+
+
 
   useEffect(() => {
     const fetchUser = async () => {
       const userId = localStorage.getItem("userId");
-      const user = await getUserById(userId);
-      if (user) setUser(user);
+      try{
+        const user = await getUserById(userId);
+        if (user) {
+          setUser(user);
+          console.log(user)
+          setProfileImage(user.image || "https://via.placeholder.com/150");
+        }
+      }catch(error){
+        console.log(error);
+      }     
     };
     fetchUser();
   }, []);
@@ -84,7 +109,7 @@ const UserProfileTab = () => {
           )}
         </div>
 
-        {["firstName", "lastName", "email", "password"].map((field) => (
+        {["firstName", "lastName", "emailId", "password"].map((field) => (
           <div key={field} className="flex items-center space-x-4">
             <label className="font-semibold w-32 capitalize">{field}:</label>
             {isEditing ? (

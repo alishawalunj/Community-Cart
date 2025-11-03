@@ -89,3 +89,14 @@ export const getUserCommunitiesService = async (userId) => {
     url: `${serviceConfig.communityHost}/users/${userId}/communities`,
   });
 };
+
+export const uploadUserImageService = async (userId, formData) => {
+  return await axiosInstance({
+    method: "post",
+    url: `${serviceConfig.communityHost}/user/${userId}/upload-image`,
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

@@ -37,7 +37,7 @@ if (loading) {
 }
 
   return (
-    <div className='min-h-screen flex flex-col'>
+    <div className='min-h-screen flex flex-col bg-gradient-to-b from-pink-400 via-purple-500 to-indigo-400 hover:from-indigo-400 via-purple-500 to-pink-400'>
       <div className='item-center justify-center'>
         <h1 className='text-3xl md:text-4xl font-bold text-gray-800 text-center my-8'>Explore Communities</h1>
       </div>

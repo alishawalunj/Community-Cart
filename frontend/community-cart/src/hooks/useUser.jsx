@@ -8,7 +8,8 @@ import {
     deleteUserService,
     joinCommunityService,
     leaveCommunityService,
-    loginService
+    loginService,
+    uploadUserImageService
   } from '../services/UserService';
 import { useState } from 'react';
 
@@ -120,8 +121,15 @@ export const useUser = () => {
         }
     }
 
-    
-
+    const uploadUserImage = async(userId, formData) => {
+        try {
+            const response = await uploadUserImageService(userId, formData);
+            return response.data;
+        } catch (error) {
+            console.error("Error from backend", error);
+            throw error;
+        }
+    };
 
     return {
         getAllUsers,
@@ -133,6 +141,7 @@ export const useUser = () => {
         deleteUser,
         joinCommunity,
         leaveCommunity,
-        login
+        login,
+        uploadUserImage
     }
 }

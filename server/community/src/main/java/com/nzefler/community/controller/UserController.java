@@ -107,7 +107,7 @@ public class UserController {
     }
 
     //image upload
-    @PostMapping("/{userId}/upload-image")
+    @PostMapping("/user/{userId}/upload-image")
     public ResponseEntity<String> uploadUserImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) throws IOException {
         String fileUrl = s3Service.uploadFile("users", userId + "-" + file.getOriginalFilename(), file.getBytes());
         userService.updateImageUrl(userId, fileUrl);

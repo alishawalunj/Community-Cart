@@ -8,7 +8,8 @@ import {
     deleteCommunityService,
     addUsersToCommunityService,
     removeUsersFromCommunityService,
-    getUserOwnedCommunitiesService
+    getUserOwnedCommunitiesService,
+    uploadCommunityImageService
   } from '../services/CommunityService';
 import { useState } from 'react';
 
@@ -121,6 +122,18 @@ export const useCommunity = () => {
         }
     }
 
+    const uploadCommunityImage = async(communityId, formData) => {
+        try{
+            console.log("Data passed po upoad image in community",communityId );
+            console.log("Data passed po upoad image in community", formData );
+            const response = uploadCommunityImageService(communityId, formData);
+            return response.data;
+        }catch(error){
+            console.error("Error from backend", error);
+            throw error;
+        }
+    }
+
     return {
         refresh,
         getAllCommunities,
@@ -132,6 +145,7 @@ export const useCommunity = () => {
         deleteCommunity,
         addUsersToCommunity,
         removeUsersFromCommunity,
-        getUserOwnedCommunities
+        getUserOwnedCommunities,
+        uploadCommunityImage
     }
 }

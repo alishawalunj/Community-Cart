@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAllCommunityUsersService, removeUsersFromCommunityService } from '../services/CommunityService';
 
+
 const CommunityCard = ({ community }) => {
 
   const [ members, setMembers ] = useState([]);
@@ -73,6 +74,11 @@ const CommunityCard = ({ community }) => {
         <div className="card">
           <div className="front">
             <div className="front-image h-1/2 w-full">
+              <img 
+                src={community.image || "https://via.placeholder.com/300x150"} 
+                alt={community.name} 
+                className="w-full h-full object-cover rounded-t-lg"
+              />
             </div>
             <div className="mb-4 flex flex-col items-center justify-center bg-white p-4">
               <h2 className="text-gray-900 font-bold text-xl mb-2">{community.name}</h2>

@@ -34,7 +34,7 @@ const BuyProduct = () => {
 
   return (
     <div>
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-4'>
+      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 hover:from-purple-700 via-indigo-600 to-blue-600 space-y-4'>
         <div className="self-end mr-8 text-3xl">
           <BackButton onClick={() => {window.history.back() }} />
         </div>
@@ -51,5 +51,4 @@ const BuyProduct = () => {
   )
 }
 
-// export default BuyProduct;
 export default BuyProduct;

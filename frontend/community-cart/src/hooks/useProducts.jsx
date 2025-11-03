@@ -6,7 +6,8 @@ import {
   getProductsByUserCommunitiesService,
   createProductService,
   updateProductService,
-  deleteProductService
+  deleteProductService,
+  uploadProductImageService
 } from "../services/ProductServices";
 import { useState } from "react";
 
@@ -97,6 +98,16 @@ export const useProducts = () => {
     }
   }
 
-  return {refresh, getAllProducts, getProductById, getProductsByCommunityId, getProductsByUserId, getProductsByUserCommunities, createProduct, updateProduct, deleteProduct};
+  const uploadProductImage = async(productId, formData) => {
+    try{
+      const response = await uploadProductImageService(productId, formData);
+      return response.data;
+    }catch(error){
+      console.error("Error from backend", error);
+      throw error;
+    }
+  }
+
+  return {refresh, getAllProducts, getProductById, getProductsByCommunityId, getProductsByUserId, getProductsByUserCommunities, createProduct, updateProduct, deleteProduct, uploadProductImage};
 
 }

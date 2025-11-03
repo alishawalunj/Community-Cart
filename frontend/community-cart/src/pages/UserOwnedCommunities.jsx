@@ -35,7 +35,7 @@ const UserOwnedCommunities = () => {
       );
     }
     return (
-        <div className="min-h-screen flex flex-col bg-gray-100 w-full">
+        <div className="min-h-screen flex flex-col bg-gradient-to-b from-indigo-400 via-purple-500 to-pink-400 hover:from-pink-400 via-purple-500 to-indigo-400 w-full">
             <div className="flex flex-col h-1/4 justity-left item-center text-5xl font-bold px-8 py-4 relative">
                 <h1>Your Created Communities</h1>
                 </div>

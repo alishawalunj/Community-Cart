@@ -84,9 +84,9 @@ public class CommunityController {
     }
 
     //image upload
-    @PostMapping("/{communityId}/upload-image")
+    @PostMapping("/community/{communityId}/upload-image")
     public ResponseEntity<String> uploadCommunityImage(@PathVariable Long communityId, @RequestParam("file") MultipartFile file) throws IOException {
-        String fileUrl = s3Service.uploadFile("community", communityId + "-" + file.getOriginalFilename(), file.getBytes());
+        String fileUrl = s3Service.uploadFile("communities", communityId + "-" + file.getOriginalFilename(), file.getBytes());
         communityService.updateImageUrl(communityId, fileUrl);
         return ResponseEntity.ok(fileUrl);
     }

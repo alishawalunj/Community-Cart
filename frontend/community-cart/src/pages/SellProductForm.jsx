@@ -1,65 +1,167 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Button, MenuItem, TextField } from '@mui/material';
+import sellProductImage from '../assets/sellproduct.png';
+import { useCommunity } from '../hooks/useCommunity';
 
-const SellProductForm = ({ onProductUploadClick, communities }) => {
+const SellProductForm = ({ onProductUploadClick }) => {
     const [formData, setFormData] = useState({
-        communityName: '',
-        productName: '',
-        productType: '',
-        productDescription: '',
+        communityId: '',
+        name: '',
+        description: '',
+        tag: '',
+        color: '',
+        size: '',
         price: '',
-        productImage: '',
-        quantity: ''
+        count: '',
+        image: ''
     });
+
+    const [userId, setUserId] = useState(null);
+    const { getUserOwnedCommunities } = useCommunity();
+    const [communitiesList, setCommunitiesList] = useState([]);
+
+    useEffect(() => {
+        const fetchCommunities = async () => {
+            const storedUserId = localStorage.getItem('userId');
+            if (!storedUserId) return;
+
+            setUserId(parseInt(storedUserId));
+
+            try {
+                const communities = await getUserOwnedCommunities(storedUserId);
+                if (communities) setCommunitiesList(communities);
+            } catch (error) {
+                alert("Error fetching user's communities");
+            }
+        };
+
+        fetchCommunities();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setFormData(prev => ({ ...prev, image: file }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onProductUploadClick(formData);
+        if (!userId) {
+            alert("User not found. Please log in again.");
+            return;
+        }
+        onProductUploadClick({ ...formData, userId });
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50">
-            <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-10 rounded-xl shadow-xl">
-                <h2 className="text-2xl font-bold mb-6 text-center">Add a Product</h2>
+        <div className="flex flex-col md:flex-row h-screen">
+            <div className="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-400 to-blue-600 text-white flex-col justify-center items-center p-10">
+                <h1 className="text-4xl font-extrabold mb-4 text-center">Register Your Product</h1>
+                <p className="text-lg max-w-md text-center leading-relaxed">
+                    Create listings, showcase your products, and connect with your community buyers instantly.
+                </p>
+                <img
+                    src={sellProductImage}
+                    alt="Product registration illustration"
+                    className="mt-5 w-4/5 max-w-md rounded-xl shadow-xl opacity-95"
+                />
+            </div>
+            <div className="flex w-full md:w-1/2 justify-center items-center bg-gray-50">
+                <form onSubmit={handleSubmit} className="w-full bg-white p-10 rounded-2xl shadow-2xl">
+                    <h2 className="text-3xl font-bold mb-6 mt-2 text-center text-gray-800">
+                        Add a New Product
+                    </h2>
 
-                {[
-                    { inputFor : 'Product Name', name: 'productName', placeholder: 'Product Name' },
-                    { inputFor : 'Product Type', name: 'productType', placeholder: 'Product Type' },
-                    { inputFor : 'Price', name: 'price', placeholder: 'Price' },
-                    { inputFor : 'Product Description', name: 'productDescription', placeholder: 'Product Description' },
-                    { inputFor : 'Quantity', name: 'quantity', placeholder: 'Quantity' },
-                ].map(({ inputFor, name, placeholder }) => (
-                    <div className="mb-4" key={name}>
-                     {inputFor} : <input
-                            type="text"
-                            name={name}
-                            id={name}
-                            value={formData[name]}
+                    <div className="mb-6">
+                        <label className="block text-gray-700 mb-2 font-medium">Select Community</label>
+                        <TextField
+                            select
+                            fullWidth
+                            name="communityId"
+                            value={formData.communityId}
                             onChange={handleChange}
-                            // placeholder={placeholder}
-                            className="w-full bg-transparent border-b-2 border-teal-500 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+                            required
+                            variant="outlined"
+                        >
+                            {communitiesList.length > 0 ? (
+                                communitiesList.map(c => (
+                                    <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                                ))
+                            ) : (
+                                <MenuItem disabled>No communities found</MenuItem>
+                            )}
+                        </TextField>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {[
+                            { label: 'Product Name', name: 'name' },
+                            { label: 'Tag', name: 'tag' },
+                            { label: 'Color', name: 'color' },
+                            { label: 'Size', name: 'size' },
+                            { label: 'Price ($)', name: 'price', type: 'number' },
+                            { label: 'Quantity', name: 'count', type: 'number' },
+                        ].map(({ label, name, type = 'text' }) => (
+                            <div key={name}>
+                                <label className="block text-gray-700 mb-2 font-medium">{label}</label>
+                                <input
+                                    type={type}
+                                    name={name}
+                                    value={formData[name]}
+                                    onChange={handleChange}
+                                    className="w-full border-2 border-gray-200 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:border-cyan-500"
+                                    required
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-6">
+                        <label className="block text-gray-700 mb-2 font-medium">Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            rows="4"
+                            className="w-full border-2 border-gray-200 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:border-cyan-500"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div className="mt-6">
+                        <label className="block text-gray-700 mb-2 font-medium">Product Image</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="w-full text-gray-700"
                             required
                         />
                     </div>
-                ))}
 
-                <div className="flex justify-between mt-6">
-                    <Button type="submit" variant="contained" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full">
-                        Add Product
-                    </Button>
-                    <Button type="button" variant="contained" className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full" onClick={() => window.history.back()}>
-                        Back
-                    </Button>
-                </div>
-            </form>
+                    <div className="flex justify-between mt-10">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ bgcolor: '#06b6d4', '&:hover': { bgcolor: '#0891b2' } }}
+                        >
+                            Add Product
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="contained"
+                            sx={{ bgcolor: '#9ca3af', '&:hover': { bgcolor: '#6b7280' } }}
+                            onClick={() => window.history.back()}
+                        >
+                            Back
+                        </Button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

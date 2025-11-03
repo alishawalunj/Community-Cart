@@ -71,9 +71,9 @@ public class ProductController {
     }
 
     //image upload
-    @PostMapping("/{productId}/upload-image")
+    @PostMapping("/product/{productId}/upload-image")
     public ResponseEntity<String> uploadProductImage(@PathVariable Long productId, @RequestParam("file") MultipartFile file) throws IOException {
-        String fileUrl = s3Service.uploadFile("product", productId + "-" + file.getOriginalFilename(), file.getBytes());
+        String fileUrl = s3Service.uploadFile("products", productId + "-" + file.getOriginalFilename(), file.getBytes());
         productService.updateImageUrl(productId, fileUrl);
         return ResponseEntity.ok(fileUrl);
     }

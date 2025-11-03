@@ -111,4 +111,15 @@ export const deleteProductService = async (productId) => {
     } catch (error) {
         console.error("Error from backend", error);
     }
-}
+};
+
+export const uploadProductImageService = async(productId, formData) => {
+    return await axiosInstance({
+        method: "post",
+        url: `${PRODUCT_BASE_URL}/product/${productId}/upload-image`,
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+    });
+};
