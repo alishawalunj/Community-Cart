@@ -34,3 +34,10 @@ build/
 
 # Environment variables
 .env
+
+
+# IntelliJ IDEA
+.idea/
+
+# macOS
+.DS_Store
