@@ -9,7 +9,10 @@ const Layout = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded}/>
+      {/* <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded}/> */}
+      <div className="sticky top-0 h-screen">
+    <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+  </div>
 
       {/* Main content */}
       <div className="flex-1 bg-gray-100 min-h-screen overflow-y-auto transition-all duration-300">
