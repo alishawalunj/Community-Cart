@@ -64,8 +64,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDTO findOpenCartByUserId(Long userId, String token) {
         validateToken(token);
-
-        // Try to find an open cart directly
         Cart openCart = cartRepository.findByUserIdAndStatus(userId, "OPEN")
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
@@ -133,7 +131,7 @@ public class CartServiceImpl implements CartService {
                 });
 
         cartItem.setAddedAt(new Date());
-        cartItem.setCart(cart); // Important: maintain relationship
+        cartItem.setCart(cart);
 
         if (cart.getCartItems() == null) {
             cart.setCartItems(new ArrayList<>());
@@ -181,13 +179,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartSummaryResponseDTO checkoutCart(Cart cart, String token) {
         validateToken(token);
-
-        // Update cart status
         cart.setStatus("CHECKED_OUT");
         cart.setUpdatedAt(new Date());
         cartRepository.save(cart);
-
-        // Build checkout summary
         CartSummaryResponseDTO response = new CartSummaryResponseDTO();
         response.setUserId(cart.getUserId());
         response.setCartId(cart.getCartId());

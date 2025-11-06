@@ -5,7 +5,7 @@ console.log("Product Services called");
 
 const PRODUCT_BASE_URL = "http://localhost:8082/product-service";
 
-export const getAllProductsService = async(inputs) => {
+export const getAllProductsService = async() => {
     return await axiosInstance({
         method: 'get',
         url: `${PRODUCT_BASE_URL}/getAllProducts`

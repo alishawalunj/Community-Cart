@@ -1,6 +1,5 @@
 package com.nzefler.community.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ public class Community {
     private Long communityId;
     @Column(unique = true, nullable = false)
     private String name;
-//    private String owner;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;

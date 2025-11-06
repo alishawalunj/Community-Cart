@@ -1,22 +1,33 @@
 package com.nzefler.order.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
+@Entity
+@Table(name = "orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
+    @SequenceGenerator(
+            name = "order_seq",
+            sequenceName = "order_sequence",
+            allocationSize = 1,
+            initialValue = 1501
+    )
     private Long orderId;
     private Long userId;
-    private double totalAmount;
-    private Date createdAt;
-    private Date updateAt;
     private Long paymentId;
-    List<OrderItem> orderItems;
+    private Long cartId;
+    private double totalAmount;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     public Long getOrderId() {
         return orderId;
@@ -34,30 +45,6 @@ public class Order {
         this.userId = userId;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
-
     public Long getPaymentId() {
         return paymentId;
     }
@@ -66,11 +53,27 @@ public class Order {
         this.paymentId = paymentId;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
+    public Long getCartId() {
+        return cartId;
     }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

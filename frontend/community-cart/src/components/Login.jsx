@@ -45,7 +45,6 @@ const Login = () => {
             setIsLoggedIn(true);
             navigate("/dashboard");
         }catch(error){
-            console.log("Login error : ", error);
             setError(error.message);
         }
     };

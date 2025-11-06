@@ -16,6 +16,7 @@ import Buy from './pages/BuyProduct.jsx';
 import CommunityLists from './pages/CommunityLists.jsx';
 import UserOwnedCommunities from './pages/UserOwnedCommunities.jsx';
 import Cart from './pages/Cart.jsx';
+import Payment from './pages/Payment.jsx';
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         <Route path="/communitylists" element={<CommunityLists />} />
         <Route path="/userownedcommunities" element={<UserOwnedCommunities />} />
         <Route path='/cart' element={<Cart/>} />
+        <Route path='/payment' element={<Payment/>} />
       </Route>
     </Routes>
   );

@@ -46,6 +46,7 @@ export const useCart = () => {
   const getCartById = async (cartId) => {
     try {
       const response = await getCartByIdService(cartId);
+      console.log("Cart data:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching cart by ID:", error);

@@ -75,7 +75,6 @@ public class ProductServiceImpl implements ProductService{
 
     public List<ProductResponseDTO> findProductsByUserCommunities(Long userId, String token) {
         try{
-            //fetch user's communities
             validateToken(token);
             List<Long> communitiesId = client.getUserCommunityIds(userId, token);
             System.out.println("Printing all community Ids of users :" + communitiesId);

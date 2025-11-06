@@ -15,7 +15,7 @@ const BuyProduct = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const { getProductsByUserCommunities } = useProducts();
-  const { getOpenCart, getCartItemCount } = useCart();
+  const { getOpenCart, getCartItemCount } = useCart(); // make sure this hook returns count
 
   useEffect(() => {
     if (!userId) return;
@@ -24,9 +24,8 @@ const BuyProduct = () => {
       try {
         const products = await getProductsByUserCommunities(userId);
         setProductList(products || []);
-        console.log("Products for user communities:", JSON.stringify(products, null, 2));
       } catch (err) {
-        console.error("Error from backend", err);
+        console.error("Error fetching products:", err);
         setError("Failed to load products.");
       } finally {
         setLoading(false);
@@ -51,7 +50,7 @@ const BuyProduct = () => {
 
     initCart();
     fetchProducts();
-  }, [userId]);
+  }, [userId, getProductsByUserCommunities, getOpenCart, getCartItemCount]);
 
   const handleCartClick = () => {
     const cartId = localStorage.getItem("cartId");
@@ -62,7 +61,7 @@ const BuyProduct = () => {
     <div className="relative min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 hover:from-purple-700 via-indigo-600 to-blue-600">
       <div className="flex justify-between items-center p-6">
         <BackButton onClick={() => window.history.back()} />
-        
+
         <IconButton onClick={handleCartClick} sx={{ color: 'white' }}>
           <Badge badgeContent={cartCount} color="error">
             <ShoppingCartIcon fontSize="large" />
@@ -70,16 +69,18 @@ const BuyProduct = () => {
         </IconButton>
       </div>
 
-      <div className="text-center text-6xl font-bold text-white py-4">
-        <h1>Products</h1>
-      </div>
+      <h1 className="text-center text-6xl font-extrabold  text-white py-6 mb-7">Products</h1>
 
-      <div className="flex flex-col items-center space-y-4 pb-10">
-        {loading && <div className="text-2xl text-gray-100">Loading...</div>}
-        {error && <div className="text-2xl text-red-400">{error}</div>}
+      <div className="flex flex-col items-center space-y-3">
+        {loading && <div className="text-2xl text-gray-100 mt-20">Loading...</div>}
+        {error && <div className="text-2xl text-red-400 mt-20">{error}</div>}
 
-        {!loading && !error && (
+        {!loading && !error && productList.length > 0 && (
           <ProductsGrid productList={productList} mode="buy" />
+        )}
+
+        {!loading && !error && productList.length === 0 && (
+          <div className="text-2xl text-gray-100 mt-10">No products available in your communities.</div>
         )}
       </div>
     </div>

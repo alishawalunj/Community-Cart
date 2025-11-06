@@ -1,7 +1,6 @@
 package com.nzefler.community.service;
 
 import com.nzefler.community.dto.*;
-import com.nzefler.community.model.Community;
 import com.nzefler.community.model.User;
 
 import java.util.List;

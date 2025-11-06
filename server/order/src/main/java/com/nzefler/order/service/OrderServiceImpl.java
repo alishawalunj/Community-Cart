@@ -34,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponseDTO> getAllOrders(String token) {
         try{
+            validateToken(token);
             return orderRepository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
         }catch(Exception e){
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
@@ -42,23 +43,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO getOrderById(Long orderId, String token) {
+        validateToken(token);
         return orderRepository.findById(orderId).map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.ORDER_DOES_NOT_EXIST));
     }
 
     @Override
     public List<OrderResponseDTO> getOrdersByUserId(Long userId, String token) {
-        try{
-            return orderRepository.findById(userId).stream().map(mapper::toDTO).collect(Collectors.toList());
-        }catch(Exception e){
+        try {
+            validateToken(token);
+            List<Order> orders = orderRepository.findByUserId(userId);
+            return orders.stream()
+                    .map(mapper::toDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
         }
     }
 
+
     @Override
     public OrderResponseDTO saveOrder(Order order, String token) {
         try{
+            validateToken(token);
             if(order.getOrderId() != null) throw new EntityAlreadyExistsException(ErrorMessages.ORDER_ALREADY_EXIST);
-            Order created = orderRepository.save(order);
+            Order created = orderRepository.save(mapper.toEntity(order));
             return mapper.toDTO(created);
         }catch (EntityAlreadyExistsException e){
             throw new EntityAlreadyExistsException(ErrorMessages.ORDER_ALREADY_EXIST);
@@ -69,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long orderId, String token) {
+        validateToken(token);
         if (!orderRepository.existsById(orderId)) {
             throw new EntityNotFoundException(ErrorMessages.ORDER_DOES_NOT_EXIST);
         }

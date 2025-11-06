@@ -14,9 +14,6 @@ import java.util.Set;
 @Component
 public class UserMapper {
 
-    // Removed @Autowired CommunityMapper to avoid circular dependency
-    // Map communities manually here
-
     public UserResponseDTO toDTO(User user){
         UserResponseDTO userResponse = new UserResponseDTO();
         userResponse.setUserId(user.getUserId());
@@ -56,7 +53,6 @@ public class UserMapper {
             communityResponseDTO.setCreatedOn(community.getCreatedOn());
             communityResponseDTO.setImage(community.getImage());
 
-            // Map owner manually to avoid injecting CommunityMapper
             if (community.getOwner() != null) {
                 UserResponseDTO ownerDTO = new UserResponseDTO();
                 ownerDTO.setUserId(community.getOwner().getUserId());

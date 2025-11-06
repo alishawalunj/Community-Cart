@@ -23,7 +23,7 @@ public class OrderController {
         return orderService.getAllOrders(token);
     }
 
-    @GetMapping("/getOrderById/{cartId}")
+    @GetMapping("/getOrderById/{orderId}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId, @RequestHeader("Authorization") String token) {
         OrderResponseDTO response = orderService.getOrderById(orderId, token);
         return new ResponseEntity<>(response, HttpStatus.OK);
