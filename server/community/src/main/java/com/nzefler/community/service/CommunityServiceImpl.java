@@ -35,8 +35,7 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     private User getOwner(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
     }
 
     @Override
@@ -45,6 +44,16 @@ public class CommunityServiceImpl implements CommunityService{
         return communities.stream()
                 .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommunityResponseDTO> exploreCommunities(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND));
+        List<Community> communities = communityRepository.findAll();
+        return communities.stream()
+                .filter(c -> !c.getOwner().getUserId().equals(userId))
+                .filter(c -> !c.getUsers().contains(user))
+                .map(mapper::toResponseDTO).collect(Collectors.toList());
     }
 
     @Transactional
@@ -124,7 +133,6 @@ public class CommunityServiceImpl implements CommunityService{
     public List<CommunityResponseDTO> findAllUserOwnedCommunities(Long userId) {
         User user = getOwner(userId);
         List<Community> communities = communityRepository.findByOwner(user);
-
         return communities.stream()
                 .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());

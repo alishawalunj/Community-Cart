@@ -97,7 +97,7 @@ const SellProductForm = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen overflow-hidden">
       {/* Left Panel */}
       <div className="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-400 to-blue-600 text-white flex-col justify-center items-center p-10">
         <h1 className="text-4xl font-extrabold mb-4 text-center">Register Your Product</h1>

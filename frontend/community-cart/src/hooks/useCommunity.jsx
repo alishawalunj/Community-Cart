@@ -1,5 +1,6 @@
 import {
     getAllCommunitiesService,
+    getExploreCommunitiesService,
     getCommunityByIdService,
     getCommunityByNameService,
     getAllCommunityUsersService,
@@ -23,6 +24,16 @@ export const useCommunity = () => {
     const getAllCommunities = async() => {
         try{
             const response = await getAllCommunitiesService();
+            return response.data;
+        }catch(error){
+            console.error("Error from backend", error);
+            return [];
+        }
+    }
+
+    const getExplorecommunities = async(userId) => {
+        try{
+            const response = await getExploreCommunitiesService(userId);
             return response.data;
         }catch(error){
             console.error("Error from backend", error);
@@ -136,6 +147,7 @@ export const useCommunity = () => {
     return {
         refresh,
         getAllCommunities,
+        getExplorecommunities,
         getCommunityById,
         getCommunityByName,
         getCommunityUsers,

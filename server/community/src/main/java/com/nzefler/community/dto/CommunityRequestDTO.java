@@ -2,16 +2,15 @@ package com.nzefler.community.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
-import java.util.HashSet;
-import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommunityRequestDTO {
     private String name;
     private Long owner;
     private String description;
-    private String createdOn;
+    private LocalDate createdOn;
     private String image;
 
     public String getName() {
@@ -38,11 +37,11 @@ public class CommunityRequestDTO {
         this.description = description;
     }
 
-    public String getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 

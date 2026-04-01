@@ -12,7 +12,6 @@ import com.nzefler.community.repository.CommunityRepository;
 import com.nzefler.community.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,16 +66,16 @@ public class UserServiceImpl implements UserService{
         Optional<User> existingUserOptional = userRepository.findByEmailId(user.getEmailId());
         if(existingUserOptional.isEmpty()){
                 throw new EntityNotFoundException(ErrorMessages.USER_NOT_FOUND);
-            }else{
-                User existingUser = existingUserOptional.get();
-                existingUser.setFirstName(user.getFirstName());
-                existingUser.setLastName(user.getLastName());
-                existingUser.setEmailId(user.getEmailId());
-                existingUser.setPassword(user.getPassword());
-                existingUser.setImage(user.getImage());
-                userRepository.save(existingUser);
-                return userMapper.toDTO(existingUser);
-            }
+        }else{
+            User existingUser = existingUserOptional.get();
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setEmailId(user.getEmailId());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setImage(user.getImage());
+            userRepository.save(existingUser);
+            return userMapper.toDTO(existingUser);
+        }
     }
 
     @Override
@@ -121,14 +120,12 @@ public class UserServiceImpl implements UserService{
         }catch(Exception e) {
             throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
         }
-
     }
 
     @Override
     public List<CommunityResponseDTO> findAllUserCommunities(Long userId) {
         try {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("User doesn't exist"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User doesn't exist"));
             Set<Community> communities = user.getCommunities();
             return communities.stream()
                     .map(communityMapper::toResponseDTO)
@@ -176,8 +173,7 @@ public class UserServiceImpl implements UserService{
     }
 
     public void updateImageUrl(Long userId, String imageUrl) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         user.setImage(imageUrl);
         userRepository.save(user);
     }

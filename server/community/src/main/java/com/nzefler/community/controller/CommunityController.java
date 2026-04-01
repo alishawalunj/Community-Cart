@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/community-service")
+@RequestMapping("/community")
 public class CommunityController {
 
     private final CommunityServiceImpl communityService;
@@ -26,7 +26,7 @@ public class CommunityController {
         this.s3Service = s3Service;
     }
 
-    @GetMapping("/community/all")
+    @GetMapping("/all")
     public List<CommunityResponseDTO> getAllCommunities(){
         return communityService.findAllCommunities();
     }
@@ -34,12 +34,6 @@ public class CommunityController {
     @GetMapping("/getCommunityById/{communityId}")
     public ResponseEntity<CommunityUserResponseDTO> getCommunityById(@PathVariable Long communityId){
         CommunityUserResponseDTO response = communityService.findCommunityById(communityId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/getCommunityByName/{name}")
-    public ResponseEntity<CommunityResponseDTO> getCommunityByName( @PathVariable String name){
-        CommunityResponseDTO response =  communityService.findCommunityByName(name);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -60,6 +54,19 @@ public class CommunityController {
         communityService.deleteCommunity(communityId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/explore/{userId}")
+    public List<CommunityResponseDTO> exploreCommunities(@PathVariable Long userId){
+        return communityService.exploreCommunities(userId);
+    }
+
+    @GetMapping("/getCommunityByName/{name}")
+    public ResponseEntity<CommunityResponseDTO> getCommunityByName( @PathVariable String name){
+        CommunityResponseDTO response =  communityService.findCommunityByName(name);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
     @PutMapping("/addUsersToCommunity/communityId/{communityId}/userId/{userId}")
     public ResponseEntity<Boolean> addUsersToCommunity(@PathVariable Long communityId, @PathVariable  Long userId){

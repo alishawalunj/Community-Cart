@@ -4,8 +4,6 @@ import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
 import com.nzefler.community.dto.CommunityUserResponseDTO;
 import com.nzefler.community.dto.UserResponseDTO;
-
-
 import java.util.List;
 
 public interface CommunityService {
@@ -24,5 +22,6 @@ public interface CommunityService {
     List<CommunityResponseDTO> findAllUserOwnedCommunities(Long userId);
 
 //    Utility methods
+    List<CommunityResponseDTO> exploreCommunities(Long userId);
     CommunityResponseDTO findCommunityByName(String name);
 }

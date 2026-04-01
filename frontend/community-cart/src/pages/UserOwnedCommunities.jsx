@@ -35,10 +35,10 @@ const UserOwnedCommunities = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-indigo-400 via-purple-500 to-pink-400 hover:from-pink-400 via-purple-500 to-indigo-400 w-full">
-      <div className="flex flex-col h-1/4 justify-left items-center text-5xl font-bold px-8 py-4 relative">
-        <h1>Your Created Communities</h1>
+      <div className="flex flex-col h-1/4 justify-left text-5xl text-white font-bold px-10 mt-16">
+        <h1>Communities Owned By You</h1>
       </div>
-      <div className="px-8 w-full flex justify-center">
+      <div className="px-8 w-full flex justify-center mb-16 mt-14">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '50px', justifyContent: 'center' }}>
           {communities.length === 0 ? (
             <div className="text-xl">You have not created any communities yet.</div>
@@ -48,7 +48,7 @@ const UserOwnedCommunities = () => {
                 key={community.communityId}
                 community={community}
                 mode="owned"
-                refetchCommunities={fetchUserOwnedCommunities} // refresh after delete
+                refetchCommunities={fetchUserOwnedCommunities}
               />
             ))
           )}

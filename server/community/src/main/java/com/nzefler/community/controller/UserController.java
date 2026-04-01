@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 @RestController
-@RequestMapping("/community-service")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -51,7 +51,7 @@ public class UserController {
         return new AuthResponse(userId, token);
     }
 
-    @GetMapping("/users/all")
+    @GetMapping("/all")
     public List<UserResponseDTO> getAllUsers(){
         return userService.findAllUsers();
     }

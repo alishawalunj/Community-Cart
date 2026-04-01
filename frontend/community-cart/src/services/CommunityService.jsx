@@ -16,6 +16,13 @@ export const getAllCommunitiesService = async() =>{
     })
 }
 
+export const getExploreCommunitiesService = async(userId) => {
+    return await axiosInstance({
+        method: 'get',
+        url: `${serviceConfig.communityHost}/community/explore/${userId}`
+    })
+}
+
 export const getCommunityByIdService = async(communityId) => {
     return await axiosInstance({
         method: 'get',

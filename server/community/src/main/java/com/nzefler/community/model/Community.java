@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name="communities")
 public class Community {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "community_seq")
     @SequenceGenerator(name = "community_seq", sequenceName = "community_sequence", allocationSize = 1, initialValue = 1201)
@@ -25,7 +24,7 @@ public class Community {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     private String description;
-    private String createdOn;
+    private LocalDate createdOn;
     private String image;
     @ManyToMany(mappedBy = "communities")
     private Set<User> users = new HashSet<>();
@@ -62,11 +61,11 @@ public class Community {
         this.description = description;
     }
 
-    public String getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 

@@ -26,7 +26,6 @@ public class S3Service {
                      @Value("${aws.region}") String region) {
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
-
         this.s3Client = S3Client.builder()
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
@@ -35,10 +34,8 @@ public class S3Service {
 
     public String uploadFile(String folder, String fileName, byte[] fileData) throws IOException {
         String key = folder + "/" + fileName;
-
         File tempFile = File.createTempFile("upload-", fileName);
         Files.write(tempFile.toPath(), fileData);
-
         s3Client.putObject(
                 PutObjectRequest.builder()
                         .bucket(bucketName)
@@ -47,9 +44,7 @@ public class S3Service {
                         .build(),
                 RequestBody.fromFile(tempFile)
         );
-
         tempFile.delete();
-
         return "https://" + bucketName + ".s3.amazonaws.com/" + key;
     }
 }

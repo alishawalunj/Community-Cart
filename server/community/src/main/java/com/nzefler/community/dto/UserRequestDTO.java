@@ -3,7 +3,6 @@ package com.nzefler.community.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -59,13 +58,12 @@ public class UserRequestDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRequestDTO that = (UserRequestDTO) o;
-        return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(emailId, that.emailId) && Objects.equals(password, that.password);
+        if (!(o instanceof UserRequestDTO that)) return false;
+        return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(emailId, that.emailId) && Objects.equals(password, that.password) && Objects.equals(image, that.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, emailId, password);
+        return Objects.hash(firstName, lastName, emailId, password, image);
     }
 }

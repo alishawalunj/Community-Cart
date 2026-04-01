@@ -15,8 +15,7 @@ const BuyProduct = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const { getProductsByUserCommunities } = useProducts();
-  const { getOpenCart, getCartItemCount } = useCart(); // make sure this hook returns count
-
+  const { getOpenCart, getCartItemCount } = useCart();
   useEffect(() => {
     if (!userId) return;
 

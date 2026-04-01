@@ -2,6 +2,7 @@ package com.nzefler.community.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,7 +11,7 @@ public class CommunityResponseDTO {
     private String name;
     private UserResponseDTO owner;
     private String description;
-    private String createdOn;
+    private LocalDate createdOn;
     private String image;
 
     public Long getCommunityId() {
@@ -45,11 +46,11 @@ public class CommunityResponseDTO {
         this.description = description;
     }
 
-    public String getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 
