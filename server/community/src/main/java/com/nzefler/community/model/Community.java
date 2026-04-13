@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -22,12 +23,15 @@ public class Community {
     private String name;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    private UserRef owner;
     private String description;
     private LocalDate createdOn;
     private String image;
-    @ManyToMany(mappedBy = "communities")
-    private Set<User> users = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "community_members",
+            joinColumns = @JoinColumn(name = "community_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserRef> members = new HashSet<>();
 
     public Long getCommunityId() {
         return communityId;
@@ -45,11 +49,11 @@ public class Community {
         this.name = name;
     }
 
-    public User getOwner() {
+    public UserRef getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserRef owner) {
         this.owner = owner;
     }
 
@@ -77,24 +81,23 @@ public class Community {
         this.image = image;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserRef> getMembers() {
+        return members;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(!(o instanceof Community)) return false;
-        Community community = (Community) o;
-        return communityId != null && communityId.equals(community.communityId);
+    public void setMembers(Set<UserRef> members) {
+        this.members = members;
     }
 
     @Override
-    public int hashCode(){
-        return getClass().hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Community community)) return false;
+        return Objects.equals(communityId, community.communityId) && Objects.equals(name, community.name) && Objects.equals(owner, community.owner) && Objects.equals(description, community.description) && Objects.equals(createdOn, community.createdOn) && Objects.equals(image, community.image) && Objects.equals(members, community.members);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(communityId, name, owner, description, createdOn, image, members);
     }
 }

@@ -1,58 +1,46 @@
 package com.nzefler.community.mapper;
 
-import com.nzefler.community.dto.*;
+import com.nzefler.community.dto.CommunityRequestDTO;
+import com.nzefler.community.dto.CommunityResponseDTO;
+import com.nzefler.community.dto.UserRefDTO;
 import com.nzefler.community.model.Community;
-import com.nzefler.community.model.User;
+import com.nzefler.community.model.UserRef;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
 public class CommunityMapper {
 
-    private final UserMapper userMapper;
-
-    public CommunityMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
-
-    public CommunityResponseDTO toResponseDTO(Community community) {
+    public CommunityResponseDTO toResponseDTO(Community community){
         CommunityResponseDTO dto = new CommunityResponseDTO();
         dto.setCommunityId(community.getCommunityId());
         dto.setName(community.getName());
         dto.setDescription(community.getDescription());
         dto.setCreatedOn(community.getCreatedOn());
-        dto.setOwner(userMapper.toDTO(community.getOwner()));
         dto.setImage(community.getImage());
+        dto.setOwnerId(community.getOwner().getUserId());
+
+        Set<UserRefDTO> membersDTO = new HashSet<>();
+        for(UserRef user: community.getMembers()){
+            membersDTO.add(new UserRefDTO(user.getUserId(), user.getDisplayName(), user.getImage()));
+
+        }
+        dto.setMembers(membersDTO);
         return dto;
     }
 
-    public Community toEntity(CommunityRequestDTO request, User owner) {
+    public Community toEntity(CommunityRequestDTO request, UserRef owner){
         Community community = new Community();
         community.setName(request.getName());
         community.setDescription(request.getDescription());
-        community.setCreatedOn(request.getCreatedOn());
-        community.setOwner(owner);
         community.setImage(request.getImage());
+        community.setOwner(owner);
+        community.setCreatedOn(LocalDate.now());
+        community.getMembers().add(owner);
         return community;
     }
 
-    public CommunityUserResponseDTO toUserResponseDTO(Community community) {
-        CommunityUserResponseDTO dto = new CommunityUserResponseDTO();
-        dto.setCommunityId(community.getCommunityId());
-        dto.setName(community.getName());
-        dto.setDescription(community.getDescription());
-        dto.setCreatedOn(community.getCreatedOn());
-        dto.setOwner(userMapper.toDTO(community.getOwner()));
-        dto.setImage(community.getImage());
-
-        Set<UserResponseDTO> users = new HashSet<>();
-        for (User user : community.getUsers()) {
-            users.add(userMapper.toDTO(user));
-        }
-        dto.setUsers(users);
-        return dto;
-    }
 }

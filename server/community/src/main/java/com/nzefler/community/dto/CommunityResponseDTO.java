@@ -3,16 +3,18 @@ package com.nzefler.community.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommunityResponseDTO {
     private Long communityId;
     private String name;
-    private UserResponseDTO owner;
     private String description;
-    private LocalDate createdOn;
     private String image;
+    private Long ownerId;
+    private LocalDate createdOn;
+    Set<UserRefDTO> members;
 
     public Long getCommunityId() {
         return communityId;
@@ -30,20 +32,28 @@ public class CommunityResponseDTO {
         this.name = name;
     }
 
-    public UserResponseDTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserResponseDTO owner) {
-        this.owner = owner;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public LocalDate getCreatedOn() {
@@ -54,11 +64,11 @@ public class CommunityResponseDTO {
         this.createdOn = createdOn;
     }
 
-    public String getImage() {
-        return image;
+    public Set<UserRefDTO> getMembers() {
+        return members;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setMembers(Set<UserRefDTO> members) {
+        this.members = members;
     }
 }

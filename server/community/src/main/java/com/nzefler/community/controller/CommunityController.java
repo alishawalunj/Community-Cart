@@ -2,100 +2,79 @@ package com.nzefler.community.controller;
 
 import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
-import com.nzefler.community.dto.CommunityUserResponseDTO;
-import com.nzefler.community.dto.UserResponseDTO;
-import com.nzefler.community.service.CommunityServiceImpl;
-import com.nzefler.community.service.S3Service;
+import com.nzefler.community.dto.UserRefDTO;
+import com.nzefler.community.service.CommunityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/community")
+@RequestMapping("/api")
 public class CommunityController {
 
-    private final CommunityServiceImpl communityService;
-    private final S3Service s3Service;
+    private final CommunityService communityService;
 
-    public CommunityController(CommunityServiceImpl communityService, S3Service s3Service) {
+    public CommunityController(CommunityService communityService) {
         this.communityService = communityService;
-        this.s3Service = s3Service;
     }
 
-    @GetMapping("/all")
-    public List<CommunityResponseDTO> getAllCommunities(){
-        return communityService.findAllCommunities();
+    private Long currentUserId() {
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    @GetMapping("/getCommunityById/{communityId}")
-    public ResponseEntity<CommunityUserResponseDTO> getCommunityById(@PathVariable Long communityId){
-        CommunityUserResponseDTO response = communityService.findCommunityById(communityId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @GetMapping("/communities")
+    public ResponseEntity<List<CommunityResponseDTO>> findAll(){
+        return ResponseEntity.ok(communityService.findAllCommunities());
     }
 
-    @PostMapping("/createCommunity")
-    public ResponseEntity<CommunityResponseDTO> createCommunity(@RequestBody CommunityRequestDTO dto){
-        CommunityResponseDTO response = communityService.saveCommunity(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @GetMapping("/communities/{communityId}")
+    public ResponseEntity<CommunityResponseDTO> findById(@PathVariable Long communityId){
+        return ResponseEntity.ok(communityService.findById(communityId));
     }
 
-    @PutMapping("/updateCommunity")
-    public ResponseEntity<CommunityResponseDTO> updateCommunity(@RequestBody CommunityRequestDTO dto){
-        CommunityResponseDTO response = communityService.updateCommunity(dto);
-        return ResponseEntity.ok(response);
+    @GetMapping("/communities/explore")
+    public ResponseEntity<List<CommunityResponseDTO>> explore() {
+        return ResponseEntity.ok(communityService.explore(currentUserId()));
+    }
+    @PostMapping("/communities")
+    public ResponseEntity<CommunityResponseDTO> create(@RequestBody CommunityRequestDTO request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(communityService.create(currentUserId(), request));
     }
 
-    @DeleteMapping("/deleteCommunity/{communityId}")
-    public ResponseEntity<Void> deleteCommunity( @PathVariable Long communityId){
-        communityService.deleteCommunity(communityId);
+    @PutMapping("/communities/{communityId}")
+    public ResponseEntity<CommunityResponseDTO> update(@PathVariable Long communityId, @RequestBody CommunityRequestDTO request){
+        return ResponseEntity.ok(communityService.update(communityId, currentUserId(), request));
+    }
+
+    @DeleteMapping("/communities/{communityId}")
+    public ResponseEntity<Void> delete( @PathVariable Long communityId){
+        communityService.delete(communityId, currentUserId());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/explore/{userId}")
-    public List<CommunityResponseDTO> exploreCommunities(@PathVariable Long userId){
-        return communityService.exploreCommunities(userId);
+    @PostMapping("/communities/{communityId}/members/{userId}")
+    public ResponseEntity<Void> join(@PathVariable Long communityId, @PathVariable Long userId){
+        communityService.addMember(communityId, userId);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/getCommunityByName/{name}")
-    public ResponseEntity<CommunityResponseDTO> getCommunityByName( @PathVariable String name){
-        CommunityResponseDTO response =  communityService.findCommunityByName(name);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @DeleteMapping("/communities/{communityId}/members/{userId}")
+    public ResponseEntity<Void> leave(@PathVariable Long communityId, @PathVariable Long userId){
+        communityService.removeMember(communityId, userId);
+        return ResponseEntity.noContent().build();
     }
 
-
-
-    @PutMapping("/addUsersToCommunity/communityId/{communityId}/userId/{userId}")
-    public ResponseEntity<Boolean> addUsersToCommunity(@PathVariable Long communityId, @PathVariable  Long userId){
-        boolean result = communityService.addUsersToCommunity(communityId, userId);
-        return ResponseEntity.ok(result);
+    @PostMapping("/communities/{communityId}/members")
+    public ResponseEntity<List<UserRefDTO>> getMembers(@PathVariable Long communityId){
+        return ResponseEntity.ok(communityService.getMembers(communityId));
     }
 
-    @PutMapping("/removeUsersFromCommunity/communityId/{communityId}/userId/{userId}")
-    public ResponseEntity<Boolean> removeUsersFromCommunity( @PathVariable Long communityId,  @PathVariable Long userId){
-        boolean result = communityService.removeUsersFromCommunity(communityId, userId);
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/getAllCommunityUsers/{communityId}")
-    public List<UserResponseDTO> getAllCommunityUsers(@PathVariable Long communityId){
-        return communityService.findAllCommunityUsers(communityId);
-    }
-
-    @GetMapping("/communities/{userId}/owned")
-    public List<CommunityResponseDTO> getUserOwnedCommunities(@PathVariable Long userId) {
-        return communityService.findAllUserOwnedCommunities(userId);
-    }
-
-    //image upload
-    @PostMapping("/community/{communityId}/upload-image")
-    public ResponseEntity<String> uploadCommunityImage(@PathVariable Long communityId, @RequestParam("file") MultipartFile file) throws IOException {
-        String fileUrl = s3Service.uploadFile("communities", communityId + "-" + file.getOriginalFilename(), file.getBytes());
-        communityService.updateImageUrl(communityId, fileUrl);
-        return ResponseEntity.ok(fileUrl);
+    @GetMapping("/users/{userId}/communities")
+    public ResponseEntity<List<Long>> getUserCommunityIds(@PathVariable Long userId) {
+        return ResponseEntity.ok(communityService.getUserCommunityIds(userId));
     }
 }
 
