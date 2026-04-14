@@ -11,6 +11,8 @@ import com.nzefler.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -24,6 +26,11 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<UserResponseDTO> findAllUsers() {
+        return userRepository.findAll().stream().map(mapper::toResponseDTO).toList();
     }
 
     @Override

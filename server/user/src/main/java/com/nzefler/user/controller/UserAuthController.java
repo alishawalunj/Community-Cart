@@ -8,9 +8,12 @@ import com.nzefler.user.service.AuthService;
 import com.nzefler.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -40,6 +43,11 @@ public class UserAuthController {
     public ResponseEntity<AuthResponseDTO> refresh(HttpServletRequest request, HttpServletResponse response){
         AuthResponseDTO responseDto = authService.refresh(request, response);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponseDTO>> fidAll(){
+        return ResponseEntity.ok(userService.findAllUsers());
     }
 
     @PostMapping("/save")

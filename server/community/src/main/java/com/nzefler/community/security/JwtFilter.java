@@ -1,7 +1,7 @@
 package com.nzefler.community.security;
 
 import com.nzefler.community.client.UserServiceClient;
-import com.nzefler.community.dto.UserRefDTO;
+import com.nzefler.community.model.UserRef;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,12 +38,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (jwtUtil.isTokenValid(token)) {
                 String email = jwtUtil.extractEmail(token);
-                UserRefDTO user = userServiceClient.getUserByEmail(email);
+
+                // call user service to resolve email → UserRef (userId + displayName + image)
+                UserRef user = userServiceClient.getUserByEmail(email);
 
                 if (user != null) {
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
-                                    user.getUserId(),
+                                    user.getUserId(),  // principal — retrieved via currentUserId() in controller
                                     null,
                                     List.of(new SimpleGrantedAuthority("ROLE_USER"))
                             );

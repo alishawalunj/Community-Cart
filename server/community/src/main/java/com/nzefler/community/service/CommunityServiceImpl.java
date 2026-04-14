@@ -1,5 +1,6 @@
 package com.nzefler.community.service;
 
+import com.nzefler.community.client.UserServiceClient;
 import com.nzefler.community.dto.CommunityRequestDTO;
 import com.nzefler.community.dto.CommunityResponseDTO;
 import com.nzefler.community.dto.UserRefDTO;
@@ -21,11 +22,13 @@ public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
     private final UserRefRepository userRefRepository;
     private final CommunityMapper communityMapper;
+    private final UserServiceClient userServiceClient;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserRefRepository userRefRepository, CommunityMapper communityMapper) {
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserRefRepository userRefRepository, CommunityMapper communityMapper, UserServiceClient userServiceClient) {
         this.communityRepository = communityRepository;
         this.userRefRepository = userRefRepository;
         this.communityMapper = communityMapper;
+        this.userServiceClient = userServiceClient;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class CommunityServiceImpl implements CommunityService{
         if(communityRepository.findByName(request.getName()).isPresent()){
             throw new EntityAlreadyExistsException(ErrorConstants.COMMUNITY_ALREADY_EXITS);
         }
-        UserRef owner = findUserRefOrThrow(ownerId);
+        UserRef owner = findOrCreateUserRef(ownerId);
         Community community = communityMapper.toEntity(request, owner);
         Community saved = communityRepository.save(community);
         return communityMapper.toResponseDTO(saved);
@@ -55,7 +58,7 @@ public class CommunityServiceImpl implements CommunityService{
         Community community = findCommunityOrThrow(communityId);
         assertIsOwner(community, requestingUserId);
         community.setName(request.getName());
-        community.setDescription(request.getName());
+        community.setDescription(request.getDescription());
         community.setImage(request.getImage());
 
         Community saved = communityRepository.save(community);
@@ -72,7 +75,7 @@ public class CommunityServiceImpl implements CommunityService{
     @Override
     public void addMember(Long communityId, Long userId) {
         Community community = findCommunityOrThrow(communityId);
-        UserRef user = findUserRefOrThrow(userId);
+        UserRef user = findOrCreateUserRef(userId);
         community.getMembers().add(user);
         communityRepository.save(community);
     }
@@ -112,5 +115,12 @@ public class CommunityServiceImpl implements CommunityService{
         if(!community.getOwner().getUserId().equals(requestingUserId)){
             throw new UnAuthorizedException(ErrorConstants.NOT_OWNER);
         }
+    }
+
+    private UserRef findOrCreateUserRef(Long userId) {
+        return userRefRepository.findById(userId).orElseGet(() -> {
+            UserRef ref = userServiceClient.getUserById(userId);
+            return userRefRepository.save(ref);
+        });
     }
 }
