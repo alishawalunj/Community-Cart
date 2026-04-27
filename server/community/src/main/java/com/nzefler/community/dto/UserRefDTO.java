@@ -3,7 +3,6 @@ package com.nzefler.community.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserRefDTO {
     private Long userId;

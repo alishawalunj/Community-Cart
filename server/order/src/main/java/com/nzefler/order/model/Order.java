@@ -1,11 +1,14 @@
 package com.nzefler.order.model;
 
+import com.nzefler.order.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,19 +18,38 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
-    @SequenceGenerator(
-            name = "order_seq",
-            sequenceName = "order_sequence",
-            allocationSize = 1,
-            initialValue = 1501
-    )
+    @SequenceGenerator(name = "order_seq", sequenceName = "order_sequence", allocationSize = 1, initialValue = 1501)
     private Long orderId;
+
     private Long userId;
-    private Long paymentId;
     private Long cartId;
-    private double totalAmount;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Long paymentId;
+    private BigDecimal totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    private LocalDateTime createdAt;
+
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -37,12 +59,12 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public Long getPaymentId() {
@@ -53,27 +75,39 @@ public class Order {
         this.paymentId = paymentId;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public Date getDate() {
-        return date;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order order)) return false;
+        return Objects.equals(orderId, order.orderId) && Objects.equals(userId, order.userId) && Objects.equals(cartId, order.cartId) && Objects.equals(paymentId, order.paymentId) && Objects.equals(totalAmount, order.totalAmount) && status == order.status && Objects.equals(orderItems, order.orderItems) && Objects.equals(createdAt, order.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, userId, cartId, paymentId, totalAmount, status, orderItems, createdAt);
     }
 }

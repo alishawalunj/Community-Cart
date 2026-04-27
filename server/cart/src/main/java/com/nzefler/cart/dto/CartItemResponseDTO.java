@@ -2,19 +2,27 @@ package com.nzefler.cart.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class CartItemResponseDTO {
     private Long cartItemId;
-    private Long cartId;
     private Long productId;
-    private int quantity;
-    private double price;
-    private Date addedAt;
+    private Long communityId;
+    private String productName;
+    private Integer quantity;
+    private BigDecimal priceAtAdd;
+    private LocalDateTime addedAt;
+
+    public LocalDateTime getAddedAt() {
+        return addedAt;
+    }
+
+    public void setAddedAt(LocalDateTime addedAt) {
+        this.addedAt = addedAt;
+    }
 
     public Long getCartItemId() {
         return cartItemId;
@@ -24,12 +32,20 @@ public class CartItemResponseDTO {
         this.cartItemId = cartItemId;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public Long getCommunityId() {
+        return communityId;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
+    }
+
+    public BigDecimal getPriceAtAdd() {
+        return priceAtAdd;
+    }
+
+    public void setPriceAtAdd(BigDecimal priceAtAdd) {
+        this.priceAtAdd = priceAtAdd;
     }
 
     public Long getProductId() {
@@ -40,27 +56,19 @@ public class CartItemResponseDTO {
         this.productId = productId;
     }
 
-    public int getQuantity() {
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getAddedAt() {
-        return addedAt;
-    }
-
-    public void setAddedAt(Date addedAt) {
-        this.addedAt = addedAt;
     }
 }

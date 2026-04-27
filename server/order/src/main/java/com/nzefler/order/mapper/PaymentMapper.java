@@ -16,7 +16,7 @@ public class PaymentMapper {
         return p;
     }
 
-    public PaymentResponseDTO toDTO(Payment p){
+    public PaymentResponseDTO toResponseDTO(Payment p){
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setPaymentId(p.getPaymentId());
         dto.setUserId(p.getUserId());

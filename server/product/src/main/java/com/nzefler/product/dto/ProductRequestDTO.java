@@ -3,29 +3,21 @@ package com.nzefler.product.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class ProductRequestDTO {
-    private Long userId;
     private Long communityId;
-    private String image;
     private String name;
     private String description;
+    private String image;
     private String tag;
     private String color;
     private String size;
-    private double price;
-    private double count;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    private BigDecimal price;
+    private Integer stockCount;
 
     public Long getCommunityId() {
         return communityId;
@@ -33,14 +25,6 @@ public class ProductRequestDTO {
 
     public void setCommunityId(Long communityId) {
         this.communityId = communityId;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getName() {
@@ -57,6 +41,14 @@ public class ProductRequestDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTag() {
@@ -83,19 +75,19 @@ public class ProductRequestDTO {
         this.size = size;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public double getCount() {
-        return count;
+    public Integer getStockCount() {
+        return stockCount;
     }
 
-    public void setCount(double count) {
-        this.count = count;
+    public void setStockCount(Integer stockCount) {
+        this.stockCount = stockCount;
     }
 }

@@ -1,152 +1,119 @@
 package com.nzefler.product.service;
 
-
-import com.nzefler.product.client.AuthServiceClient;
+import com.nzefler.product.client.CommunityServiceClient;
 import com.nzefler.product.dto.ProductRequestDTO;
 import com.nzefler.product.dto.ProductResponseDTO;
-import com.nzefler.product.exception.EntityNotFoundException;
-import com.nzefler.product.exception.ErrorMessages;
+import com.nzefler.product.dto.ProductStatus;
+import com.nzefler.product.dto.StockUpdateDTO;
+import com.nzefler.product.exception.ErrorConstants;
+import com.nzefler.product.exception.MembershipException;
+import com.nzefler.product.exception.UnAuthorizedException;
 import com.nzefler.product.mapper.ProductMapper;
 import com.nzefler.product.model.Product;
 import com.nzefler.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
-    private final ProductMapper mapper;
-    private final AuthServiceClient client;
+    private final ProductMapper productMapper;
+    private final CommunityServiceClient communityServiceClient;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper mapper, AuthServiceClient client) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CommunityServiceClient communityServiceClient) {
         this.productRepository = productRepository;
-        this.mapper = mapper;
-        this.client = client;
-    }
-
-    private void validateToken(String token){
-        if(!client.isTokenValid(token.substring(7))){
-            throw new RuntimeException("Unauthorized : invalid token");
-        }
-    }
-
-
-    @Override
-    public List<ProductResponseDTO> findAllProducts(String token) {
-        try{
-            validateToken(token);
-            return productRepository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
-        }catch(Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
+        this.productMapper = productMapper;
+        this.communityServiceClient = communityServiceClient;
     }
 
     @Override
-    public ProductResponseDTO findProductById(Long productId, String token) {
-        validateToken(token);
-        return productRepository.findById(productId).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.PRODUCT_DOES_NOT_EXIST));
+    public ProductResponseDTO create(Long sellerId, ProductRequestDTO request) {
+        assertIsMember(sellerId, request.getCommunityId());
+        Product product = productMapper.toEntity(request, sellerId);
+        return productMapper.toResponseDTO(productRepository.save(product));
     }
 
     @Override
-    public List<ProductResponseDTO> findProductsByCommunityId(Long communityId, String token) {
-        try{
-            validateToken(token);
-            return productRepository.findByCommunityId(communityId).stream().map(mapper::toDto).collect(Collectors.toList());
-        }catch(Exception e){
-            throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
-        }
+    public ProductResponseDTO findById(Long productId, Long requestingUserId) {
+        Product product = findOrThrow(productId);
+        assertIsMember(requestingUserId, product.getCommunityId());
+        return productMapper.toResponseDTO(product);
     }
 
     @Override
-    public List<ProductResponseDTO> findProductsByUserId(Long userId, String token) {
-        try{
-            validateToken(token);
-            return productRepository.findByUserId(userId).stream().map(mapper::toDto).collect(Collectors.toList());
-        }catch(Exception e){
-            throw new RuntimeException(ErrorMessages.ERROR_IN_PROCESSING);
-        }
-    }
-
-    public List<ProductResponseDTO> findProductsByUserCommunities(Long userId, String token) {
-        try{
-            validateToken(token);
-            List<Long> communitiesId = client.getUserCommunityIds(userId, token);
-            System.out.println("Printing all community Ids of users :" + communitiesId);
-            List<ProductResponseDTO> productsList = new ArrayList<>();
-            List<ProductResponseDTO> communityProductsList = new ArrayList<>();
-            for(Long community: communitiesId){
-                communityProductsList = findProductsByCommunityId(community,token);
-                for(ProductResponseDTO product : communityProductsList){
-                    productsList.add(product);
-                }
-            }
-            return productsList;
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching products list for user");
-        }
+    public ProductResponseDTO update(Long productId, Long requestingUserId, ProductRequestDTO request) {
+        Product product = findOrThrow(productId);
+        assertIsSeller(product, requestingUserId);
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setImage(request.getImage());
+        product.setTag(request.getTag());
+        product.setColor(request.getColor());
+        product.setSize(request.getSize());
+        product.setPrice(request.getPrice());
+        product.setStockCount(request.getStockCount());
+        return productMapper.toResponseDTO(productRepository.save(product));
     }
 
     @Override
-    @Transactional
-    public ProductResponseDTO saveProduct(ProductRequestDTO product, String token) {
-        try{
-            validateToken(token);
-            Product newProduct = mapper.toEntity(product);
-            productRepository.save(newProduct);
-            return mapper.toDto(newProduct);
-        }catch(Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional
-    public ProductResponseDTO updateProduct(Product product, String token) {
-        Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
-        try{
-            validateToken(token);
-            if (optionalProduct.isEmpty()) {
-                throw new EntityNotFoundException(ErrorMessages.PRODUCT_DOES_NOT_EXIST);
-            }
-            Product existingProduct = optionalProduct.get();
-            existingProduct.setCommunityId(product.getCommunityId());
-            existingProduct.setUserId(product.getUserId());
-            existingProduct.setTag(product.getTag());
-            existingProduct.setSize(product.getSize());
-            existingProduct.setCount(product.getCount());
-            existingProduct.setImage(product.getImage());
-            existingProduct.setName(product.getName());
-            existingProduct.setDescription(product.getDescription());
-            existingProduct.setColor(product.getColor());
-            productRepository.save(existingProduct);
-            return mapper.toDto(existingProduct);
-        }catch(Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional
-    public Boolean deleteProduct(Long productId, String token) {
-        try{
-            validateToken(token);
-            productRepository.deleteById(productId);
-            return true;
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public void updateImageUrl(Long productId, String imageUrl) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
-        product.setImage(imageUrl);
+    public void delete(Long productId, Long requestingUserId) {
+        Product product = findOrThrow(productId);
+        assertIsSeller(product, requestingUserId);
+        product.setStatus(ProductStatus.REMOVED);
         productRepository.save(product);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findAllInUserCommunities(Long userId) {
+        List<Long> communityIds = communityServiceClient.getUserCommunityIds(userId);
+        return productRepository.findByCommunityIdIn(communityIds)
+                .stream()
+                .map(productMapper::toResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDTO> findByCommunity(Long communityId, Long requestingUserId) {
+        assertIsMember(requestingUserId, communityId);
+        return productRepository.findByCommunityId(communityId)
+                .stream()
+                .map(productMapper::toResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDTO> findByUser(Long userId) {
+        return productRepository.findByUserId(userId)
+                .stream()
+                .map(productMapper::toResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public void decrementStock(Long productId, StockUpdateDTO stockUpdate) {
+        Product product = findOrThrow(productId);
+        int updated = product.getStockCount() - stockUpdate.getQuantity();
+        if(updated < 0) throw new RuntimeException(ErrorConstants.INSUFFICIENT_STOCK);
+        product.setStockCount(updated);
+        product.setStatus(updated == 0 ? ProductStatus.SOLD_OUT : ProductStatus.ACTIVE);
+        productRepository.save(product);
+    }
+
+    private Product findOrThrow(Long id){
+        return productRepository.findById(id).orElseThrow(() -> new UnAuthorizedException(ErrorConstants.PRODUCT_DOES_NOT_EXIST));
+    }
+
+    private void assertIsMember(Long userId, Long communityId){
+        List<Long> ids = communityServiceClient.getUserCommunityIds(userId);
+        if(ids == null || !ids.contains(communityId)){
+            throw new MembershipException(ErrorConstants.NOT_A_MEMBER);
+        }
+    }
+
+    private void assertIsSeller(Product product, Long requestingUserId){
+        if(!product.getUserId().equals(requestingUserId)){
+            throw new UnAuthorizedException(ErrorConstants.NOT_SELLER);
+        }
     }
 }

@@ -1,11 +1,12 @@
 package com.nzefler.cart.model;
 
+import com.nzefler.cart.enums.CartStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cart")
@@ -14,14 +15,14 @@ import java.util.List;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_seq")
+    @SequenceGenerator(name = "cart_seq", sequenceName = "cart_sequence", allocationSize = 1, initialValue = 1401)
     private Long cartId;
     private Long userId;
-    private String status;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    @Enumerated(EnumType.STRING)
+    private CartStatus status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 
@@ -41,27 +42,27 @@ public class Cart {
         this.userId = userId;
     }
 
-    public String getStatus() {
+    public CartStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CartStatus status) {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -74,13 +75,14 @@ public class Cart {
     }
 
     @Override
-    public String toString() {
-        return "Cart{" +
-                "cartId=" + cartId +
-                ", userId=" + userId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", cartItems=" + cartItems +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cart cart)) return false;
+        return Objects.equals(cartId, cart.cartId) && Objects.equals(userId, cart.userId) && status == cart.status && Objects.equals(createdAt, cart.createdAt) && Objects.equals(updatedAt, cart.updatedAt) && Objects.equals(cartItems, cart.cartItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cartId, userId, status, createdAt, updatedAt, cartItems);
     }
 }

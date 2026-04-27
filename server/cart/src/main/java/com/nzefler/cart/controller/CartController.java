@@ -1,82 +1,74 @@
 package com.nzefler.cart.controller;
 
+import com.nzefler.cart.dto.CartItemRequestDTO;
 import com.nzefler.cart.dto.CartResponseDTO;
-import com.nzefler.cart.dto.CartSummaryResponseDTO;
-import com.nzefler.cart.model.Cart;
-import com.nzefler.cart.model.CartItem;
-import com.nzefler.cart.service.CartServiceImpl;
+import com.nzefler.cart.dto.CheckoutResponseDTO;
+import com.nzefler.cart.service.CartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/cart-service")
+@RequestMapping("/api/carts")
 public class CartController {
+    private final CartService cartService;
 
-    private final CartServiceImpl cartService;
-
-    public CartController(CartServiceImpl cartService) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
     }
 
-    @GetMapping("/getAllCarts")
-    public List<CartResponseDTO> getAllCarts(@RequestHeader("Authorization") String token){
-        return cartService.findAllCarts(token);
+    private Long currentUserId() {
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    @GetMapping("/getCartById/{cartId}")
-    public ResponseEntity<CartResponseDTO> getCartById(@PathVariable Long cartId, @RequestHeader("Authorization") String token) {
-        CartResponseDTO response = cartService.findCartById(cartId, token);
-        return ResponseEntity.ok(response);
+    @GetMapping("/user/{userId}/open")
+    public ResponseEntity<CartResponseDTO> getOpenCart(@PathVariable Long userId) {
+        return ResponseEntity.ok(cartService.getOpenCart(userId));
     }
 
-    @GetMapping("/getAllCartByUserId/{userId}")
-    public List<CartResponseDTO> getAllCartByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String token){
-        return cartService.findAllCartByUserId(userId, token);
+    @GetMapping("/{id}")
+    public ResponseEntity<CartResponseDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(cartService.getCartById(id, currentUserId()));
     }
 
-    @PostMapping("/createCart")
-    public ResponseEntity<CartResponseDTO> createCart(@RequestBody Cart cart, @RequestHeader("Authorization") String token){
-        CartResponseDTO response = cartService.saveCart(cart, token);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CartResponseDTO>> getAllCarts(@PathVariable Long userId) {
+        return ResponseEntity.ok(cartService.getAllCarts(userId));
     }
 
-    @PutMapping("/updateCart")
-    public ResponseEntity<CartResponseDTO> updateCart(@RequestBody Cart cart, @RequestHeader("Authorization") String token){
-        CartResponseDTO response= cartService.updateCart(cart, token);
-        return ResponseEntity.ok(response);
+    @PostMapping("/{id}/items")
+    public ResponseEntity<CartResponseDTO> addItem(
+            @PathVariable Long id,
+            @RequestBody CartItemRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(cartService.addItem(id, currentUserId(), request));
     }
 
-    @DeleteMapping("/deleteCart/{cartId}")
-    public ResponseEntity<Void> deleteCart(@PathVariable Long cartId, @RequestHeader("Authorization") String token){
-        cartService.deleteCart(cartId, token);
+    @PutMapping("/{id}/items/{itemId}")
+    public ResponseEntity<CartResponseDTO> updateItem(
+            @PathVariable Long id,
+            @PathVariable Long itemId,
+            @RequestBody CartItemRequestDTO request) {
+        return ResponseEntity.ok(cartService.updateItem(id, itemId, currentUserId(), request));
+    }
+
+    @DeleteMapping("/{id}/items/{itemId}")
+    public ResponseEntity<Void> removeItem(@PathVariable Long id, @PathVariable Long itemId) {
+        cartService.removeItem(id, itemId, currentUserId());
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/addItem/cart/{userId}")
-    public CartResponseDTO addItem(@PathVariable Long userId, @RequestBody CartItem item, @RequestHeader("Authorization") String token){
-        return cartService.addItemToCart(userId, item, token);
+    @DeleteMapping("/{id}/items")
+    public ResponseEntity<Void> clearCart(@PathVariable Long id) {
+        cartService.clearCart(id, currentUserId());
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/removeItem/cart/{cartId}/item/{cartItemId}")
-    public CartResponseDTO removeItem(@PathVariable Long cartId, @PathVariable Long cartItemId, @RequestHeader("Authorization") String token){
-        return cartService.removeItemFromCart(cartId, cartItemId, token);
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<CheckoutResponseDTO> checkout(@PathVariable Long id) {
+        return ResponseEntity.ok(cartService.checkout(id, currentUserId()));
     }
 
-    @DeleteMapping("/clearCart/{cartId}")
-    public CartResponseDTO clearCart(@PathVariable Long cartId, @RequestHeader("Authorization") String token){
-        return cartService.clearCart(cartId, token);
-    }
-
-    @PostMapping("/checkoutCart")
-    public CartSummaryResponseDTO checkoutCart(@RequestBody Cart cart, @RequestHeader("Authorization") String token){
-        return cartService.checkoutCart(cart, token);
-    }
-
-    @PostMapping("/getOpenCart/{userId}")
-    public CartResponseDTO getOpenCartByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String token){
-        return cartService.findOpenCartByUserId(userId, token);
-    }
 }

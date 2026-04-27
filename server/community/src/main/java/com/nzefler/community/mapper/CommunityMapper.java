@@ -6,7 +6,6 @@ import com.nzefler.community.dto.UserRefDTO;
 import com.nzefler.community.model.Community;
 import com.nzefler.community.model.UserRef;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,6 @@ public class CommunityMapper {
         dto.setCreatedOn(community.getCreatedOn());
         dto.setImage(community.getImage());
         dto.setOwnerId(community.getOwner().getUserId());
-
         Set<UserRefDTO> membersDTO = new HashSet<>();
         for(UserRef user: community.getMembers()){
             membersDTO.add(new UserRefDTO(user.getUserId(), user.getDisplayName(), user.getImage()));
@@ -42,5 +40,4 @@ public class CommunityMapper {
         community.getMembers().add(owner);
         return community;
     }
-
 }

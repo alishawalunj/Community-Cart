@@ -3,6 +3,8 @@ package com.nzefler.product.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,14 +14,16 @@ public class ProductResponseDTO {
     private Long productId;
     private Long userId;
     private Long communityId;
-    private String image;
     private String name;
     private String description;
+    private String image;
     private String tag;
     private String color;
     private String size;
-    private double price;
-    private double count;
+    private BigDecimal price;
+    private Integer stockCount;
+    private ProductStatus status;
+    private LocalDateTime createdAt;
 
     public Long getProductId() {
         return productId;
@@ -45,14 +49,6 @@ public class ProductResponseDTO {
         this.communityId = communityId;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getName() {
         return name;
     }
@@ -67,6 +63,14 @@ public class ProductResponseDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTag() {
@@ -93,19 +97,35 @@ public class ProductResponseDTO {
         this.size = size;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public double getCount() {
-        return count;
+    public Integer getStockCount() {
+        return stockCount;
     }
 
-    public void setCount(double count) {
-        this.count = count;
+    public void setStockCount(Integer stockCount) {
+        this.stockCount = stockCount;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

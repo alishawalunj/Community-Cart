@@ -1,204 +1,165 @@
 package com.nzefler.cart.service;
 
-import com.nzefler.cart.client.AuthServiceClient;
+import com.nzefler.cart.client.OrderServiceClient;
+import com.nzefler.cart.client.ProductServiceClient;
+import com.nzefler.cart.dto.CartItemRequestDTO;
 import com.nzefler.cart.dto.CartResponseDTO;
-import com.nzefler.cart.dto.CartSummaryResponseDTO;
+import com.nzefler.cart.dto.CheckoutResponseDTO;
+import com.nzefler.cart.enums.CartStatus;
 import com.nzefler.cart.exception.EntityNotFoundException;
-import com.nzefler.cart.exception.ErrorMessages;
+import com.nzefler.cart.exception.ErrorConstants;
+import com.nzefler.cart.exception.InsufficientStockException;
+import com.nzefler.cart.exception.UnAuthorizedException;
 import com.nzefler.cart.mapper.CartMapper;
 import com.nzefler.cart.model.Cart;
 import com.nzefler.cart.model.CartItem;
+import com.nzefler.cart.repository.CartItemRepository;
 import com.nzefler.cart.repository.CartRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CartMapper mapper;
-    private final AuthServiceClient client;
+    private final CartItemRepository cartItemRepository;
+    private final ProductServiceClient productServiceClient;
+    private final CartMapper cartMapper;
+    private final OrderServiceClient orderServiceClient;
 
-    public CartServiceImpl(CartRepository cartRepository, CartMapper mapper, AuthServiceClient client) {
+    public CartServiceImpl(CartItemRepository cartItemRepository, CartRepository cartRepository, ProductServiceClient productServiceClient, CartMapper cartMapper, OrderServiceClient orderServiceClient) {
+        this.cartItemRepository = cartItemRepository;
         this.cartRepository = cartRepository;
-        this.mapper = mapper;
-        this.client = client;
+        this.productServiceClient = productServiceClient;
+        this.cartMapper = cartMapper;
+        this.orderServiceClient = orderServiceClient;
     }
 
-    private void validateToken(String token) {
-        if (!client.isTokenValid(token)) {
-            throw new RuntimeException("Unauthorized: Invalid token");
+    @Override
+    public CartResponseDTO getOpenCart(Long userId) {
+        Cart cart  = cartRepository.findByUserIdAndStatus(userId, CartStatus.OPEN).orElseGet(() -> createNewCart(userId));
+        return cartMapper.toDTO(cart);
+    }
+
+    @Override
+    public CartResponseDTO getCartById(Long cartId, Long requestingUserId) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, requestingUserId);
+        return cartMapper.toDTO(cart);
+    }
+
+    @Override
+    public List<CartResponseDTO> getAllCarts(Long userId) {
+        return cartRepository.findByUserId(userId).stream().map(cartMapper::toDTO).toList();
+    }
+
+    @Override
+    public CartResponseDTO addItem(Long cartId, Long userId, CartItemRequestDTO request) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, userId);
+        ProductServiceClient.ProductDTO product = productServiceClient.getProduct(request.getProductId());
+        if(product.getStockCount < request.getQuantity()){
+            throw new InsufficientStockException(ErrorConstants.INSUFFICIENT_STOCK);
         }
+        CartItem item = new CartItem();
+        item.setCart(cart);
+        item.setProductId(product.getProductId());
+        item.setCommunityId(product.getCommunityId());
+        item.setProductName(product.getName());
+        item.setQuantity(request.getQuantity());
+        item.setPriceAtAdd(product.getPrice());
+        item.setAddedAt(LocalDateTime.now());
+        cart.getCartItems().add(item);
+        cart.setUpdatedAt(LocalDateTime.now());
+        return cartMapper.toDTO(cartRepository.save(cart));
     }
 
     @Override
-    public List<CartResponseDTO> findAllCarts(String token) {
-        validateToken(token);
-        return cartRepository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
-    }
+    public CartResponseDTO updateItemQuantity(Long cartId, Long itemId, Long userId, CartItemRequestDTO request) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, userId);
 
-    @Override
-    public CartResponseDTO findCartById(Long cartId, String token) {
-        validateToken(token);
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
-        return mapper.toDTO(cart);
-    }
+        CartItem item = cart.getCartItems().stream()
+                .filter(i -> i.getCartItemId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(ErrorConstants.ITEM_NOT_FOUND));
 
-    @Override
-    public List<CartResponseDTO> findAllCartByUserId(Long userId, String token) {
-        validateToken(token);
-        return cartRepository.findByUserId(userId)
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public CartResponseDTO findOpenCartByUserId(Long userId, String token) {
-        validateToken(token);
-        Cart openCart = cartRepository.findByUserIdAndStatus(userId, "OPEN")
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUserId(userId);
-                    newCart.setStatus("OPEN");
-                    newCart.setCreatedAt(new Date());
-                    newCart.setUpdatedAt(new Date());
-                    newCart.setCartItems(new ArrayList<>());
-                    return cartRepository.save(newCart);
-                });
-
-        return mapper.toDTO(openCart);
-    }
-
-    @Override
-    public CartResponseDTO saveCart(Cart cart, String token) {
-        validateToken(token);
-        if (cart.getCartItems() != null) {
-            cart.getCartItems().forEach(item -> item.setCart(cart));
-        }
-        Cart saved = cartRepository.save(cart);
-        return mapper.toDTO(saved);
-    }
-
-    @Override
-    public CartResponseDTO updateCart(Cart cart, String token) {
-        validateToken(token);
-        Cart existing = cartRepository.findById(cart.getCartId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
-
-        existing.setUserId(cart.getUserId());
-        existing.setUpdatedAt(new Date());
-
-        existing.getCartItems().clear();
-        if (cart.getCartItems() != null) {
-            cart.getCartItems().forEach(item -> item.setCart(existing));
-            existing.getCartItems().addAll(cart.getCartItems());
+        ProductServiceClient.ProductDTO product = productServiceClient.getProduct(item.getProductId());
+        if (product.getStockCount() < request.getQuantity()) {
+            throw new InsufficientStockException(ErrorConstants.INSUFFICIENT_STOCK);
         }
 
-        Cart updated = cartRepository.save(existing);
-        return mapper.toDTO(updated);
+        item.setQuantity(request.getQuantity());
+        cart.setUpdatedAt(LocalDateTime.now());
+        return cartMapper.toDTO(cartRepository.save(cart));
     }
 
     @Override
-    public void deleteCart(Long cartId, String token) {
-        validateToken(token);
-        if (!cartRepository.existsById(cartId)) {
-            throw new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST);
-        }
-        cartRepository.deleteById(cartId);
-    }
-
-    @Override
-    public CartResponseDTO addItemToCart(Long userId, CartItem cartItem, String token) {
-        validateToken(token);
-
-        Cart cart = cartRepository.findByUserIdAndStatus(userId, "OPEN")
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUserId(userId);
-                    newCart.setStatus("OPEN");
-                    newCart.setCreatedAt(new Date());
-                    newCart.setUpdatedAt(new Date());
-                    return cartRepository.save(newCart);
-                });
-
-        cartItem.setAddedAt(new Date());
-        cartItem.setCart(cart);
-
-        if (cart.getCartItems() == null) {
-            cart.setCartItems(new ArrayList<>());
-        }
-        cart.getCartItems().add(cartItem);
-        cart.setUpdatedAt(new Date());
-
-        Cart updated = cartRepository.save(cart);
-        return mapper.toDTO(updated);
-    }
-
-    @Override
-    public CartResponseDTO removeItemFromCart(Long cartId, Long cartItemId, String token) {
-        validateToken(token);
-        Cart existing = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
-
-        if (existing.getCartItems() == null || existing.getCartItems().isEmpty()) {
-            throw new EntityNotFoundException("Cart item does not exist");
-        }
-
-        boolean removed = existing.getCartItems().removeIf(item -> item.getCartItemId().equals(cartItemId));
-        if (!removed) {
-            throw new EntityNotFoundException("Cart item does not exist");
-        }
-
-        existing.setUpdatedAt(new Date());
-        Cart updated = cartRepository.save(existing);
-        return mapper.toDTO(updated);
-    }
-
-    @Override
-    public CartResponseDTO clearCart(Long cartId, String token) {
-        validateToken(token);
-        Cart existing = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.CART_DOES_NOT_EXIST));
-
-        existing.setCartItems(new ArrayList<>());
-        existing.setUpdatedAt(new Date());
-
-        Cart updated = cartRepository.save(existing);
-        return mapper.toDTO(updated);
-    }
-
-    @Override
-    public CartSummaryResponseDTO checkoutCart(Cart cart, String token) {
-        validateToken(token);
-        cart.setStatus("CHECKED_OUT");
-        cart.setUpdatedAt(new Date());
+    public void removeItem(Long cartId, Long cartItemId, Long userId) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, userId);
+        cart.getCartItems().removeIf(i -> i.getCartItemId().equals(itemId));
+        cart.setUpdatedAt(LocalDateTime.now());
         cartRepository.save(cart);
-        CartSummaryResponseDTO response = new CartSummaryResponseDTO();
-        response.setUserId(cart.getUserId());
-        response.setCartId(cart.getCartId());
+    }
 
-        double totalAmount = 0;
-        List<Long> productIds = new ArrayList<>();
+    @Override
+    public void clearCart(Long cartId, Long userId) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, userId);
+        cart.getCartItems().clear();
+        cart.setUpdatedAt(LocalDateTime.now());
+        cartRepository.save(cart);
+    }
 
-        if (cart.getCartItems() != null && !cart.getCartItems().isEmpty()) {
-            for (CartItem item : cart.getCartItems()) {
-                productIds.add(item.getProductId());
-                double itemPrice = (item.getPrice() != 0) ? item.getPrice() : 10.0;
-                totalAmount += item.getQuantity() * itemPrice;
-            }
+    @Override
+    public CheckoutResponseDTO checkout(Long cartId, Long userId) {
+        Cart cart = findOrThrow(cartId);
+        assertOwner(cart, userId);
+
+        if (cart.getCartItems().isEmpty()) {
+            throw new RuntimeException(ErrorConstants.CART_EMPTY);
         }
 
-        response.setProductIds(productIds);
-        response.setAmount(totalAmount);
-        return response;
+        cart.getCartItems().forEach(item -> productServiceClient.decrementStock(item.getProductId(), item.getQuantity()));
+
+        BigDecimal total = cart.getCartItems().stream()
+                .map(i -> i.getPriceAtAdd().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        List<OrderServiceClient.OrderItemDTO> orderItems = cart.getCartItems().stream()
+                .map(i -> new OrderServiceClient.OrderItemDTO(
+                        i.getProductId(), i.getProductName(), i.getQuantity(), i.getPriceAtAdd()))
+                .collect(Collectors.toList());
+
+
+        OrderServiceClient.OrderResponseDTO order = orderServiceClient.createOrder(new OrderServiceClient.OrderRequestDTO(userId, cartId, total, orderItems));
+        cart.setStatus(CartStatus.CHECKED_OUT);
+        cart.setUpdatedAt(LocalDateTime.now());
+        cartRepository.save(cart);
+        return new CheckoutResponseDTO(order.getOrderId(), "Order placed successfully");
+    }
+
+    private Cart createNewCart(Long userId){
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+        cart.setStatus(CartStatus.OPEN);
+        cart.setCreatedAt(LocalDateTime.now());
+        cart.setUpdatedAt(LocalDateTime.now());
+        return cartRepository.save(cart);
+    }
+
+    private Cart findOrThrow(Long id){
+        return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorConstants.CART_NOT_FOUND));
+    }
+
+    private void assertOwner(Cart cart, Long userId){
+        if(!cart.getUserId().equals(userId)){
+            throw new UnAuthorizedException(ErrorConstants.UNAUTHORIZED_CART);
+        }
     }
 }

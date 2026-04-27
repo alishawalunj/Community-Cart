@@ -1,9 +1,13 @@
 package com.nzefler.product.model;
 
+import com.nzefler.product.dto.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @NoArgsConstructor
@@ -15,28 +19,20 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "product_seq")
     @SequenceGenerator(name = "product_seq", sequenceName = "product_sequence", allocationSize = 1, initialValue = 1301)
-    @Column(name="product_id")
     private Long productId;
-    @Column(name="user_id")
     private Long userId;
-    @Column(name = "community_id")
     private Long communityId;
-    @Column(name="image")
-    private String image;
-    @Column(name="name")
     private String name;
-    @Column(name="description")
     private String description;
-    @Column(name="tag")
+    private String image;
     private String tag;
-    @Column(name="color")
     private String color;
-    @Column(name="size")
     private String size;
-    @Column(name="price")
-    private double price;
-    @Column(name="count")
-    private double count;
+    private BigDecimal price;
+    private Integer stockCount;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+    private LocalDateTime createdAt;
 
     public Long getProductId() {
         return productId;
@@ -62,14 +58,6 @@ public class Product {
         this.communityId = communityId;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getName() {
         return name;
     }
@@ -84,6 +72,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTag() {
@@ -110,19 +106,47 @@ public class Product {
         this.size = size;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public double getCount() {
-        return count;
+    public Integer getStockCount() {
+        return stockCount;
     }
 
-    public void setCount(double count) {
-        this.count = count;
+    public void setStockCount(Integer stockCount) {
+        this.stockCount = stockCount;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(productId, product.productId) && Objects.equals(userId, product.userId) && Objects.equals(communityId, product.communityId) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(image, product.image) && Objects.equals(tag, product.tag) && Objects.equals(color, product.color) && Objects.equals(size, product.size) && Objects.equals(price, product.price) && Objects.equals(stockCount, product.stockCount) && Objects.equals(status, product.status) && Objects.equals(createdAt, product.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, userId, communityId, name, description, image, tag, color, size, price, stockCount, status, createdAt);
     }
 }
