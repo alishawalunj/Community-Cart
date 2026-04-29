@@ -21,7 +21,6 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
     private Long productId;
     private Long communityId;
     private String productName;
