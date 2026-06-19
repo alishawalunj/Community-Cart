@@ -26,7 +26,6 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-
         UserResponseDTO response = new UserResponseDTO();
         response.setUserId(user.getUserId());
         response.setFirstName(user.getFirstName());
@@ -36,4 +35,26 @@ public class UserMapper {
         response.setRole(user.getRole());
         return response;
     }
+
+    public void updateEntityFromDTO(UserRequestDTO request, User existingUser){
+        if(request == null){
+            return;
+        }
+        if(request.getFirstName() != null){
+            existingUser.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            existingUser.setLastName(request.getLastName());
+        }
+        if (request.getEmail() != null) {
+            existingUser.setEmail(request.getEmail());
+        }
+        if (request.getImageUrl() != null) {
+            existingUser.setImageUrl(request.getImageUrl());
+        }
+        if (request.getRole() != null) {
+            existingUser.setRole(request.getRole());
+        }
+    }
+    
 }

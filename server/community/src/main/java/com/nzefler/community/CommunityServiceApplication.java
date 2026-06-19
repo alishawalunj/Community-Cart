@@ -19,7 +19,6 @@ public class CommunityServiceApplication {
 		System.setProperty("AWS_S3_BUCKET_NAME", dotenv.get("AWS_S3_BUCKET_NAME"));
 		System.setProperty("AWS_ACCESS_KEY_ID", dotenv.get("AWS_ACCESS_KEY_ID"));
 		System.setProperty("AWS_SECRET_KEY", dotenv.get("AWS_SECRET_KEY"));
-
 		SpringApplication.run(CommunityServiceApplication.class, args);
 	}
 }

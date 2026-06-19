@@ -33,7 +33,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO requestDTO, HttpServletResponse response) {
-
         User user = userRepository.findByEmail(requestDTO.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorConstants.USER_NOT_FOUND));
         if (!passwordEncoder.matches(requestDTO.getPassword(), user.getPassword())) {
@@ -51,9 +50,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseDTO refresh(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = extractRefreshToken(request);
-
         String email = jwtUtil.extractEmail(refreshToken);
-
         if (!jwtUtil.validateToken(refreshToken, email)) {
             throw new RuntimeException("Invalid Refresh token");
         }

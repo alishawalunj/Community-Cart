@@ -1,5 +1,6 @@
 package com.nzefler.user.security;
 
+import com.nzefler.user.enums.ErrorConstants;
 import com.nzefler.user.model.User;
 import com.nzefler.user.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,8 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USER_NOT_FOUND));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
