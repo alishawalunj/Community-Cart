@@ -1,48 +1,21 @@
 package com.nzefler.user.controller;
 
-import com.nzefler.user.dto.AuthResponseDTO;
-import com.nzefler.user.dto.LoginRequestDTO;
 import com.nzefler.user.dto.UserRequestDTO;
 import com.nzefler.user.dto.UserResponseDTO;
-import com.nzefler.user.service.AuthService;
 import com.nzefler.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
-public class UserAuthController {
+@RequestMapping("/users")
+public class UserController {
 
     private final UserService userService;
-    private final AuthService authService;
 
-    public UserAuthController(UserService userService, AuthService authService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.authService = authService;
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request, HttpServletResponse response){
-        AuthResponseDTO responseDto = authService.login(request, response);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response){
-        authService.logout(request, response);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<AuthResponseDTO> refresh(HttpServletRequest request, HttpServletResponse response){
-        AuthResponseDTO responseDto = authService.refresh(request, response);
-        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/users")

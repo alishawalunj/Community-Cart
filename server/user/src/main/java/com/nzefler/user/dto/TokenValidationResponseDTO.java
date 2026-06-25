@@ -1,15 +1,16 @@
-package com.nzefler.auth.dto;
+package com.nzefler.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDTO {
+@AllArgsConstructor
+public class TokenValidationResponseDTO {
+    private boolean valid;
     private Long userId;
     private String email;
-    private String password;
     private String role;
+
 
     public String getEmail() {
         return email;
@@ -19,12 +20,12 @@ public class UserResponseDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -35,11 +36,11 @@ public class UserResponseDTO {
         this.userId = userId;
     }
 
-    public String getRole() {
-        return role;
+    public boolean isValid() {
+        return valid;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

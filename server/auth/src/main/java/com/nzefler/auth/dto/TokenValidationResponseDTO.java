@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDTO {
+public class TokenValidationResponseDTO {
+    private boolean valid;
     private Long userId;
     private String email;
-    private String password;
     private String role;
 
     public String getEmail() {
@@ -19,12 +19,12 @@ public class UserResponseDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -35,11 +35,11 @@ public class UserResponseDTO {
         this.userId = userId;
     }
 
-    public String getRole() {
-        return role;
+    public boolean isValid() {
+        return valid;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }
